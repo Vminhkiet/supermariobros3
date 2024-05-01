@@ -1,6 +1,7 @@
 # list of object assets to load in this scene
 [ASSETS]
 man.txt
+title.txt
 mario.txt
 coin.txt
 cloud.txt

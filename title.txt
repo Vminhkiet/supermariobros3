@@ -1,0 +1,44 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#tree
+60003	0	39	64	104	50
+60004	64	6	128	104	50
+#title
+60005	5	154	188	222	50
+#1 player game
+60006	0	109	105	122	50
+#2 player game
+60007	0	127	105	136	50
+#smoke big
+60008	15	7	48	23	50
+
+#smoke small
+60009	0	23	16	32	50
+
+#1988
+60010	127	62	176	71	50
+#nintendo
+60011	134	47	185	56	50
+#TM
+60012	51	7	63	18	50
+rite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+#tree
+12002	60003	1000
+12003	60004	1000
+#title
+12004	60005	1000
+#1 player game
+12005	60006	1000
+#2 player game
+12006	60007	1000
+#smoke big
+12007	60008	1000
+#smoke small
+12008	60009	1000
+#1988
+12009	60010	1000
+#nintendo
+12010	60011	1000
+#TM
+12011	60012	1000

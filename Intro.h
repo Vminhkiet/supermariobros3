@@ -12,11 +12,12 @@ class Intro {
 	CNEN* nen;
 	vector<CGameObject*> objects;
 	bool greenjump=false;
-
+	bool draw = false;
 public:
 	static Intro* GetInstance();
 	void Setitem(vector<LPGAMEOBJECT>& obj,LPGAMEOBJECT& player);
 	void Update(DWORD dt);
 	void Render();
 	void PlanIntro();
+	void EndIntro();
 };

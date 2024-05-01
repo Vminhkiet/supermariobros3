@@ -57,13 +57,30 @@ void Intro::PlanIntro() {
 	else if (timepassed < 5000) {
 		
 		mariored->SetSittingFalse();
+		draw = true;
 	}
+
+}
+void Intro::EndIntro() {
+    //tree
+	DebugOut(L"sdads");
+	CSprites::GetInstance()->Get(60003)->Draw(30, 135, 64, 70);
+	CSprites::GetInstance()->Get(60004)->Draw(276, 120, 64, 100);
+
+	//CSprites::GetInstance()->Get(60005)->Draw(600, 80, -1, -1);
+	//CSprites::GetInstance()->Get(60006)->Draw(600, 80, -1, -1);
+	//CSprites::GetInstance()->Get(60007)->Draw(600, 80, -1, -1);
+	//CSprites::GetInstance()->Get(60008)->Draw(600, 80, -1, -1);
+	//CSprites::GetInstance()->Get(60009)->Draw(600, 80, -1, -1);
+	//CSprites::GetInstance()->Get(60010)->Draw(600, 80, -1, -1);
+	//CSprites::GetInstance()->Get(60011)->Draw(600, 80, -1, -1);
+	//CSprites::GetInstance()->Get(60012)->Draw(600, 80, -1, -1);
+
 }
 void Intro::Update(DWORD dt)
 {
 	PlanIntro();
-
-
+	
 
 	vector<CGameObject*> coObjects;
 
@@ -86,6 +103,9 @@ void Intro::Render()
 		if (objects[i]->IsDeleted() == false)
 			objects[i]->Render();
 	}
-	
+	if (draw) {
+		CGame::GetInstance()->SetBackgroundColor(D3DXCOLOR(255, 216, 154, 1.0f));
+		EndIntro();
+	}
 	
 }

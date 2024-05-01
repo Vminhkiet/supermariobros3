@@ -294,9 +294,13 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+	if (id == 1) {
+		Intro::GetInstance()->Render();
+	}
+	else {
+		for (int i = 0; i < objects.size(); i++)
+			objects[i]->Render();
+	}
 }
 
 /*
