@@ -83,8 +83,7 @@ public:
 	// Keyboard related functions 
 	void SetBackgroundColor(D3DXCOLOR backgroundColor) {
 		backgroundcolor = backgroundColor;
-		float clearColor[4] = { backgroundcolor.r, backgroundcolor.g, backgroundcolor.b, backgroundcolor.a };
-		pD3DDevice->ClearRenderTargetView(pRenderTargetView, clearColor);
+		
 	}
 	D3DXCOLOR GetBackgroundColor() {
 		return backgroundcolor;

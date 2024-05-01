@@ -62,12 +62,18 @@ void Intro::PlanIntro() {
 
 }
 void Intro::EndIntro() {
-    //tree
-	DebugOut(L"sdads");
+	if (draw) {
+	//background
+	D3DXCOLOR color(255.0f / 255.0f, 216.0f / 255.0f, 154.0f / 255.0f, 1.0f);
+	CGame::GetInstance()->SetBackgroundColor(color);
+    }
+	//tree
+
 	CSprites::GetInstance()->Get(60003)->Draw(30, 135, 64, 70);
 	CSprites::GetInstance()->Get(60004)->Draw(276, 120, 64, 100);
+	//title
 
-	//CSprites::GetInstance()->Get(60005)->Draw(600, 80, -1, -1);
+	CSprites::GetInstance()->Get(60005)->Draw(150, 85, 150, 80);
 	//CSprites::GetInstance()->Get(60006)->Draw(600, 80, -1, -1);
 	//CSprites::GetInstance()->Get(60007)->Draw(600, 80, -1, -1);
 	//CSprites::GetInstance()->Get(60008)->Draw(600, 80, -1, -1);
@@ -98,14 +104,14 @@ void Intro::Update(DWORD dt)
 
 void Intro::Render()
 {
+	
+	if (draw) {
+		EndIntro();
+	}
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->IsDeleted() == false)
 			objects[i]->Render();
-	}
-	if (draw) {
-		CGame::GetInstance()->SetBackgroundColor(D3DXCOLOR(255, 216, 154, 1.0f));
-		EndIntro();
 	}
 	
 }

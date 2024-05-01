@@ -13,6 +13,7 @@ class Intro {
 	vector<CGameObject*> objects;
 	bool greenjump=false;
 	bool draw = false;
+
 public:
 	static Intro* GetInstance();
 	void Setitem(vector<LPGAMEOBJECT>& obj,LPGAMEOBJECT& player);

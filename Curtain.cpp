@@ -17,7 +17,7 @@ void CCurtain::Render()
 	if(!stop)
 	    animations->Get(ID_ANI_CURTAIN)->Render(x, y, 305, 240);
 	else
-		animations->Get(ID_ANI_CURTAIN + 1)->Render(x, y+105, 305, 20);
+		animations->Get(ID_ANI_CURTAIN + 1)->Render(x+10, y+105, 360, 20);
 	//RenderBoundingBox();
 }
 
