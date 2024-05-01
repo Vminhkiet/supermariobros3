@@ -77,12 +77,14 @@ void Intro::EndIntro() {
 	//title
 
 	CSprites::GetInstance()->Get(60005)->Draw(150, 60, 150, 80);
-    //
-	//CSprites::GetInstance()->Get(60006)->Draw(600, 80, -1, -1);
+    //player
+	//CSprites::GetInstance()->Get(60006)->Draw(, 80, -1, -1);
 	//CSprites::GetInstance()->Get(60007)->Draw(600, 80, -1, -1);
-	//CSprites::GetInstance()->Get(60008)->Draw(600, 80, -1, -1);
-	//CSprites::GetInstance()->Get(60009)->Draw(600, 80, -1, -1);
-	//CSprites::GetInstance()->Get(60010)->Draw(600, 80, -1, -1);
+	//smoke
+	CSprites::GetInstance()->Get(60008)->Draw(50, 40, 30, 30);
+	CSprites::GetInstance()->Get(60008)->Draw(240, 40, 30, 30);
+	CSprites::GetInstance()->Get(60009)->Draw(40, 80, 15, 15);
+	//CSprites::GetInstance()->Get(60010)->Draw(600 80, -1, -1);
 	//CSprites::GetInstance()->Get(60011)->Draw(600, 80, -1, -1);
 	//CSprites::GetInstance()->Get(60012)->Draw(600, 80, -1, -1);
 
