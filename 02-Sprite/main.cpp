@@ -112,21 +112,29 @@ void LoadResources()
 
 
 	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
-	sprites->Add(20001, 300, 117, 317, 133, texMisc);
-	sprites->Add(20002, 318, 117, 335, 133, texMisc);
-	sprites->Add(20003, 336, 117, 353, 133, texMisc);
-	sprites->Add(20004, 354, 117, 371, 133, texMisc);
-
+	sprites->Add(20001, 19, 165, 19+23, 165+37, texMisc);
+	sprites->Add(20002, 19+23, 165, 19 + 23 * 2, 165 + 37, texMisc);
+	sprites->Add(20003, 19+23*2, 165, 19 + 23 * 3, 165 + 37, texMisc);
+	sprites->Add(20004, 19+23*3, 165, 19 + 23 * 4, 165 + 37, texMisc);
+	sprites->Add(20005, 19+23*4, 165, 19 + 23 * 5, 165 + 37, texMisc);
+	sprites->Add(20006, 19+23*5, 165, 19 + 23 * 6, 165 + 37, texMisc);
+	sprites->Add(20007, 19+23*6, 165, 19 + 23 * 7, 165 + 37, texMisc);
+	sprites->Add(20008, 19+23*7, 165, 19 + 23 * 8, 165 + 37, texMisc);
 	ani = new CAnimation(100);
 	ani->Add(20001,1000);
 	ani->Add(20002);
 	ani->Add(20003);
 	ani->Add(20004);
+	ani->Add(20005);
+	ani->Add(20006);
+	ani->Add(20007);
+	ani->Add(20008);
 	animations->Add(510, ani);
 	
 	
 	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
 	brick = new CBrick(100.0f, 100.0f);
+
 }
 
 /*

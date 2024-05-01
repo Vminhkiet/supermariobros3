@@ -4,6 +4,7 @@
 #include "Mario.h"
 #include "Game.h"
 
+#include "Nam.h"
 #include "Goomba.h"
 #include "Coin.h"
 
@@ -51,8 +52,13 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
+	else if (dynamic_cast<CNAM*>(e->obj))
+		OnCollisionWithNam(e);
 }
-
+void CMario::OnCollisionWithNam(LPCOLLISIONEVENT e) {
+	e->obj->Delete();
+	coin++;
+}
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);

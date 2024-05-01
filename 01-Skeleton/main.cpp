@@ -43,7 +43,8 @@ CMario *mario;
 #define MARIO_START_Y 100.0f
 #define MARIO_START_VX 0.1f
 #define MARIO_START_VY 0.1f
-
+#define BRICK_START_VX 0.1f
+#define BRICK_START_VY 0.1f
 
 CBrick *brick;
 #define BRICK_X 10.0f
@@ -60,6 +61,14 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		break;
+	case WM_CHAR:
+		if (wParam & MK_LBUTTON) {
+			// N?u nút trái chu?t ?ang ???c gi?, c?p nh?t v? trí c?a nhân v?t
+			brick = LOWORD(lParam);
+			brick_y = HIWORD(lParam);
+			InvalidateRect(hWnd, NULL, TRUE); // Yêu c?u v? l?i c?a s?
+		}
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -82,7 +91,7 @@ void LoadResources()
 	//texMisc = game->LoadTexture(MISC_TEXTURE_PATH);
 
 	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX, MARIO_START_VY, texMario);
-	brick = new CBrick(BRICK_X, BRICK_Y, texBrick);
+	brick = new CBrick(BRICK_X, BRICK_Y,BRICK_START_VX,BRICK_START_VY, texBrick);
 
 	
 	// objects.push_back(mario);
@@ -136,9 +145,11 @@ void Render()
 		// Use Alpha blending for transparent sprites
 		FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 		pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
-
+		
 		brick->Render();
 		mario->Render();
+		
+		
 
 		// Uncomment this line to see how to draw a porttion of a texture  
 		//g->Draw(10, 10, texMisc, 300, 117, 317, 134);

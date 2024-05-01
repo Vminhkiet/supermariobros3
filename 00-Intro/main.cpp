@@ -36,9 +36,9 @@ WARNING: This one file example has a hell LOT of *sinful* programming practices
 #include <stdarg.h>
 #include <time.h>
 #include <stdlib.h>
-
+#include <cmath>
 #include <comdef.h>
-
+#include<iostream>
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define WINDOW_TITLE L"00 - Intro"
 #define WINDOW_ICON_PATH L"brick.ico" 
@@ -61,14 +61,15 @@ int BackBufferWidth = 0;
 int BackBufferHeight = 0;
 
 #define TEXTURE_PATH_BRICK L"brick.png"
-#define BRICK_START_X 8.0f
-#define BRICK_START_Y 200.0f
+#define BRICK_START_X 0.0f
+#define BRICK_START_Y 0.0f
 
 #define BRICK_START_VX 0.2f
 
 #define BRICK_WIDTH 16.0f
 #define BRICK_HEIGHT 16.0f
-
+#define M_PI 3.14159265358979323846f
+#define g 9.8f
 
 ID3D10Texture2D* texBrick = NULL;				// Texture object to store brick image
 ID3DX10Sprite* spriteObject = NULL;				// Sprite handling object 
@@ -78,6 +79,8 @@ D3DX10_SPRITE spriteBrick;
 float brick_x = BRICK_START_X;
 float brick_vx = BRICK_START_VX;
 float brick_y = BRICK_START_Y;
+float brick_vy = BRICK_START_VX;
+float alpha = 45;
 
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -86,6 +89,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+	
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -342,29 +346,41 @@ void LoadResources()
 */
 void Update(DWORD dt)
 {
-	//Uncomment the whole function to see the brick moves and bounces back when hitting left and right edges
-	//brick_x++;
-
-	brick_x += brick_vx*dt; 
-
+	// Uncomment the whole function to see the brick moves and bounces back when hitting left and right edges
+	brick_x += brick_vx * dt;
+	brick_y = -(float)21/5120*brick_x* (brick_x-640);
+	//brick_y = (float)1/2*brick_x;
+	//brick_x += brick_vx * cos(alpha) * dt;
+	//brick_y =  2 *dt*dt -5*dt- 3;
 	// NOTE: BackBufferWidth is indeed related to rendering!!
+	float right_edge2 = BackBufferHeight - BRICK_HEIGHT;
 	float right_edge = BackBufferWidth - BRICK_WIDTH;
 
-	if (brick_x < 0 || brick_x > right_edge) {
-
+	if (brick_y < 0 || brick_y > right_edge2) {
 		brick_vx = -brick_vx;
 
-		//	//Why not having these logics would make the brick disappear sometimes?  
-		////	if (brick_x < 0)
-		////	{
-		////		brick_x = 0;
-		////	}
-		////	else if (brick_x > right_edge )
-		////	{
-		////		brick_x = right_edge;
-		////	}
+		// Why not having these logics would make the brick disappear sometimes?  
+		if (brick_y < 0) {
+			brick_y = 0;
+		}
+		else if (brick_y > right_edge2) {
+			brick_y = right_edge2;
+		}
+	}
+
+	if (brick_x < 0 || brick_x > right_edge) {
+		brick_vx = -brick_vx;
+
+		// Why not having these logics would make the brick disappear sometimes?  
+		if (brick_x < 0) {
+			brick_x = 0;
+		}
+		else if (brick_x > right_edge) {
+			brick_x = right_edge;
+		}
 	}
 }
+
 
 /*
 	Render a frame

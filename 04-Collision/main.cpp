@@ -36,7 +36,7 @@
 #include "Goomba.h"
 #include "Coin.h"
 #include "Platform.h"
-
+#include "Nam.h"
 #include "SampleKeyEventHandler.h"
 
 #include "AssetIDs.h"
@@ -59,7 +59,8 @@
 
 CGame *game;
 CMario *mario;
-
+CNAM* nam;
+CBrick* brick;
 list<LPGAMEOBJECT> objects;
 
 CSampleKeyHandler * keyHandler; 
@@ -338,7 +339,20 @@ void LoadAssetsCoin()
 	ani->Add(ID_SPRITE_COIN + 3);
 	animations->Add(ID_ANI_COIN, ani);
 }
+void LoadAssetsNam()
+{
+	CTextures* textures = CTextures::GetInstance();
+	CSprites* sprites = CSprites::GetInstance();
+	CAnimations* animations = CAnimations::GetInstance();
 
+	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
+
+	sprites->Add(ID_SPRITE_NAM + 1, 298, 188, 316, 205, texMisc);
+
+	LPANIMATION ani = new CAnimation(100);
+	ani->Add(ID_SPRITE_NAM + 1);
+	animations->Add(ID_ANI_NAM, ani);
+}
 void LoadAssetsOther()
 {
 	CTextures* textures = CTextures::GetInstance();
@@ -370,6 +384,7 @@ void LoadResources()
 	LoadAssetsGoomba();
 	LoadAssetsBrick();
 	LoadAssetsCoin();
+	LoadAssetsNam();
 	LoadAssetsOther();
 }
 
@@ -400,9 +415,13 @@ void ClearScene()
 void Reload()
 {
 	ClearScene();
-
+	// Nam
+	nam = new CNAM(BRICK_WIDTH * 1.0f, BRICK_Y-20.0f);
+	objects.push_back(nam);
+	brick=new CBrick(0 * BRICK_WIDTH * 1.0f, BRICK_Y);
+	objects.push_back(brick);
 	// Main ground
-	for (int i = 0; i < NUM_BRICKS; i++)
+	for (int i = 1; i < NUM_BRICKS; i++)
 	{
 		CBrick* b = new CBrick(i * BRICK_WIDTH * 1.0f, BRICK_Y);
 		objects.push_back(b);
@@ -508,8 +527,9 @@ void Update(DWORD dt)
 
 	// Update camera to follow mario
 	float cx, cy;
-	mario->GetPosition(cx, cy);
-
+	//mario->GetPosition(cx, cy);
+	//nam->GetPosition(cx, cy);
+	brick->GetPosition(cx, cy);
 	cx -= SCREEN_WIDTH / 2;
 	cy = 0;
 	//cy -= SCREEN_HEIGHT / 2;

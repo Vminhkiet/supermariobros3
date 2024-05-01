@@ -1,3 +1,4 @@
+
 #include "Animation.h"
 
 void CAnimation::Add(int spriteId, DWORD time)
