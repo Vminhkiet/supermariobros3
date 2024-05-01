@@ -32,6 +32,9 @@ void Intro::Setitem(vector<LPGAMEOBJECT>& objects,LPGAMEOBJECT& player)
 
 	nen = new CNEN(153, 190);
 	this->objects.push_back(nen);
+
+	three = new CThree(155,120);
+	this->objects.push_back(three);
 	objects = this->objects;
 }
 void Intro::PlanIntro() {
@@ -55,7 +58,7 @@ void Intro::PlanIntro() {
 		}
 	}
 	else if (timepassed < 5000) {
-		
+		three->setdraw(true);
 		mariored->SetSittingFalse();
 		draw = true;
 	}
@@ -73,7 +76,8 @@ void Intro::EndIntro() {
 	CSprites::GetInstance()->Get(60004)->Draw(276, 120, 64, 100);
 	//title
 
-	CSprites::GetInstance()->Get(60005)->Draw(150, 85, 150, 80);
+	CSprites::GetInstance()->Get(60005)->Draw(150, 60, 150, 80);
+    //
 	//CSprites::GetInstance()->Get(60006)->Draw(600, 80, -1, -1);
 	//CSprites::GetInstance()->Get(60007)->Draw(600, 80, -1, -1);
 	//CSprites::GetInstance()->Get(60008)->Draw(600, 80, -1, -1);

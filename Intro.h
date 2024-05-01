@@ -2,7 +2,9 @@
 #include "Curtain.h"
 #include "Nen.h"
 #include "Mario.h"
+#include "Three.h"
 class Intro {
+
 	static Intro* __instance;
 	int introTime;
 	ULONGLONG introTimeStart;
@@ -10,6 +12,7 @@ class Intro {
 	CMario* mariored;
 	CMario* mariogreen;
 	CNEN* nen;
+	CThree* three;
 	vector<CGameObject*> objects;
 	bool greenjump=false;
 	bool draw = false;
