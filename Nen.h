@@ -10,12 +10,11 @@
 #define NEN_BBOX_HEIGHT 45
 
 class CNEN : public CGameObject {
-	float cellWidth;
+
 public:
-	CNEN(float x, float y, float width) : CGameObject(x, y) { cellWidth = width; }
+	CNEN(float x, float y) : CGameObject(x, y) {  }
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	void RenderBoundingBox();
 };
 typedef CNEN* LPNEN;

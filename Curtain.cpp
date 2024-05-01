@@ -1,10 +1,10 @@
 #pragma once
 #include "Curtain.h"
 #include "debug.h"
-void CCurtain::Update(DWORD dt) {
-	y -= CURTAIN_SPEED * dt;
-	DebugOut(L"y= \n", y);
-	CGameObject::Update(dt);
+void CCurtain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+
+	y -= CURTAIN_SPEED;
+	CGameObject::Update(dt, coObjects);
 }
 void CCurtain::Render()
 {

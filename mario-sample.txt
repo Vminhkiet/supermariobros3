@@ -19,4 +19,3 @@ height	750
 20	textures\misc.png
 30	textures\intro.png
 40	textures\man.png
-50	textures\mario1.png

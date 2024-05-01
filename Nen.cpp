@@ -5,7 +5,7 @@ void CNEN::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ID_ANI_NEN)->Render(x, y,305,45);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CNEN::GetBoundingBox(float& l, float& t, float& r, float& b)

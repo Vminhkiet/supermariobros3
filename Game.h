@@ -37,15 +37,13 @@ class CGame
 	ID3D10BlendState* pBlendStateAlpha = NULL;			// To store alpha blending state
 
 	LPD3DX10SPRITE spriteObject;						// Sprite handling object, BIG MYSTERY: it has to be in this place OR will lead to access violation in D3D11.dll ????
-
+	D3DXCOLOR backgroundcolor;
 	LPDIRECTINPUT8       di;		// The DirectInput object         
 	LPDIRECTINPUTDEVICE8 didv;		// The keyboard device 
 
 	BYTE  keyStates[KEYBOARD_STATE_SIZE];			// DirectInput keyboard state buffer 
 	DIDEVICEOBJECTDATA keyEvents[KEYBOARD_BUFFER_SIZE];		// Buffered keyboard data
-
 	LPKEYEVENTHANDLER keyHandler;
-
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 
@@ -83,6 +81,14 @@ public:
 	LPTEXTURE LoadTexture(LPCWSTR texturePath);
 
 	// Keyboard related functions 
+	void SetBackgroundColor(D3DXCOLOR backgroundColor) {
+		backgroundcolor = backgroundColor;
+		float clearColor[4] = { backgroundcolor.r, backgroundcolor.g, backgroundcolor.b, backgroundcolor.a };
+		pD3DDevice->ClearRenderTargetView(pRenderTargetView, clearColor);
+	}
+	D3DXCOLOR GetBackgroundColor() {
+		return backgroundcolor;
+	}
 	void InitKeyboard();
 	int IsKeyDown(int KeyCode);
 	void ProcessKeyboard();

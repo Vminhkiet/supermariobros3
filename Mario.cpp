@@ -10,8 +10,15 @@
 
 #include "Collision.h"
 
+int CMario::getintro() {
+	return intro;
+}
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (GetState()==MARIO_STATE_JUMP) {
+		ay = MARIO_GRAVITY;
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -23,15 +30,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
-	isOnPlatform = false;
-
+	if (intro == 0 && !mariogreen) {
+		isOnPlatform = true;
+	}
+    else isOnPlatform = false;
+	
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
+	
 	y += vy * dt;
 }
 
@@ -54,8 +64,22 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CMario*>(e->obj))
+		OnCollisionWithMario(e);
 }
+void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {
+	CMario* mario = dynamic_cast<CMario*>(e->obj);
 
+	if (mario->GetState() == MARIO_STATE_JUMP)
+	{
+		ay = 0;
+		
+		SetState(MARIO_STATE_SIT);
+		mario->vy = -MARIO_JUMP_RUN_SPEED_Y;
+	}
+
+
+}
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -170,6 +194,7 @@ int CMario::GetAniIdSmall()
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
+	
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -239,7 +264,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	if(mariogreen) RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -276,6 +301,7 @@ void CMario::SetState(int state)
 		nx = -1;
 		break;
 	case MARIO_STATE_JUMP:
+		
 		if (isSitting) break;
 		if (isOnPlatform)
 		{
@@ -296,7 +322,9 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
 			vx = 0; vy = 0.0f;
-			y +=MARIO_SIT_HEIGHT_ADJUST;
+			ax = 0;
+
+			y -=MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
 
@@ -331,14 +359,14 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		if (isSitting)
 		{
 			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
-			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
+			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2 ;
 			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
 		}
 		else 
 		{
 			left = x - MARIO_BIG_BBOX_WIDTH/2;
-			top = y - MARIO_BIG_BBOX_HEIGHT/2;
+			top = y - MARIO_BIG_BBOX_HEIGHT/2 ;
 			right = left + MARIO_BIG_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}
@@ -346,7 +374,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	else
 	{
 		left = x - MARIO_SMALL_BBOX_WIDTH/2;
-		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
+		top = y - MARIO_SMALL_BBOX_HEIGHT/2 ;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
 	}

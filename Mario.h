@@ -101,6 +101,9 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
+
+#define SPEED_INTRO 1
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -118,14 +121,18 @@ class CMario : public CGameObject
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
-
+	void OnCollisionWithMario(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
-
+	bool mariogreen = false;
+	int kichhoat = 1;
+	int intro=1;
 public:
-	CMario(float x, float y) : CGameObject(x, y)
+	CMario(float x, float y,int intro = 1,bool mariogreen=false) : CGameObject(x, y)
 	{
+		this->mariogreen=mariogreen;
+		this->intro = intro;
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
@@ -137,6 +144,11 @@ public:
 		isOnPlatform = false;
 		coin = 0;
 	}
+	int getintro();
+	void SetSittingFalse() {
+		isSitting = false;
+	}
+	void SetAXY(float ax, float ay) { this->ax = ax; this->ay = ay; }
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);

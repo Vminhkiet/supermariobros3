@@ -11,7 +11,7 @@
 #include "Platform.h"
 #include "Curtain.h"
 #include "Nen.h"
-
+#include "Intro.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -94,77 +94,87 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 */
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
-	vector<string> tokens = split(line);
-
-	// skip invalid lines - an object set must have at least id, x, y
-	if (tokens.size() < 2) return;
-
-	int object_type = atoi(tokens[0].c_str());
-	float x = (float)atof(tokens[1].c_str());
-	float y = (float)atof(tokens[2].c_str());
-
-	CGameObject *obj = NULL;
-
-	switch (object_type)
+	if (id != 1)
 	{
-	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
-		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
-		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
+		vector<string> tokens = split(line);
 
-		DebugOut(L"[INFO] Player object has been created!\n");
-		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_MAN: obj = new CCurtain(x,y); break;
-	case OBJECT_TYPE_NEN: { 
-		float cell_width = (float)atof(tokens[3].c_str());
-		obj = new CNEN(x, y,cell_width); break; 
+		// skip invalid lines - an object set must have at least id, x, y
+		if (tokens.size() < 2) return;
+
+		int object_type = atoi(tokens[0].c_str());
+		float x = (float)atof(tokens[1].c_str());
+		float y = (float)atof(tokens[2].c_str());
+
+		CGameObject *obj = NULL;
+	
+			switch (object_type)
+			{
+			case OBJECT_TYPE_MARIO:
+				if (player != NULL)
+				{
+					DebugOut(L"[ERROR] MARIO object was created before!\n");
+					return;
+				}
+				obj = new CMario(x, y);
+				player = (CMario*)obj;
+
+
+				DebugOut(L"[INFO] Player object has been created!\n");
+				break;
+			case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+			case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+			case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+			case OBJECT_TYPE_MAN: obj = new CCurtain(x, y); break;
+			case OBJECT_TYPE_NEN: {
+
+				obj = new CNEN(x, y); break;
+			}
+			case OBJECT_TYPE_MARIOGREEN: {
+
+				obj = new CMario(x, y, 0, true);
+
+				player = (CMario*)obj;
+			}
+			case OBJECT_TYPE_PLATFORM:
+			{
+
+				float cell_width = (float)atof(tokens[3].c_str());
+				float cell_height = (float)atof(tokens[4].c_str());
+				int length = atoi(tokens[5].c_str());
+				int sprite_begin = atoi(tokens[6].c_str());
+				int sprite_middle = atoi(tokens[7].c_str());
+				int sprite_end = atoi(tokens[8].c_str());
+
+				obj = new CPlatform(
+					x, y,
+					cell_width, cell_height, length,
+					sprite_begin, sprite_middle, sprite_end
+				);
+
+				break;
+			}
+
+			case OBJECT_TYPE_PORTAL:
+			{
+				float r = (float)atof(tokens[3].c_str());
+				float b = (float)atof(tokens[4].c_str());
+				int scene_id = atoi(tokens[5].c_str());
+				obj = new CPortal(x, y, r, b, scene_id);
+			}
+			break;
+
+
+			default:
+				DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
+				return;
+			}
+
+			// General object setup
+			obj->SetPosition(x, y);
+
+
+			objects.push_back(obj);
 	}
-	case OBJECT_TYPE_PLATFORM:
-	{
-
-		float cell_width = (float)atof(tokens[3].c_str());
-		float cell_height = (float)atof(tokens[4].c_str());
-		int length = atoi(tokens[5].c_str());
-		int sprite_begin = atoi(tokens[6].c_str());
-		int sprite_middle = atoi(tokens[7].c_str());
-		int sprite_end = atoi(tokens[8].c_str());
-
-		obj = new CPlatform(
-			x, y,
-			cell_width, cell_height, length,
-			sprite_begin, sprite_middle, sprite_end
-		);
-
-		break;
-	}
-
-	case OBJECT_TYPE_PORTAL:
-	{
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
-		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
-	}
-	break;
-
-
-	default:
-		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
-		return;
-	}
-
-	// General object setup
-	obj->SetPosition(x, y);
-
-
-	objects.push_back(obj);
 }
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
@@ -233,7 +243,11 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-
+	
+	if (id == 1)
+	{
+		Intro::GetInstance()->Setitem(objects, player);
+	}
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
@@ -242,37 +256,45 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
+	
+	if (id == 1) {
+		Intro::GetInstance()->Update(dt);
+		CGame::GetInstance()->SetCamPos(0, 0.0f /*cy*/);
 	}
+	else{
+		vector<LPGAMEOBJECT> coObjects;
+		for (size_t i = 1; i < objects.size(); i++)
+		{
+			coObjects.push_back(objects[i]);
+		}
 
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &coObjects);
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(dt, &coObjects);
+		}
+
+		// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
+		if (player == NULL) return;
+
+		// Update camera to follow mario
+		float cx, cy;
+		player->GetPosition(cx, cy);
+
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetBackBufferWidth() / 2;
+		cy -= game->GetBackBufferHeight() / 2;
+
+		if (cx < 0) cx = 0;
+		CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
 	}
-
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
-
-	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
-
-	CGame *game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
-
-	if (cx < 0) cx = 0;
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	    
 
 	PurgeDeletedObjects();
 }
 
 void CPlayScene::Render()
 {
+	
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
