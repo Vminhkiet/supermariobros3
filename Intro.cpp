@@ -37,7 +37,7 @@ void Intro::Setitem(vector<LPGAMEOBJECT>& objects,LPGAMEOBJECT& player)
 void Intro::PlanIntro() {
 	ULONGLONG timepassed = GetTickCount64() - introTimeStart;
 	if (timepassed < 1000) {
-
+		
 	}
 	else if (timepassed < 2000) {
 		
@@ -46,7 +46,8 @@ void Intro::PlanIntro() {
 		mariored->SetState(100);
 		mariogreen->SetState(200);
 	}
-	else if (timepassed < 3000) {
+	else if (timepassed < 2800) {
+		
 		if (!greenjump) {
 			greenjump = true;
 			mariogreen->SetState(300);
@@ -54,6 +55,7 @@ void Intro::PlanIntro() {
 		}
 	}
 	else if (timepassed < 5000) {
+		
 		mariored->SetSittingFalse();
 	}
 }
