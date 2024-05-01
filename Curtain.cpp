@@ -14,9 +14,10 @@ void CCurtain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 void CCurtain::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_CURTAIN)->Render(x, y, 305, 240);
-	//else
-		//animations->Get(ID_ANI_CURTAIN + 1)->Render(x, y, 305, 240);
+	if(!stop)
+	    animations->Get(ID_ANI_CURTAIN)->Render(x, y, 305, 240);
+	else
+		animations->Get(ID_ANI_CURTAIN + 1)->Render(x, y+105, 305, 20);
 	//RenderBoundingBox();
 }
 
