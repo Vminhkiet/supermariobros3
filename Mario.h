@@ -117,7 +117,7 @@ class CMario : public CGameObject
 	BOOLEAN isOnPlatform;
 
 	int coin; 
-
+	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);

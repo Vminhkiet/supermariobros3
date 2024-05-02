@@ -3,7 +3,7 @@
 
 #include "Mario.h"
 #include "Game.h"
-
+#include "Mushroom.h"
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
@@ -66,6 +66,13 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CMario*>(e->obj))
 		OnCollisionWithMario(e);
+	else if (dynamic_cast<CMUSHROOM*>(e->obj))
+		OnCollisionWithMushroom(e);
+}
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
+	e->obj->Delete();
+	level = MARIO_LEVEL_BIG;
+	SetLevel(level);
 }
 void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {
 	CMario* mario = dynamic_cast<CMario*>(e->obj);
