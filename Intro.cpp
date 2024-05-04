@@ -35,6 +35,9 @@ void Intro::Setitem(vector<LPGAMEOBJECT>& objects,LPGAMEOBJECT& player)
 
 	three = new CThree(155,120);
 	this->objects.push_back(three);
+
+	leaf = new CLEAF(153, 0);
+	this->objects.push_back(leaf);
 	objects = this->objects;
 }
 void Intro::PlanIntro() {
@@ -58,6 +61,7 @@ void Intro::PlanIntro() {
 		}
 	}
 	else if (timepassed < 5000) {
+		leaf->setdraw(true);
 		three->setdraw(true);
 		mariored->SetSittingFalse();
 		draw = true;

@@ -5,6 +5,7 @@ title.txt
 mario.txt
 coin.txt
 cloud.txt
+Leaf.txt
 brick.txt
 nen.txt
 #

@@ -3,7 +3,7 @@
 #include "Animation.h"
 #include "Animations.h"
 
-#define ID_ANI_MUSHROOM 12000
+#define ID_ANI_MUSHROOM 80000
 #define MUSHROOM_WALKING_SPEED 0.05f
 #define MUSHROOM_GRAVITY 0.002f
 #define MUSHROOM_DIE_TIMEOUT 5000
@@ -19,13 +19,14 @@ class CMUSHROOM : public CGameObject {
 protected:
 	float ax;
 	float ay;
-
+	bool red;
 	ULONGLONG die_start;
 public:
-	CMUSHROOM(float x, float y) : CGameObject(x, y) {
+	CMUSHROOM(float x, float y,bool red=true) : CGameObject(x, y) {
 		this->ax = 0;
 		this->ay = MUSHROOM_GRAVITY;
 		die_start = -1;
+		this->red = red;
 		SetState(MUSHROOM_STATE_WALKING);
 	}
 	void Render();

@@ -3,8 +3,10 @@
 void CMUSHROOM::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_MUSHROOM)->Render(x, y);
-
+	if (red)
+		animations->Get(ID_ANI_MUSHROOM)->Render(x, y);
+	else
+		animations->Get(ID_ANI_MUSHROOM + 1)->Render(x, y);
 	RenderBoundingBox();
 }
 

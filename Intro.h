@@ -3,6 +3,7 @@
 #include "Nen.h"
 #include "Mario.h"
 #include "Three.h"
+#include "Leaf.h"
 class Intro {
 
 	static Intro* __instance;
@@ -13,6 +14,7 @@ class Intro {
 	CMario* mariogreen;
 	CNEN* nen;
 	CThree* three;
+	CLEAF* leaf;
 	vector<CGameObject*> objects;
 	bool greenjump=false;
 	bool draw = false;
