@@ -6,6 +6,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
+#include "TMXLoader.h"
 //#include "Koopas.h"
 
 
@@ -24,7 +25,7 @@ protected:
 	void _ParseSection_OBJECTS(string line);
 
 	void LoadAssets(LPCWSTR assetFile);
-	
+	void DrawMap(TMXLoader* map);
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
 

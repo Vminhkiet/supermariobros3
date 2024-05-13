@@ -13,6 +13,7 @@
 #include "Nen.h"
 #include "Intro.h"
 #include "SampleKeyEventHandler.h"
+#include "TMXLoader.h"
 
 using namespace std;
 
@@ -353,4 +354,7 @@ void CPlayScene::PurgeDeletedObjects()
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+}
+void CPlayScene::DrawMap(TMXLoader* map) {
+
 }

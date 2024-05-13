@@ -7,7 +7,7 @@
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
-
+#include "Leaf.h"
 #include "Collision.h"
 
 int CMario::getintro() {
@@ -68,7 +68,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMario(e);
 	else if (dynamic_cast<CMUSHROOM*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CLEAF*>(e->obj))
+		OnCollisionWithLeaf(e);
 }
+
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
 	e->obj->Delete();
 	level = MARIO_LEVEL_BIG;
@@ -85,6 +88,11 @@ void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {
 		mario->vy = -MARIO_JUMP_RUN_SPEED_Y;
 	}
 
+
+}
+void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e) {
+	CLEAF* leaf = dynamic_cast<CLEAF*>(e->obj);
+	e->obj->Delete();
 
 }
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)

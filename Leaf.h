@@ -21,9 +21,11 @@ protected:
 	float ay;
 	float trucx;
 	bool draw = false;
+	DWORD startfalltime;
 	ULONGLONG die_start;
 public:
 	CLEAF(float x, float y) : CGameObject(x, y) {
+		startfalltime= GetTickCount64();
 		this->ax = 0;
 		this->ay = LEAF_GRAVITY;
 		die_start = -1;

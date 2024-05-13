@@ -1,6 +1,7 @@
 #include "Sprites.h"
 #include "Game.h"
 #include "debug.h"
+#include "Textures.h"
 
 CSprites* CSprites::__instance = NULL;
 
@@ -33,4 +34,13 @@ void CSprites::Clear()
 	}
 
 	sprites.clear();
+}
+void CSprites::DrawTextureRegion(int id, int tileSize, int x, int y, int row, int frame) {
+    int top = tileSize * frame;
+    int left = tileSize * (row - 1);
+
+
+    CSprite sprite(left,top,left+tileSize,top+tileSize,CTextures::GetInstance()->Get(id));
+
+    sprite.Draw(x,y);
 }

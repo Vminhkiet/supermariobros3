@@ -3,6 +3,7 @@
 void CLEAF::Render()
 {
 	if (draw) {
+		startfalltime = GetTickCount64();
 		CAnimations* animations = CAnimations::GetInstance();
 
 		animations->Get(ID_ANI_LEAF)->Render(x, y);
@@ -19,16 +20,18 @@ void CLEAF::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void CLEAF::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
-	
-	if ((state == LEAF_STATE_DIE) && (GetTickCount64() - die_start > LEAF_DIE_TIMEOUT))
-	{
-		isDeleted = true;
-		return;
-	}
+	if (draw) {
+		vy = ay*(dt);
 
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+		if ((state == LEAF_STATE_DIE) && (GetTickCount64() - die_start > LEAF_DIE_TIMEOUT))
+		{
+			isDeleted = true;
+			return;
+		}
+
+		CGameObject::Update(dt, coObjects);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+	}
 }
 void CLEAF::SetState(int state)
 {
@@ -49,7 +52,7 @@ void CLEAF::SetState(int state)
 }
 void CLEAF::OnNoCollision(DWORD dt)
 {
-	x += vx * dt;
+
 	y += vy * dt;
 };
 

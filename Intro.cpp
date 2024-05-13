@@ -36,7 +36,7 @@ void Intro::Setitem(vector<LPGAMEOBJECT>& objects,LPGAMEOBJECT& player)
 	three = new CThree(155,120);
 	this->objects.push_back(three);
 
-	leaf = new CLEAF(153, 0);
+	leaf = new CLEAF(153, 20);
 	this->objects.push_back(leaf);
 	objects = this->objects;
 }
@@ -61,7 +61,7 @@ void Intro::PlanIntro() {
 		}
 	}
 	else if (timepassed < 5000) {
-		leaf->setdraw(true);
+		
 		three->setdraw(true);
 		mariored->SetSittingFalse();
 		draw = true;
@@ -73,6 +73,8 @@ void Intro::EndIntro() {
 	//background
 	D3DXCOLOR color(255.0f / 255.0f, 216.0f / 255.0f, 154.0f / 255.0f, 1.0f);
 	CGame::GetInstance()->SetBackgroundColor(color);
+
+	leaf->setdraw(true);
     }
 	//tree
 
