@@ -13,7 +13,7 @@
 #include "Nen.h"
 #include "Intro.h"
 #include "SampleKeyEventHandler.h"
-#include "TMXLoader.h"
+
 
 using namespace std;
 
@@ -249,6 +249,7 @@ void CPlayScene::Load()
 	{
 		Intro::GetInstance()->Setitem(objects, player);
 	}
+
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
@@ -299,6 +300,7 @@ void CPlayScene::Render()
 		Intro::GetInstance()->Render();
 	}
 	else {
+
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 	}
@@ -354,7 +356,4 @@ void CPlayScene::PurgeDeletedObjects()
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
-}
-void CPlayScene::DrawMap(TMXLoader* map) {
-
 }

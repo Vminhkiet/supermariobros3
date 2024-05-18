@@ -2,13 +2,15 @@
 #include "Textures.h"
 #include "Utils.h"
 #include "Sprites.h"
-TileLayer::TileLayer(int tilesize, int rowcount, int colcount, TileMap tilemap, TilesetList tilesets) :m_Tilesets(tilesize){
+TileLayer::TileLayer(int tilesize, int rowcount, int colcount, TileMap tilemap, TilesetList tilesets) {
 	this->m_Rowcount = rowcount;
 	this->m_Colcount = colcount;
 	this->m_Tilemap = tilemap;
+	this->m_TileSize = tilesize;
+	this->m_Tilesets = tilesets;
 
 	for (unsigned int i = 0; i < m_Tilesets.size(); i++) {
-		CTextures::GetInstance()->Add(m_Tilesets[i].id, ToLPCWSTR("map/" + m_Tilesets[i].source));
+		CTextures::GetInstance()->Add(m_Tilesets[i].name, ToLPCWSTR("map/" + m_Tilesets[i].source));
 	}
 }
 void TileLayer::Render() {
@@ -36,7 +38,7 @@ void TileLayer::Render() {
 					tileRow--;
 					tileCol = ts.columnscount - 1;
 				}
-				CSprites::GetInstance()->DrawTextureRegion(ts.id, ts.TileSize, j * ts.TileSize, i * ts.TileSize, tileRow, tileCol);
+				CSprites::GetInstance()->DrawTextureRegion(ts.name, ts.TileSize, j * ts.TileSize, i * ts.TileSize, tileRow, tileCol);
 			}
 		}
 	}

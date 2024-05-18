@@ -6,8 +6,7 @@ struct Tileset {
 	int Firstid, Lastid;
 	int rowscount, columnscount;
 	int TileCount, TileSize;
-	int id;
-	std::string  source;
+	std::string name, source;
 };
 
 using TilesetList = std::vector<Tileset>;
@@ -22,7 +21,7 @@ private:
 public:
 	TileLayer(int tilesize,int rowcount,int colcount,TileMap tilemap,TilesetList tilesets);
 	virtual void Render();
-	virtual void Update();
+	void Update(){ }
 	inline TileMap GetTileMap() { return m_Tilemap; }
 
 };

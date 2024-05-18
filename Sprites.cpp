@@ -35,12 +35,12 @@ void CSprites::Clear()
 
 	sprites.clear();
 }
-void CSprites::DrawTextureRegion(int id, int tileSize, int x, int y, int row, int frame) {
+void CSprites::DrawTextureRegion(string name, int tileSize, int x, int y, int row, int frame) {
     int top = tileSize * frame;
     int left = tileSize * (row - 1);
 
 
-    CSprite sprite(left,top,left+tileSize,top+tileSize,CTextures::GetInstance()->Get(id));
+    CSprite sprite(left,top,left+tileSize,top+tileSize,CTextures::GetInstance()->Get(name));
 
     sprite.Draw(x,y);
 }

@@ -21,13 +21,25 @@ void CTextures::Add(int id, LPCWSTR filePath)
 {
 	textures[id] = CGame::GetInstance()->LoadTexture(filePath);
 }
+void CTextures::Add(string name, LPCWSTR filePath)
+{
+	textures1[name] = CGame::GetInstance()->LoadTexture(filePath);
+}
 
-LPTEXTURE CTextures::Get(unsigned int i)
+LPTEXTURE CTextures::Get(int i)
 {
 	LPTEXTURE t = textures[i];
 	if (t == NULL)
 		DebugOut(L"[ERROR] Texture Id %d not found !\n", i);
 	
+	return t;
+}
+LPTEXTURE CTextures::Get(string i)
+{
+	LPTEXTURE t = textures1[i];
+	if (t == NULL)
+		DebugOut(L"[ERROR] Texture Id %d not found !\n", i);
+
 	return t;
 }
 

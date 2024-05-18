@@ -1,10 +1,11 @@
 #include "MapParser.h"
+MapParser* MapParser::m_Instance = nullptr;
 bool MapParser::Load() {
-	return Parse("level1", "map.tmx");
+	return Parse("map", "map/wolrd1-1.tmx");
 }
 Tileset MapParser::ParseTileset(TiXmlElement* xmlTileset) {
 	Tileset tileset;
-	tileset.Name = xmlTileset->Attribute("name");
+	tileset.name = xmlTileset->Attribute("name");
 	xmlTileset->Attribute("firstgid",&tileset.Firstid);
 	xmlTileset->Attribute("tilecount", &tileset.TileCount);
 	tileset.Lastid = (tileset.Firstid + tileset.TileCount) - 1;
@@ -17,7 +18,7 @@ Tileset MapParser::ParseTileset(TiXmlElement* xmlTileset) {
 	return tileset;
 }
 TileLayer* MapParser::ParseTileLayer(TiXmlElement* xmlLayer, TilesetList tilesets, int tilesize, int rowcount, int colcount) {
-	TiXmlElement* data;
+	TiXmlElement* data{};
 	for (TiXmlElement* e = xmlLayer->FirstChildElement(); e != nullptr; e = e->NextSiblingElement()) {
 		if (e->Value() == std::string("data")) {
 			data = 0;
@@ -75,4 +76,11 @@ bool MapParser::Parse(std::string id, std::string source) {
 
 	m_MapDict[id] = gamemap;
 	return true;
+}
+void MapParser::Clean() {
+	std::map<std::string, GameMap*>::iterator it;
+	for (it = m_MapDict.begin(); it != m_MapDict.end(); it++) {
+		it->second = nullptr;
+	}
+	m_MapDict.clear();
 }
