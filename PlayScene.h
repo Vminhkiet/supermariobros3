@@ -6,41 +6,41 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
-
+#include "TileMap.h"
+#include "Grid.h"
 //#include "Koopas.h"
 
-
-class CPlayScene: public CScene
+class CPlayScene : public CScene
 {
-protected: 
-	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+protected:
+    LPGAMEOBJECT player;
+    LPTILEMAP tileMap;
+    LPGRID grid;
+    vector<LPGAMEOBJECT> objects;
 
-	vector<LPGAMEOBJECT> objects;
+    void _ParseSection_SPRITES(string line);
+    void _ParseSection_ANIMATIONS(string line);
 
-	void _ParseSection_SPRITES(string line);
-	void _ParseSection_ANIMATIONS(string line);
+    void _ParseSection_ASSETS(string line);
+    void _ParseSection_OBJECTS(string line);
 
-	void _ParseSection_ASSETS(string line);
-	void _ParseSection_OBJECTS(string line);
+    void LoadAssets(LPCWSTR assetFile);
 
-	void LoadAssets(LPCWSTR assetFile);
+public:
+    CPlayScene(int id, LPCWSTR filePath);
 
-public: 
-	CPlayScene(int id, LPCWSTR filePath);
+    virtual void Load();
+    virtual void LoadResource(string s);
+    virtual void Update(DWORD dt);
+    virtual void Render();
+    virtual void Unload();
 
-	virtual void Load();
-	virtual void Update(DWORD dt);
-	virtual void Render();
-	virtual void Unload();
+    LPGAMEOBJECT GetPlayer() { return player; }
 
-	LPGAMEOBJECT GetPlayer() { return player; }
+    void Clear();
+    void PurgeDeletedObjects();
 
-	void Clear();
-	void PurgeDeletedObjects();
-
-	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
+    static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 };
 
 typedef CPlayScene* LPPLAYSCENE;
-

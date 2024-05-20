@@ -21,3 +21,4 @@ public:
     void GetObjectsInViewport(std::vector<LPGAMEOBJECT>& objects);
     void Update(DWORD dt);
 };
+typedef CGrid* LPGRID;

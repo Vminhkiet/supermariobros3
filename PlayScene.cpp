@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include "AssetIDs.h"
 
@@ -22,6 +22,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 {
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
+
 }
 
 
@@ -103,10 +104,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (tokens.size() < 2) return;
 
 		int object_type = atoi(tokens[0].c_str());
-		float x = (float)atof(tokens[1].c_str());
-		float y = (float)atof(tokens[2].c_str());
+		
 
 		CGameObject *obj = NULL;
+		if (object_type == LOAD_RESOURCE)
+		{
+			DebugOut(L"ADS:", tokens[1].c_str());
+			LoadResource("textures\\world-1-1-map.json");
+			return;
+		}
+		float x = (float)atof(tokens[1].c_str());
+		float y = (float)atof(tokens[2].c_str());
 	
 			switch (object_type)
 			{
@@ -162,6 +170,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				int scene_id = atoi(tokens[5].c_str());
 				obj = new CPortal(x, y, r, b, scene_id);
 			}
+
 			break;
 
 
@@ -264,6 +273,8 @@ void CPlayScene::Update(DWORD dt)
 		CGame::GetInstance()->SetCamPos(0, 0.0f /*cy*/);
 	}
 	else{
+		grid->Update(dt);
+
 		vector<LPGAMEOBJECT> coObjects;
 		for (size_t i = 1; i < objects.size(); i++)
 		{
@@ -288,6 +299,7 @@ void CPlayScene::Update(DWORD dt)
 
 		if (cx < 0) cx = 0;
 		CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+		tileMap->Update(dt, &objects);
 	}
 	    
 
@@ -300,7 +312,7 @@ void CPlayScene::Render()
 		Intro::GetInstance()->Render();
 	}
 	else {
-
+		tileMap->Draw({ 0, 48 * 10 });
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 	}
@@ -356,4 +368,38 @@ void CPlayScene::PurgeDeletedObjects()
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+}
+void CPlayScene::LoadResource(string s) {
+	LPGAME game = CGame::GetInstance();
+
+	// Khởi tạo TileMap và Grid
+	tileMap = new CTileMap();
+	grid = new CGrid(22, 6, 16, 16);
+
+	// Load dữ liệu từ tệp JSON
+	tileMap->LoadFromFile(ToLPCWSTR(s));
+
+	// Lặp qua các layer trong tệp JSON để tìm các đối tượng
+	ifstream file(s);
+	json j = json::parse(file);
+
+	for (auto& layer : j["layers"]) {
+		if (layer["name"] == "Ground") {
+			for (auto& object : layer["objects"]) {
+				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
+				CPortal* portal = new CPortal(
+					float(object["x"]),
+					float(object["y"]) + object["height"],
+					object["properties"][0]["value"],
+					object["properties"][1]["value"],
+					id
+				);
+				// Thêm portal vào danh sách đối tượng của Scene
+				objects.push_back(portal);
+				// Thêm portal vào Grid
+				grid->InsertObject(portal);
+			}
+		}
+	}
+
 }

@@ -3,7 +3,7 @@
 //
 // This file contains all IDs of game assets 
 //
-
+#define ID_TEX_TILESET -10
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
@@ -20,6 +20,7 @@
 #define OBJECT_TYPE_NEN 7
 #define OBJECT_TYPE_MARIOGREEN 8
 #define OBJECT_TYPE_PORTAL	50
+#define LOAD_RESOURCE -1
 
 
 #pragma region MARIO 
