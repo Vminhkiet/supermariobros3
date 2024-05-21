@@ -122,7 +122,9 @@ void CTileMap::LoadFromFile(LPCWSTR filePath)
 
 void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 {
+
 	float x, y;
+
 	CGame::GetInstance()->GetCamPos(x, y);
 
 	int wStart = x / tileSet->GetTileWidth();
@@ -133,7 +135,7 @@ void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 	if (wEnd > tileColumn) wEnd = tileColumn;
 	int hEnd = hStart + SCREEN_HEIGHT / tileSet->GetTileHeight();
 	if (hEnd > tileRow) hEnd = tileRow;
-
+	
 	if (effectStart > 0)
 	{
 		alpha = GetTickCount() % 100 > 50 ? 80 : 255;

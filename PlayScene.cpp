@@ -271,10 +271,10 @@ void CPlayScene::Update(DWORD dt)
 	
 	if (id == 1) {
 		Intro::GetInstance()->Update(dt);
-		CGame::GetInstance()->SetCamPos(0, 0.0f /*cy*/);
+		CGame::GetInstance()->SetCamPos(0, 0 /*cy*/);
 	}
 	else{
-		grid->Update(dt);
+		//grid->Update(dt);
 
 		vector<LPGAMEOBJECT> coObjects;
 		for (size_t i = 1; i < objects.size(); i++)
@@ -299,7 +299,7 @@ void CPlayScene::Update(DWORD dt)
 		cy -= game->GetBackBufferHeight() / 2;
 
 		if (cx < 0) cx = 0;
-		CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+		CGame::GetInstance()->SetCamPos((int)cx, 0 /*cy*/);
 		tileMap->Update(dt, &objects);
 	}
 	    
@@ -377,7 +377,7 @@ void CPlayScene::LoadResource(string s) {
 	CGame::GetInstance()->SetBackgroundColor(blueColor);
 	// Khởi tạo TileMap và Grid
 	tileMap = new CTileMap();
-	grid = new CGrid(40, 30, 16, 16);
+	//grid = new CGrid(40, 30, 16, 16);
 
 	// Load dữ liệu từ tệp JSON
 	tileMap->LoadFromFile(ToLPCWSTR(s));
@@ -393,14 +393,14 @@ void CPlayScene::LoadResource(string s) {
 
 				 CGround* ground = new CGround(
 					float(object["x"])-10,
-					float(object["y"])-230,
+					float(object["y"])-228,
 					 object["width"],
 					 object["height"]
 				);
 				// Thêm portal vào danh sách đối tượng của Scene
 				objects.push_back(ground);
 				// Thêm portal vào Grid
-				grid->InsertObject(ground);
+				//grid->InsertObject(ground);
 			}
 		}
 	}
