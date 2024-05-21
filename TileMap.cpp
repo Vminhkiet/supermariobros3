@@ -44,10 +44,7 @@ void CTileSet::LoadFromFile(LPCWSTR imagePath) {
 void CTileSet::DrawTile(int id, D3DXVECTOR2 position, int alpha)
 {
 	RECT sourceRect = listTile[id];
-	CGame::GetInstance()->Draw(position.x, position.y, texture, sourceRect.left, sourceRect.top, sourceRect.right, sourceRect.bottom, alpha);
-	if (id != 0) {
-		DebugOut(L"dunglai");
-	}
+	CGame::GetInstance()->Draw(position.x, position.y, texture, sourceRect.left, sourceRect.top, sourceRect.right, sourceRect.bottom, alpha,22,20);
 }
 
 int CTileSet::GetTileWidth()
@@ -136,21 +133,20 @@ void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 	if (effectStart > 0)
 	{
 		alpha = GetTickCount() % 100 > 50 ? 80 : 255;
+		
 		//if (alpha == 80)
 			//CGame::GetInstance()->GetDirect3DDevice()->ColorFill(CGame::GetInstance()->GetBackBuffer(), NULL, D3DXCOLOR(0xBBBBBB));
 	}
-
 	for (int i = hStart; i < hEnd; i++)
 	{
 		for (int j = wStart; j < wEnd; j++)
 		{
 			if (mapData[i][j] == 0)
 				continue;
-			x = 0;
-			y = 840;
 			D3DXVECTOR2 pos;
-			pos.x = position.x + j * tileSet->GetTileWidth()-x;
-			pos.y = position.y + i * tileSet->GetTileHeight()-y;
+			pos.x = position.x + j * tileSet->GetTileWidth() - x+10;
+			pos.y = position.y + i * tileSet->GetTileHeight() - y-50;
+			
 			tileSet->DrawTile(mapData[i][j], pos, 255);
 		}
 	}

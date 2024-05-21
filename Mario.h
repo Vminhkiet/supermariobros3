@@ -5,6 +5,7 @@
 #include "Animations.h"
 
 #include "debug.h"
+#include "AssetIDs.h"
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
@@ -144,6 +145,7 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		this->SetType(OBJECT_TYPE_MARIO);
 	}
 	int getintro();
 	void SetSittingFalse() {

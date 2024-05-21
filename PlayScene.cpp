@@ -11,6 +11,7 @@
 #include "Platform.h"
 #include "Curtain.h"
 #include "Nen.h"
+#include "Ground.h"
 #include "Intro.h"
 #include "SampleKeyEventHandler.h"
 
@@ -312,7 +313,7 @@ void CPlayScene::Render()
 		Intro::GetInstance()->Render();
 	}
 	else {
-		tileMap->Draw({ 0, 48 * 10 });
+		tileMap->Draw({ 0,0 });
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 	}
@@ -371,10 +372,12 @@ void CPlayScene::PurgeDeletedObjects()
 }
 void CPlayScene::LoadResource(string s) {
 	LPGAME game = CGame::GetInstance();
+	D3DXCOLOR blueColor = D3DXCOLOR(0.53f, 0.81f, 0.92f, 1.0f);
 
+	CGame::GetInstance()->SetBackgroundColor(blueColor);
 	// Khởi tạo TileMap và Grid
 	tileMap = new CTileMap();
-	grid = new CGrid(22, 6, 16, 16);
+	grid = new CGrid(32, 24, 20, 20);
 
 	// Load dữ liệu từ tệp JSON
 	tileMap->LoadFromFile(ToLPCWSTR(s));
@@ -387,17 +390,17 @@ void CPlayScene::LoadResource(string s) {
 		if (layer["name"] == "Ground") {
 			for (auto& object : layer["objects"]) {
 				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
-				CPortal* portal = new CPortal(
+
+				 CGround* ground = new CGround(
 					float(object["x"]),
-					float(object["y"]) + object["height"],
-					object["properties"][0]["value"],
-					object["properties"][1]["value"],
-					id
+					float(object["y"])-56,
+					 object["width"],
+					 object["height"]
 				);
 				// Thêm portal vào danh sách đối tượng của Scene
-				objects.push_back(portal);
+				objects.push_back(ground);
 				// Thêm portal vào Grid
-				grid->InsertObject(portal);
+				grid->InsertObject(ground);
 			}
 		}
 	}

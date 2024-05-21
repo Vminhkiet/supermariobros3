@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Animation.h"
 #include "Animations.h"
+#include "AssetIDs.h"
 
 #define ID_ANI_BRICK 10000
 #define BRICK_WIDTH 16
@@ -11,7 +12,7 @@
 
 class CBrick : public CGameObject {
 public:
-	CBrick(float x, float y) : CGameObject(x, y) {}
+	CBrick(float x, float y) : CGameObject(x, y) { this->SetType(OBJECT_TYPE_BRICK); }
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);

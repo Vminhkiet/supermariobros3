@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Animation.h"
 #include "Animations.h"
-
+#include "AssetIDs.h"
 #define ID_ANI_MUSHROOM 80000
 #define MUSHROOM_WALKING_SPEED 0.05f
 #define MUSHROOM_GRAVITY 0.002f
@@ -28,6 +28,7 @@ public:
 		die_start = -1;
 		this->red = red;
 		SetState(MUSHROOM_STATE_WALKING);
+		this->SetType(OBJECT_TYPE_NAM);
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

@@ -28,14 +28,20 @@ protected:
 
 	int state;
 
-	bool isDeleted; 
+	bool isDeleted;
+	int type;
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
-
+	void SetType(int x) {
+		this->type = x;
+	}
+	int GetType() {
+		return this->type;
+	}
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }

@@ -1,4 +1,5 @@
 #include "Goomba.h"
+#include "AssetIDs.h"
 
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
@@ -6,6 +7,7 @@ CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 	this->ay = GOOMBA_GRAVITY;
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
+	this->SetType(OBJECT_TYPE_GOOMBA);
 }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Animation.h"
 #include "Animations.h"
+#include "AssetIDs.h"
 
 #define ID_ANI_LEAF 13002
 #define LEAF_WALKING_SPEED 0.05f
@@ -31,6 +32,7 @@ public:
 		die_start = -1;
 		SetState(LEAF_STATE_WALKING);
 		trucx = x;
+		this->SetType(OBJECT_TYPE_LEAF);
 	}
 	void setdraw(bool draw) { this->draw = draw; }
 	void Render();

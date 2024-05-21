@@ -115,8 +115,19 @@
  "tileheight":48,
  "tilesets":[
         {
-         "firstgid":1,
-         "source":"world1-1.json"
+         "columns":29,
+         "image":"..\/..\/textures\/world-1-1.png",
+         "imageheight":1440,
+         "imagewidth":1392,
+         "margin":0,
+         "name":"world1-1",
+         "spacing":0,
+         "tilecount":870,
+         "tiledversion":"1.10.2",
+         "tileheight":48,
+         "tilewidth":48,
+         "type":"tileset",
+         "version":"1.10"
         }],
  "tilewidth":48,
  "type":"map",
