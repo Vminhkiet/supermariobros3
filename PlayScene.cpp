@@ -377,7 +377,7 @@ void CPlayScene::LoadResource(string s) {
 	CGame::GetInstance()->SetBackgroundColor(blueColor);
 	// Khởi tạo TileMap và Grid
 	tileMap = new CTileMap();
-	grid = new CGrid(32, 24, 20, 20);
+	grid = new CGrid(40, 30, 16, 16);
 
 	// Load dữ liệu từ tệp JSON
 	tileMap->LoadFromFile(ToLPCWSTR(s));
@@ -392,8 +392,8 @@ void CPlayScene::LoadResource(string s) {
 				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
 
 				 CGround* ground = new CGround(
-					float(object["x"]),
-					float(object["y"])-56,
+					float(object["x"])-10,
+					float(object["y"])-230,
 					 object["width"],
 					 object["height"]
 				);

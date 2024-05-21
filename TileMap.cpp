@@ -3,7 +3,6 @@
 #include <fstream>
 #include "Utils.h"
 
-
 CTileSet::CTileSet()
 {
 }
@@ -44,7 +43,7 @@ void CTileSet::LoadFromFile(LPCWSTR imagePath) {
 void CTileSet::DrawTile(int id, D3DXVECTOR2 position, int alpha)
 {
 	RECT sourceRect = listTile[id];
-	CGame::GetInstance()->Draw(position.x, position.y, texture, sourceRect.left, sourceRect.top, sourceRect.right, sourceRect.bottom, alpha,22,20);
+	CGame::GetInstance()->Draw(position.x, position.y, texture, sourceRect.left, sourceRect.top, sourceRect.right, sourceRect.bottom, alpha,16,16);
 }
 
 int CTileSet::GetTileWidth()
@@ -65,16 +64,9 @@ CTileMap::CTileMap()
 	tileSet = new CTileSet();
 	wStart = 0;
 	wEnd = 100;
-
 	effectStart = 0;
 }
 
-CTileMap::~CTileMap()
-{
-	for (int i = 0; i < tileRow; i++)
-		delete[] mapData[i];
-	delete mapData;
-}
 
 void CTileMap::LoadFromFile(LPCWSTR filePath)
 {
@@ -85,23 +77,35 @@ void CTileMap::LoadFromFile(LPCWSTR filePath)
 		DebugOut(L"Cannot open file: %s\n", filePath);
 		return;
 	}
-	tileRow = j["/layers/0/height"_json_pointer].get<int>();
-	tileColumn = j["/layers/0/width"_json_pointer].get<int>();
-	height = j["/height"_json_pointer].get<int>();
+	tileRow = j["height"].get<int>();
+	tileColumn = j["width"].get<int>();
+	height = j["tileheight"].get<int>();
+	for (const auto& layerData : j["layers"]) {
+		if (layerData["type"] == "tilelayer") {
+			int rows = layerData["height"].get<int>();
+			int cols = layerData["width"].get<int>();
 
-	vector<int> data = j["/layers/0/data"_json_pointer].get<vector<int>>();
+			CLayer* newLayer = new CLayer();
+			newLayer->tileRow = rows;
+			newLayer->tileColumn = cols;
+			newLayer->data = new int* [rows];
 
-	// Map data from vector to matrix
-	mapData = new int* [tileRow];
-	for (int i = 0; i < tileRow; i++)
-	{
-		mapData[i] = new int[tileColumn];
-		for (int j = 0; j < tileColumn; j++)
-		{
-			int tmp = i * tileColumn + j;
-			mapData[i][j] = data[tmp];
+			std::vector<int> data = layerData["data"].get<std::vector<int>>();
+
+			for (int i = 0; i < rows; i++) {
+				newLayer->data[i] = new int[cols];
+				for (int j = 0; j < cols; j++) {
+					int index = i * cols + j;
+					newLayer->data[i][j] = data[index];
+				}
+			}
+
+			layers.push_back(newLayer);
 		}
 	}
+
+
+	
 	//string tilesetSource = j["tilesets"][0]["source"].get<std::string>();
 	tileSet->tileWidth = j["tilesets"][0]["tilewidth"].get<int>();
 	tileSet->tileHeight = j["tilesets"][0]["tileheight"].get<int>();
@@ -137,17 +141,19 @@ void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 		//if (alpha == 80)
 			//CGame::GetInstance()->GetDirect3DDevice()->ColorFill(CGame::GetInstance()->GetBackBuffer(), NULL, D3DXCOLOR(0xBBBBBB));
 	}
-	for (int i = hStart; i < hEnd; i++)
-	{
-		for (int j = wStart; j < wEnd; j++)
+	for (auto& layer : layers) {
+		for (int i = hStart; i < hEnd; i++)
 		{
-			if (mapData[i][j] == 0)
-				continue;
-			D3DXVECTOR2 pos;
-			pos.x = position.x + j * tileSet->GetTileWidth() - x+10;
-			pos.y = position.y + i * tileSet->GetTileHeight() - y-50;
-			
-			tileSet->DrawTile(mapData[i][j], pos, 255);
+			for (int j = wStart; j < wEnd; j++)
+			{
+				if (layer->data[i][j] == 0)
+					continue;
+				D3DXVECTOR2 pos;
+				pos.x = position.x + j * tileSet->GetTileWidth() - x;
+				pos.y = position.y + i * tileSet->GetTileHeight() - y - 220;
+
+				tileSet->DrawTile(layer->data[i][j], pos, 255);
+			}
 		}
 	}
 }

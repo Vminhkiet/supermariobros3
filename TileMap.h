@@ -18,6 +18,27 @@
 
 using json = nlohmann::json;
 
+class CLayer {
+private:
+	int tileRow;
+	int tileColumn;
+	int** data;
+
+public:
+	CLayer() : tileRow(0), tileColumn(0), data(nullptr) {}
+	~CLayer() {
+		if (data) {
+			for (int i = 0; i < tileRow; i++) {
+				delete[] data[i];
+			}
+			delete[] data;
+		}
+	}
+
+	friend class CTileMap;
+};
+
+typedef CLayer* LPLAYER;
 
 class CTileSet
 {
@@ -49,7 +70,7 @@ private:
 	int tileColumn;
 	int height;
 	LPTILESET tileSet;
-	int** mapData;
+	vector<LPLAYER> layers;
 
 	int wStart;
 	int wEnd;
@@ -57,7 +78,7 @@ private:
 	static DWORD effectStart;
 public:
 	CTileMap();
-	~CTileMap();
+
 
 	void LoadFromFile(LPCWSTR filePath);
 	void Draw(D3DXVECTOR2 position, int alpha = 255);
