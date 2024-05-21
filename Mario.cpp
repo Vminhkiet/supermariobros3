@@ -8,6 +8,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "Leaf.h"
+#include "QuestionBlock.h"
 #include "Collision.h"
 
 int CMario::getintro() {
@@ -70,6 +71,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<CLEAF*>(e->obj))
 		OnCollisionWithLeaf(e);
+	else if (dynamic_cast<CQuestionblock*>(e->obj))
+		OnCollisionWithQuestionblock(e);
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
@@ -89,6 +92,12 @@ void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {
 	}
 
 
+}
+void CMario::OnCollisionWithQuestionblock(LPCOLLISIONEVENT e){
+	if (e->ny > 0 ) {
+		CQuestionblock* ques= dynamic_cast<CQuestionblock*>(e->obj);
+		ques->SetCham(true);
+	}
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e) {
 	CLEAF* leaf = dynamic_cast<CLEAF*>(e->obj);

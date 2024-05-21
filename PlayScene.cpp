@@ -313,7 +313,7 @@ void CPlayScene::Render()
 		Intro::GetInstance()->Render();
 	}
 	else {
-		tileMap->Draw({ 0,0 });
+		tileMap->Draw({ 0,0 },objects);
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 	}
@@ -381,11 +381,11 @@ void CPlayScene::LoadResource(string s) {
 
 	// Load dữ liệu từ tệp JSON
 	tileMap->LoadFromFile(ToLPCWSTR(s));
-
+	
 	// Lặp qua các layer trong tệp JSON để tìm các đối tượng
 	ifstream file(s);
 	json j = json::parse(file);
-
+	tileMap->LoadObject(objects);
 	for (auto& layer : j["layers"]) {
 		if (layer["name"] == "Ground") {
 			for (auto& object : layer["objects"]) {
@@ -404,5 +404,6 @@ void CPlayScene::LoadResource(string s) {
 			}
 		}
 	}
+	
 
 }

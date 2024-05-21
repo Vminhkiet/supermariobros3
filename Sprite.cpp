@@ -111,4 +111,3 @@ void CSprite::Draw(float x, float y, int spritewidth, int spriteheight)
 
 	g->GetSpriteHandler()->DrawSpritesImmediate(&sprite, 1, 0, 0);
 }
-

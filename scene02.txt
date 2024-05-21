@@ -1,7 +1,7 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-
+brick.txt
 
 #
 [OBJECTS]

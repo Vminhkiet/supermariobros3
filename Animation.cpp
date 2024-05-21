@@ -33,7 +33,7 @@ void CAnimation::Render(float x, float y, float width, float height )
 		}
 
 	}
-	frames[currentFrame]->GetSprite()->Draw(x, y, width, height);
+    frames[currentFrame]->GetSprite()->Draw(x, y, width, height);
 
 }
 

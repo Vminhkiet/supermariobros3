@@ -20,12 +20,14 @@ using json = nlohmann::json;
 
 class CLayer {
 private:
+	bool load;
+	string name;
 	int tileRow;
 	int tileColumn;
 	int** data;
 
 public:
-	CLayer() : tileRow(0), tileColumn(0), data(nullptr) {}
+	CLayer() : tileRow(0), tileColumn(0), data(nullptr),name(""),load(false) {}
 	~CLayer() {
 		if (data) {
 			for (int i = 0; i < tileRow; i++) {
@@ -71,7 +73,7 @@ private:
 	int height;
 	LPTILESET tileSet;
 	vector<LPLAYER> layers;
-
+	vector<LPGAMEOBJECT> objects;
 	int wStart;
 	int wEnd;
 
@@ -81,7 +83,8 @@ public:
 
 
 	void LoadFromFile(LPCWSTR filePath);
-	void Draw(D3DXVECTOR2 position, int alpha = 255);
+	void LoadObject(vector<LPGAMEOBJECT>& obj);
+	void Draw(D3DXVECTOR2 position, vector<LPGAMEOBJECT>& object, int alpha = 255);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* object = NULL);
 
 	int GetWidth();
