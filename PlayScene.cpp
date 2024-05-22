@@ -12,6 +12,7 @@
 #include "Curtain.h"
 #include "Nen.h"
 #include "Ground.h"
+#include "TopGround.h"
 #include "Intro.h"
 #include "SampleKeyEventHandler.h"
 
@@ -396,6 +397,22 @@ void CPlayScene::LoadResource(string s) {
 					float(object["y"])-228,
 					 object["width"],
 					 object["height"]
+				);
+				// Thêm portal vào danh sách đối tượng của Scene
+				objects.push_back(ground);
+				// Thêm portal vào Grid
+				//grid->InsertObject(ground);
+			}
+		}
+		else if (layer["name"] == "TopGround") {
+			for (auto& object : layer["objects"]) {
+				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
+
+				CTop* ground = new CTop(
+					float(object["x"]) - 10,
+					float(object["y"]) - 228,
+					object["width"],
+					object["height"]
 				);
 				// Thêm portal vào danh sách đối tượng của Scene
 				objects.push_back(ground);

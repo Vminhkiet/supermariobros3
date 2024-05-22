@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "debug.h"
 
 #include "Mario.h"
@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "Leaf.h"
 #include "QuestionBlock.h"
+#include "TopGround.h"
 #include "Collision.h"
 
 int CMario::getintro() {
@@ -48,6 +49,17 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CTop*>(e->obj))
+	{
+		// Xử lý đối tượng đặc biệt CPlatform
+		if (e->ny < 0) // Va chạm từ trên xuống
+		{
+			vy = 0;
+			ay = 0;
+			isOnPlatform = true;
+			SetState(MARIO_STATE_RELEASE_JUMP);
+		}
+	}
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
@@ -93,6 +105,7 @@ void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {
 
 
 }
+
 void CMario::OnCollisionWithQuestionblock(LPCOLLISIONEVENT e){
 	if (e->ny > 0 ) {
 		CQuestionblock* ques= dynamic_cast<CQuestionblock*>(e->obj);

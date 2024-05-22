@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3dx10.h>
@@ -36,6 +36,9 @@ public:
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
+	float Gety() {
+		return y;
+	}
 	void SetType(int x) {
 		this->type = x;
 	}
@@ -69,7 +72,18 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};
 	
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
-	virtual int IsBlocking() { return 1; }
+	virtual int IsBlocking()
+	{
+		return 1;
+	}
+	virtual bool IsBlocking(LPCOLLISIONEVENT e)
+	{
+		// Chỉ chặn khi va chạm từ trên xuống (ny < 0)
+		if (e->ny < 0)
+			return true;
+		return false;
+	}
+
 
 	~CGameObject();
 

@@ -15,6 +15,11 @@ public:
 		this->height = height; 
 		this->SetType(OBJECT_TYPE_GROUND);
 	}
+	int IsBlocking() 
+	{
+		// Ch?n khi va ch?m t? m?i h??ng
+		return 1;
+	}
 	void Render();
 	void Update(DWORD dt){}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
