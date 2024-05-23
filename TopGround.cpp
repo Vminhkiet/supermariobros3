@@ -2,7 +2,7 @@
 
 
 void CTop::Render() {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CTop::GetBoundingBox(float& l, float& t, float& r, float& b)

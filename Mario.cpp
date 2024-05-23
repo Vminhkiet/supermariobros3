@@ -17,13 +17,24 @@ int CMario::getintro() {
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (GetState()==MARIO_STATE_JUMP) {
+	if (GetState()==MARIO_STATE_JUMP ) {
 		ay = MARIO_GRAVITY;
 	}
+	else if (roiy1 != -1 && roiy2 != -1) {
+		if (x<roiy1 || x>roiy2) {
+			roiy1 = -1;
+			roiy2 = -1;
+			isOnTop = 0;
+		}
+	}
+	if (isOnTop) {
+		isroi = 0;
+	}
+	if(!isOnTop)
+	  vy += ay * dt;
 
-	vy += ay * dt;
 	vx += ax * dt;
-
+	
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -35,40 +46,37 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (intro == 0 && !mariogreen) {
 		isOnPlatform = true;
 	}
-    else isOnPlatform = false;
-	
+	else {
+		isOnPlatform = false;
+		//isOnTop = 0;
+	}
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+	
 }
 
 void CMario::OnNoCollision(DWORD dt)
 {
+
 	x += vx * dt;
-	
 	y += vy * dt;
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (dynamic_cast<CTop*>(e->obj))
+	if (e->obj->IsBlocking())
 	{
-		// Xử lý đối tượng đặc biệt CPlatform
-		if (e->ny < 0) // Va chạm từ trên xuống
+		if (e->ny != 0)
 		{
-			vy = 0;
-			ay = 0;
-			isOnPlatform = true;
-			SetState(MARIO_STATE_RELEASE_JUMP);
+			vy = 0; // Đặt tốc độ rơi bằng 0 khi va chạm theo trục y
+			if (e->ny < 0)
+			{
+				isOnPlatform = true; // Điều chỉnh vị trí để đứng trên nền
+			}
 		}
-	}
-	if (e->ny != 0 && e->obj->IsBlocking())
-	{
-		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
-	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
-	{
-		vx = 0;
+		else if (e->nx != 0)
+		{
+			vx = 0; // Đặt tốc độ ngang bằng 0 khi va chạm theo trục x
+		}
 	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
@@ -85,6 +93,31 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CQuestionblock*>(e->obj))
 		OnCollisionWithQuestionblock(e);
+	else if (dynamic_cast<CTop*>(e->obj)) {
+		CTop* top = dynamic_cast<CTop*>(e->obj);
+		if (e->ny < 0) {
+			isroi = 1;
+		}
+
+		if (isroi) {
+			roiy1 = top->getx();
+			roiy2 = roiy1 + top->getwidth();
+			vy = 0;
+			if (level == MARIO_LEVEL_SMALL) {
+				y = top->Gety() - MARIO_SMALL_BBOX_HEIGHT / 2;
+			}
+			else {
+				y = top->Gety() - MARIO_BIG_BBOX_HEIGHT/2;
+			}
+			//ay = 0;
+			isOnTop = 1;
+			isOnPlatform = true;
+			return;
+		}
+		
+	}
+	
+	
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
@@ -169,7 +202,7 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
-	if (!isOnPlatform)
+	if (!(isOnPlatform || isOnTop))
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
@@ -232,7 +265,7 @@ int CMario::GetAniIdBig()
 {
 	int aniId = -1;
 	
-	if (!isOnPlatform)
+	if (!(isOnPlatform||isOnTop))
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
@@ -340,8 +373,10 @@ void CMario::SetState(int state)
 	case MARIO_STATE_JUMP:
 		
 		if (isSitting) break;
-		if (isOnPlatform)
+		if (isOnPlatform || isOnTop==1)
 		{
+			isroi = 0;
+			isOnTop = 0;
 			if (abs(this->vx) == MARIO_RUNNING_SPEED)
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
 			else
@@ -350,11 +385,13 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
+		isroi = 1;
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+
 		break;
 
 	case MARIO_STATE_SIT:
-		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
+		if ((isOnTop == 1 ||isOnPlatform) && level != MARIO_LEVEL_SMALL)
 		{
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
@@ -375,6 +412,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_IDLE:
+		isroi = 0;
 		ax = 0.0f;
 		vx = 0.0f;
 		break;

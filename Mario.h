@@ -128,6 +128,10 @@ class CMario : public CGameObject
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	bool mariogreen = false;
+	int isroi = 0;
+	int isOnTop = 0;
+	float roiy1=-1, roiy2=-1;
+	float ytop = -1;
 	int kichhoat = 1;
 	int intro=1;
 public:
@@ -140,7 +144,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;

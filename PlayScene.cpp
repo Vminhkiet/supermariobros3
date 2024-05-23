@@ -409,9 +409,9 @@ void CPlayScene::LoadResource(string s) {
 				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
 
 				CTop* ground = new CTop(
-					float(object["x"]) - 10,
+					float(object["x"]) - 2,
 					float(object["y"]) - 228,
-					object["width"],
+					object["width"]-8,
 					object["height"]
 				);
 				// Thêm portal vào danh sách đối tượng của Scene

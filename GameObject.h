@@ -25,7 +25,7 @@ protected:
 	float vy;
 
 	int nx;	 
-
+	int ny;
 	int state;
 
 	bool isDeleted;
@@ -38,6 +38,9 @@ public:
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	float Gety() {
 		return y;
+	}
+	int GetNy() {
+		return ny;
 	}
 	void SetType(int x) {
 		this->type = x;
@@ -53,7 +56,6 @@ public:
 
 	CGameObject();
 	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
-
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
@@ -75,13 +77,6 @@ public:
 	virtual int IsBlocking()
 	{
 		return 1;
-	}
-	virtual bool IsBlocking(LPCOLLISIONEVENT e)
-	{
-		// Chỉ chặn khi va chạm từ trên xuống (ny < 0)
-		if (e->ny < 0)
-			return true;
-		return false;
 	}
 
 
