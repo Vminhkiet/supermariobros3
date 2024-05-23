@@ -11,9 +11,12 @@
 
 class CQuestionblock : public CGameObject {
 	bool bicham = false;
+	float ycu;
+	int cnt = 2;
 public:
 	CQuestionblock(float x, float y) : CGameObject(x, y) { 
 		this->SetType(OBJECT_TYPE_QUES);
+		ycu = y;
 	}
 	void SetCham(bool cham) { 
 		bicham = cham;

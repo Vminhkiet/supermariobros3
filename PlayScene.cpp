@@ -314,7 +314,10 @@ void CPlayScene::Render()
 		Intro::GetInstance()->Render();
 	}
 	else {
-		tileMap->Draw({ 0,0 },objects);
+		float x, y;
+		CGame::GetInstance()->GetCamPos(x, y);
+		if(tileMap->getload())
+		   tileMap->Draw({ 0,0 },objects);
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 	}
@@ -393,9 +396,9 @@ void CPlayScene::LoadResource(string s) {
 				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
 
 				 CGround* ground = new CGround(
-					float(object["x"])-10,
+					float(object["x"])-2,
 					float(object["y"])-228,
-					 object["width"],
+					 object["width"]-8,
 					 object["height"]
 				);
 				// Thêm portal vào danh sách đối tượng của Scene

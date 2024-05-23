@@ -91,6 +91,7 @@ void CTileMap::LoadFromFile(LPCWSTR filePath)
 			newLayer->tileColumn = cols;
 			newLayer->data = new int* [rows];
 			newLayer->name = layerData["name"];
+			
 			std::vector<int> data = layerData["data"].get<std::vector<int>>();
 
 			for (int i = 0; i < rows; i++) {
@@ -98,6 +99,7 @@ void CTileMap::LoadFromFile(LPCWSTR filePath)
 				for (int j = 0; j < cols; j++) {
 					int index = i * cols + j;
 					newLayer->data[i][j] = data[index];
+
 				}
 			}
 
@@ -119,6 +121,7 @@ void CTileMap::LoadFromFile(LPCWSTR filePath)
 	file.close();
 	// Load tileset
 	tileSet->LoadFromFile(imagePath);
+	load = true;
 }
 
 void CTileMap::Draw(D3DXVECTOR2 position, vector<LPGAMEOBJECT>& object, int alpha)
@@ -145,29 +148,37 @@ void CTileMap::Draw(D3DXVECTOR2 position, vector<LPGAMEOBJECT>& object, int alph
 			//CGame::GetInstance()->GetDirect3DDevice()->ColorFill(CGame::GetInstance()->GetBackBuffer(), NULL, D3DXCOLOR(0xBBBBBB));
 	}
 	for (auto& layer : layers) {
-		if(!layer->load)
-			for (int i = hStart; i < hEnd; i++)
+		for (int i = hStart; i < hEnd; i++)
+		{
+			for (int j = wStart; j < wEnd; j++)
 			{
-				for (int j = wStart; j < wEnd; j++)
-				{
-					if (layer->data[i][j] == 0)
-						continue;
-					D3DXVECTOR2 pos;
-					pos.x = position.x + j * tileSet->GetTileWidth() - x;
-					pos.y = position.y + i * tileSet->GetTileHeight() - y - 220;
-					if (layer->name == "BlockQuestion") {
-						CQuestionblock* obj = new CQuestionblock(pos.x, pos.y);
+				if (layer->data[i][j] == 0)
+					continue;
+				D3DXVECTOR2 pos;
+				pos.x = position.x + j * tileSet->GetTileWidth()-x ;
+				pos.y = position.y + i * tileSet->GetTileHeight()-y - 220;
+				if (layer->name == "BlockQuestion") {
+					
+					bool them = true;
+					for (auto m : layer->toadocell)
+						if (m.first == i && m.second == j) {
+							them = false;
+						}
+					if (them) {
+						CQuestionblock* obj = new CQuestionblock(j* tileSet->GetTileWidth()-2, pos.y-1);
+						layer->toadocell.push_back({ i, j });
+
 						object.push_back(obj);
 						objects.push_back(obj);
 					}
-					else {
-						tileSet->DrawTile(layer->data[i][j], pos, 255);
-					}
+					
+				}
+				else {
+					tileSet->DrawTile(layer->data[i][j], pos, 255);
 				}
 			}
-		if (layer->name == "BlockQuestion") {
-			layer->load = true;
 		}
+        
 	}
 }
 void CTileMap::LoadObject(vector<LPGAMEOBJECT>& obj) {

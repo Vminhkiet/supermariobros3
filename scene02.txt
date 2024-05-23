@@ -2,6 +2,7 @@
 [ASSETS]
 mario.txt
 brick.txt
+Questionblock.txt
 
 #
 [OBJECTS]

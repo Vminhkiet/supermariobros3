@@ -2,8 +2,16 @@
 
 void CQuestionblock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (bicham) {
-		y-=20;
-		bicham = false;
+		if(cnt==2)
+		    y--;
+		if (cnt == 1)
+			y++;
+		if (y == ycu - 15) {
+			cnt--;
+		}
+		if (y == ycu) {
+			cnt--;
+		}
 	}
 	CGameObject::Update(dt, coObjects);
 }
@@ -11,7 +19,10 @@ void CQuestionblock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 void CQuestionblock::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_QUES)->Render(x, y,16,16);
+	if(!bicham)
+	    animations->Get(ID_ANI_QUES)->Render(x, y,19,19);
+	else
+		animations->Get(ID_ANI_QUES+1)->Render(x, y, 19, 19);
 	//RenderBoundingBox();
 }
 

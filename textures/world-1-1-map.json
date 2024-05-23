@@ -280,7 +280,7 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32.0454545454546,
+                 "width":32.5,
                  "x":352,
                  "y":368
                 }],
@@ -378,8 +378,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":32,
+ "nextlayerid":9,
+ "nextobjectid":42,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

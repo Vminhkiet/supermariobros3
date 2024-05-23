@@ -20,14 +20,15 @@ using json = nlohmann::json;
 
 class CLayer {
 private:
-	bool load;
 	string name;
 	int tileRow;
 	int tileColumn;
+	int count = 0;
 	int** data;
+	vector<pair<int, int>> toadocell;
 
 public:
-	CLayer() : tileRow(0), tileColumn(0), data(nullptr),name(""),load(false) {}
+	CLayer() : tileRow(0), tileColumn(0), data(nullptr),name("") {}
 	~CLayer() {
 		if (data) {
 			for (int i = 0; i < tileRow; i++) {
@@ -76,6 +77,7 @@ private:
 	vector<LPGAMEOBJECT> objects;
 	int wStart;
 	int wEnd;
+	bool load=false;
 
 	static DWORD effectStart;
 public:
@@ -89,7 +91,9 @@ public:
 
 	int GetWidth();
 	int GetHeight();
-
+	bool getload() {
+		return load;
+	}
 	static void StartEffect() { effectStart = GetTickCount(); }
 	
 };
