@@ -1,4 +1,5 @@
 #include "MUSHROOM.h"
+#include "TopGround.h"
 
 void CMUSHROOM::Render()
 {
@@ -7,7 +8,7 @@ void CMUSHROOM::Render()
 		animations->Get(ID_ANI_MUSHROOM)->Render(x, y);
 	else
 		animations->Get(ID_ANI_MUSHROOM + 1)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMUSHROOM::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -19,7 +20,26 @@ void CMUSHROOM::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void CMUSHROOM::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
+	if (ques && !chamdinh) {
+		y -=0.2;
+		if (ycu > y + 18) {
+			chamdinh = true;
+			ay = MUSHROOM_GRAVITY;
+			SetState(MUSHROOM_STATE_WALKING);
+		}
+	}
+	if (roiy1 != -1 && roiy2 != -1) {
+		if (x<roiy1 || x>roiy2) {
+			roiy1 = -1;
+			roiy2 = -1;
+			isOnTop = 0;
+		}
+	}
+	if (isOnTop) {
+		isroi = 0;
+	}
+	if (!isOnTop)
+	    vy += ay * dt;
 	vx += ax * dt;
 
 	if ((state == MUSHROOM_STATE_DIE) && (GetTickCount64() - die_start > MUSHROOM_DIE_TIMEOUT))
@@ -44,7 +64,11 @@ void CMUSHROOM::SetState(int state)
 		ay = 0;
 		break;
 	case MUSHROOM_STATE_WALKING:
+		float x, y;
+		CGame::GetInstance()->GetCamPos(x, y);
 		vx = -MUSHROOM_WALKING_SPEED;
+		if (this->x > x)
+			vx *= -1;
 		break;
 	}
 }
@@ -56,15 +80,33 @@ void CMUSHROOM::OnNoCollision(DWORD dt)
 
 void CMUSHROOM::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
+	if (!e->obj->IsBlocking() && e->obj->GetType()!=14) return;
 	if (dynamic_cast<CMUSHROOM*>(e->obj)) return;
-
-	if (e->ny != 0)
-	{
-		vy = 0;
+	if (e->obj->GetType() != 14) {
+		if (e->ny != 0)
+		{
+			vy = 0;
+		}
+		else if (e->nx != 0)
+		{
+			vx = -vx;
+		}
 	}
-	else if (e->nx != 0)
-	{
-		vx = -vx;
+	if (dynamic_cast<CTop*>(e->obj)) {
+		CTop* top = dynamic_cast<CTop*>(e->obj);
+		if (e->ny < 0) {
+			isroi = 1;
+		}
+
+		if (isroi) {
+			roiy1 = top->getx();
+			roiy2 = roiy1 + top->getwidth();
+			vy = 0;
+			y = top->Gety() - MUSHROOM_BBOX_HEIGHT / 2;
+			//ay = 0;
+			isOnTop = 1;
+			return;
+		}
+
 	}
 }

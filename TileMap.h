@@ -23,6 +23,7 @@ private:
 	string name;
 	int tileRow;
 	int tileColumn;
+	bool visible = true;
 	int count = 0;
 	int** data;
 	vector<pair<int, int>> toadocell;
@@ -74,7 +75,7 @@ private:
 	int height;
 	LPTILESET tileSet;
 	vector<LPLAYER> layers;
-	vector<LPGAMEOBJECT> objects;
+
 	int wStart;
 	int wEnd;
 	bool load=false;
@@ -85,8 +86,7 @@ public:
 
 
 	void LoadFromFile(LPCWSTR filePath);
-	void LoadObject(vector<LPGAMEOBJECT>& obj);
-	void Draw(D3DXVECTOR2 position, vector<LPGAMEOBJECT>& object, int alpha = 255);
+	void Draw(D3DXVECTOR2 position, int alpha = 255);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* object = NULL);
 
 	int GetWidth();

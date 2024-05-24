@@ -121,9 +121,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 }
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
-	e->obj->Delete();
-	level = MARIO_LEVEL_BIG;
-	SetLevel(level);
+	    CQuestionblock* ques = dynamic_cast<CQuestionblock*>(e->obj);
+
+		e->obj->Delete();
+		level = MARIO_LEVEL_BIG;
+		SetLevel(level);
 }
 void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {
 	CMario* mario = dynamic_cast<CMario*>(e->obj);
@@ -397,8 +399,12 @@ void CMario::SetState(int state)
 			isSitting = true;
 			vx = 0; vy = 0.0f;
 			ax = 0;
-
-			y -=MARIO_SIT_HEIGHT_ADJUST;
+			
+			if(isOnTop == 0)
+			  y -=MARIO_SIT_HEIGHT_ADJUST;
+			else {
+				y += MARIO_SIT_HEIGHT_ADJUST;
+			}
 		}
 		break;
 
@@ -407,7 +413,11 @@ void CMario::SetState(int state)
 		{
 			isSitting = false;
 			state = MARIO_STATE_IDLE;
-			y -= MARIO_SIT_HEIGHT_ADJUST;
+			if(isOnTop == 0)
+			    y -= MARIO_SIT_HEIGHT_ADJUST;
+			else {
+				y -= MARIO_SIT_HEIGHT_ADJUST;
+			}
 		}
 		break;
 

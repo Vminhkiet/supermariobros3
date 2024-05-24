@@ -35,7 +35,7 @@ public:
     virtual void Unload();
 
     LPGAMEOBJECT GetPlayer() { return player; }
-
+    void AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj = nullptr);
     void Clear();
     void PurgeDeletedObjects();
 

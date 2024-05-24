@@ -91,7 +91,7 @@ void CTileMap::LoadFromFile(LPCWSTR filePath)
 			newLayer->tileColumn = cols;
 			newLayer->data = new int* [rows];
 			newLayer->name = layerData["name"];
-			
+			newLayer->visible = layerData["visible"];
 			std::vector<int> data = layerData["data"].get<std::vector<int>>();
 
 			for (int i = 0; i < rows; i++) {
@@ -124,7 +124,7 @@ void CTileMap::LoadFromFile(LPCWSTR filePath)
 	load = true;
 }
 
-void CTileMap::Draw(D3DXVECTOR2 position, vector<LPGAMEOBJECT>& object, int alpha)
+void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 {
 
 	float x, y;
@@ -157,35 +157,15 @@ void CTileMap::Draw(D3DXVECTOR2 position, vector<LPGAMEOBJECT>& object, int alph
 				D3DXVECTOR2 pos;
 				pos.x = position.x + j * tileSet->GetTileWidth()-x ;
 				pos.y = position.y + i * tileSet->GetTileHeight()-y - 220;
-				if (layer->name == "BlockQuestion") {
-					
-					bool them = true;
-					for (auto m : layer->toadocell)
-						if (m.first == i && m.second == j) {
-							them = false;
-						}
-					if (them) {
-						CQuestionblock* obj = new CQuestionblock(j* tileSet->GetTileWidth()-2, pos.y-1);
-						layer->toadocell.push_back({ i, j });
+				if(layer->visible)
+				  tileSet->DrawTile(layer->data[i][j], pos, 255);
 
-						object.push_back(obj);
-						objects.push_back(obj);
-					}
-					
-				}
-				else {
-					tileSet->DrawTile(layer->data[i][j], pos, 255);
-				}
 			}
 		}
         
 	}
 }
-void CTileMap::LoadObject(vector<LPGAMEOBJECT>& obj) {
-	for (auto i : objects) {
-		obj.push_back(i);
-	}
-}
+
 void CTileMap::Update(DWORD dt, vector<LPGAMEOBJECT>* object)
 {
 	if (effectStart > 0 && GetTickCount() - effectStart > TILEMAP_CROSS_EFFECT_TIME)

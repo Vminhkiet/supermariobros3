@@ -1,19 +1,27 @@
 #include "QuestionBlock.h"
-
+#include "Mario.h"
+#include "PlayScene.h"
 void CQuestionblock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	CGameObject::Update(dt, coObjects);
 	if (bicham) {
-		if(cnt==2)
-		    y--;
+		if (cnt == 2)
+			y--;
 		if (cnt == 1)
 			y++;
-		if (y == ycu - 15) {
+		if (y == ycu - 5) {
 			cnt--;
 		}
 		if (y == ycu) {
 			cnt--;
 		}
+		if (!dathem) {
+			CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			currentScene->AddObject(obj,this);
+			dathem = true;
+		}
 	}
-	CGameObject::Update(dt, coObjects);
+	
+	
 }
 
 void CQuestionblock::Render()
@@ -21,8 +29,9 @@ void CQuestionblock::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	if(!bicham)
 	    animations->Get(ID_ANI_QUES)->Render(x, y,19,19);
-	else
-		animations->Get(ID_ANI_QUES+1)->Render(x, y, 19, 19);
+	else {
+		animations->Get(ID_ANI_QUES + 1)->Render(x, y, 19, 19);
+	}
 	//RenderBoundingBox();
 }
 

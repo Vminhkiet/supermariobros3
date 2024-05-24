@@ -12,6 +12,7 @@
 #include "Curtain.h"
 #include "Nen.h"
 #include "Ground.h"
+#include "QuestionBlock.h"
 #include "TopGround.h"
 #include "Intro.h"
 #include "SampleKeyEventHandler.h"
@@ -281,6 +282,7 @@ void CPlayScene::Update(DWORD dt)
 		for (size_t i = 1; i < objects.size(); i++)
 		{
 			coObjects.push_back(objects[i]);
+
 		}
 
 		for (size_t i = 0; i < objects.size(); i++)
@@ -317,7 +319,7 @@ void CPlayScene::Render()
 		float x, y;
 		CGame::GetInstance()->GetCamPos(x, y);
 		if(tileMap->getload())
-		   tileMap->Draw({ 0,0 },objects);
+		   tileMap->Draw({ 0,0 });
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 	}
@@ -389,7 +391,6 @@ void CPlayScene::LoadResource(string s) {
 	// Lặp qua các layer trong tệp JSON để tìm các đối tượng
 	ifstream file(s);
 	json j = json::parse(file);
-	tileMap->LoadObject(objects);
 	for (auto& layer : j["layers"]) {
 		if (layer["name"] == "Ground") {
 			for (auto& object : layer["objects"]) {
@@ -423,7 +424,48 @@ void CPlayScene::LoadResource(string s) {
 				//grid->InsertObject(ground);
 			}
 		}
+		else if (layer["name"] == "Questionblock") {
+			for (auto& object : layer["objects"]) {
+				CQuestionblock* obj=NULL;
+				if (object["name"] == "Coin") {
+					obj = new CQuestionblock(
+						float(object["x"]) - 8,
+						float(object["y"]) - 228,
+						1
+					);
+				}
+				else if (object["name"] == "Nam") {
+					obj = new CQuestionblock(
+						float(object["x"]) - 8,
+						float(object["y"]) - 228,
+						2
+					);
+				}
+				else if (object["name"] == "Leaf") {
+					obj = new CQuestionblock(
+						float(object["x"]) - 8,
+						float(object["y"]) - 228,
+						3
+					);
+				}
+				objects.push_back(obj);
+			}
+		}
 	}
 	
 
+}
+void CPlayScene::AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj) {
+	if (referenceObj == nullptr) {
+		objects.push_back(obj);
+	}
+	else {
+		auto it = std::find(objects.begin(), objects.end(), referenceObj);
+		if (it != objects.end()) {
+			objects.insert(it, obj);  // Thêm obj trước referenceObj
+		}
+		else {
+			objects.push_back(obj);
+		}
+	}
 }
