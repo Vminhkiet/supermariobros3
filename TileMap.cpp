@@ -148,20 +148,20 @@ void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 			//CGame::GetInstance()->GetDirect3DDevice()->ColorFill(CGame::GetInstance()->GetBackBuffer(), NULL, D3DXCOLOR(0xBBBBBB));
 	}
 	for (auto& layer : layers) {
-		for (int i = hStart; i < hEnd; i++)
-		{
-			for (int j = wStart; j < wEnd; j++)
+			for (int i = hStart; i < hEnd; i++)
 			{
-				if (layer->data[i][j] == 0)
-					continue;
-				D3DXVECTOR2 pos;
-				pos.x = position.x + j * tileSet->GetTileWidth()-x ;
-				pos.y = position.y + i * tileSet->GetTileHeight()-y - 220;
-				if(layer->visible)
-				  tileSet->DrawTile(layer->data[i][j], pos, 255);
+				for (int j = wStart; j < wEnd; j++)
+				{
+					if (layer->data[i][j] == 0)
+						continue;
+					D3DXVECTOR2 pos;
+					pos.x = position.x + j * tileSet->GetTileWidth()-x ;
+					pos.y = position.y + i * tileSet->GetTileHeight()-y - 220;
+					if (layer->visible)
+					    tileSet->DrawTile(layer->data[i][j], pos, 255);
 
+				}
 			}
-		}
         
 	}
 }

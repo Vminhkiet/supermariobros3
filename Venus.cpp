@@ -1,37 +1,56 @@
 ﻿#include "Venus.h"
 #include "Bullet.h"
+#include "Ground.h"
 #include "PlayScene.h"
 void CVenus::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     CGameObject::Update(dt, coObjects);
+    DWORD now = GetTickCount64();
 
-    if (!isShooting && GetTickCount64() - shootTime > 2000 ) {  // Cứ mỗi 2 giây lại bắn một lần
-        isShooting = true;
-        shootTime = GetTickCount64();
-        CreateBullet();
-        isShooting = false;
-        dung = false;
-        xuong = true;
-        len = false;
-    }
+    switch (state) {
+    case MOVING_UP:
+        y += vy*dt;
+        if (y+42 < yStart ) {  // Lên tới đỉnh
 
-    // Di chuyển lên xuống theo trục y
-    if(!dung)
-      y += vy * dt;
-    else {
-        len = false;
-        xuong = false;
-    }
-    if (y < yStart - 32 || y > yStart) {
-        dung = true;
-        
-        vy = -vy;
+            state = WAITING_AT_TOP;
+            stateTime = now;
+            vy = 0;
+        }
+        break;
+
+    case WAITING_AT_TOP:
+        if (now - stateTime >= 2000) {  // Đợi 2 giây tại đỉnh
+            CreateBullet();
+            state = MOVING_DOWN;
+            vy = -VENUS_SPEED;
+            stateTime = now;  // Cập nhật thời gian bắt đầu di chuyển xuống
+        }
+        break;
+
+    case MOVING_DOWN:
+        y += vy*dt;
+        if (y > yStart) {  // Xuống tới đáy
+            y = yStart;
+            state = WAITING_AT_BOTTOM;
+            stateTime = now;
+            vy = 0;
+        }
+        break;
+
+    case WAITING_AT_BOTTOM:
+        if (now - stateTime >= 2000) {  // Đợi 2 giây tại đáy
+            state = MOVING_UP;
+            vy = VENUS_SPEED;
+            stateTime = now;  // Cập nhật thời gian bắt đầu di chuyển lên
+        }
+        break;
     }
 }
 
 void CVenus::Render() {
     CAnimations* animations = CAnimations::GetInstance();
     float x, y;
-    CGame::GetInstance()->GetCamPos(x, y);
+    CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+    currentScene->GetPlayer()->GetPosition(x, y);
     if (x < this->x) {
         trai = true;
     }
@@ -39,20 +58,20 @@ void CVenus::Render() {
         trai = false;
     }
     if (y < this->y) {
-        tren = false;
+        tren = true;
     }
     else {
-        tren = true;
+        tren = false;
     }
     if (trai) {
         if (tren) {
-            if (len || xuong)
+            if (state==MOVING_UP || state==MOVING_DOWN)
                 animations->Get(11101)->Render(this->x, this->y);
             else 
                 animations->Get(11105)->Render(this->x, this->y);
         }
         else {
-            if (len || xuong)
+            if (state == MOVING_UP || state == MOVING_DOWN)
                 animations->Get(11103)->Render(this->x, this->y);
             else
                 animations->Get(11107)->Render(this->x, this->y);
@@ -60,13 +79,13 @@ void CVenus::Render() {
     }
     else {
         if (tren) {
-            if (len || xuong)
+            if (state == MOVING_UP || state == MOVING_DOWN)
                 animations->Get(11102)->Render(this->x, this->y);
             else
                 animations->Get(11106)->Render(this->x, this->y);
         }
         else {
-            if (len || xuong)
+            if (state == MOVING_UP || state == MOVING_DOWN)
                 animations->Get(11104)->Render(this->x, this->y);
             else
                 animations->Get(11108)->Render(this->x, this->y);
@@ -100,4 +119,8 @@ void CVenus::GetBoundingBox(float& left, float& top, float& right, float& bottom
         top = y - 20 / 2;
         right = left + 15;
         bottom = top + 20;
+}
+void CVenus::OnCollisionWith(LPCOLLISIONEVENT e) {
+    if (dynamic_cast<CGround*>(e->obj))
+        return;
 }

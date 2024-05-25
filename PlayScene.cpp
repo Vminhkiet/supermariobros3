@@ -24,6 +24,7 @@ using namespace std;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
+	
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
 
@@ -103,17 +104,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (id != 1)
 	{
 		vector<string> tokens = split(line);
-
+		CGameObject* obj;
 		// skip invalid lines - an object set must have at least id, x, y
 		if (tokens.size() < 2) return;
 
 		int object_type = atoi(tokens[0].c_str());
 		
-
-		CGameObject *obj = NULL;
 		if (object_type == LOAD_RESOURCE)
 		{
-			DebugOut(L"ADS:", tokens[1].c_str());
 			LoadResource("textures\\world-1-1-map.json");
 			return;
 		}
@@ -278,7 +276,7 @@ void CPlayScene::Update(DWORD dt)
 	}
 	else{
 		//grid->Update(dt);
-		tileMap->Update(dt, &objects);
+		
 		vector<LPGAMEOBJECT> coObjects;
 		for (size_t i = 1; i < objects.size(); i++)
 		{
@@ -304,7 +302,7 @@ void CPlayScene::Update(DWORD dt)
 
 		if (cx < 0) cx = 0;
 		CGame::GetInstance()->SetCamPos((int)cx, 0 /*cy*/);
-		
+		tileMap->Update(dt, &objects);
 	}
 	    
 
@@ -319,10 +317,18 @@ void CPlayScene::Render()
 	else {
 		float x, y;
 		CGame::GetInstance()->GetCamPos(x, y);
-		if(tileMap->getload())
-		   tileMap->Draw({ 0,0 });
+
 		for (int i = 0; i < objects.size(); i++)
-			objects[i]->Render();
+			if (objects[i]->GetType() == 15)
+				objects[i]->Render();
+		if (tileMap)
+			if (tileMap->getload())
+				tileMap->Draw({ 0,0 });
+		for (int i = 0; i < objects.size(); i++)
+			if(objects[i]->GetType()!=15)
+			   objects[i]->Render();
+		
+		
 	}
 }
 
@@ -427,13 +433,14 @@ void CPlayScene::LoadResource(string s) {
 		}
 		else if (layer["name"] == "Questionblock") {
 			for (auto& object : layer["objects"]) {
-				CQuestionblock* obj=NULL;
+				CQuestionblock* obj;
 				if (object["name"] == "Coin") {
 					obj = new CQuestionblock(
 						float(object["x"]) - 8,
 						float(object["y"]) - 228,
 						1
 					);
+					objects.push_back(obj);
 				}
 				else if (object["name"] == "Nam") {
 					obj = new CQuestionblock(
@@ -441,6 +448,7 @@ void CPlayScene::LoadResource(string s) {
 						float(object["y"]) - 228,
 						2
 					);
+					objects.push_back(obj);
 				}
 				else if (object["name"] == "Leaf") {
 					obj = new CQuestionblock(
@@ -448,8 +456,9 @@ void CPlayScene::LoadResource(string s) {
 						float(object["y"]) - 228,
 						3
 					);
+					objects.push_back(obj);
 				}
-				objects.push_back(obj);
+				
 			}
 		}
 		else if (layer["name"] == "Venus") {
@@ -458,7 +467,7 @@ void CPlayScene::LoadResource(string s) {
 
 				CVenus* venus = new CVenus(
 					float(object["x"]) - 8,
-					float(object["y"]) - 228
+					float(object["y"]) - 220
 				);
 				// Thêm portal vào danh sách đối tượng của Scene
 				objects.push_back(venus);
@@ -470,7 +479,7 @@ void CPlayScene::LoadResource(string s) {
 	
 
 }
-void CPlayScene::AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj) {
+void CPlayScene::AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj){
 	if (referenceObj == nullptr) {
 		objects.push_back(obj);
 	}

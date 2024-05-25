@@ -11,31 +11,39 @@
 
 #define ID_ANI_VENUS 20001
 #define ID_ANI_VENUS_BULLET 20002
-
+enum VenusState {
+    MOVING_UP,
+    MOVING_DOWN,
+    WAITING_AT_TOP,
+    WAITING_AT_BOTTOM
+};
 class CVenus : public CGameObject {
 protected:
     float yStart;  // V? trí ban ??u theo tr?c y
     bool isShooting;  // Tr?ng thái b?n
-    DWORD shootTime;  // Th?i gian b?t ??u b?n
+    DWORD stateTime; // Th?i gian b?t ??u b?n
+    VenusState state;
     int huong = 0;
-    bool len = true;
-    bool xuong = false;
     bool tren = true;
     bool trai = true;
-    bool dung = false;
 public:
     CVenus(float x, float y) : CGameObject(x, y) {
         yStart = y;
         isShooting = false;
         vy = VENUS_SPEED;
+        state = MOVING_UP;
         vx = 0;
         SetType(OBJECT_TYPE_VENUS);
     }
-
+    int IsBlocking()
+    {
+        return 0;
+    }
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     void Render();
     void GetBoundingBox(float& l, float& t, float& r, float& b);
     void CreateBullet();
+    void OnCollisionWith(LPCOLLISIONEVENT e);
 };
 
 typedef CVenus* LPVENUS;

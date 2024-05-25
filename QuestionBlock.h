@@ -15,7 +15,7 @@
 //       nam  2
 //       leaf 3
 class CQuestionblock : public CGameObject {
-	LPGAMEOBJECT obj;
+	LPGAMEOBJECT obj = nullptr;
 	bool bicham = false;
 	int power = 0;
 	float ycu;

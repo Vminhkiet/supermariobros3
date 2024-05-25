@@ -1,6 +1,6 @@
 #include "MUSHROOM.h"
 #include "TopGround.h"
-
+#include "Bullet.h"
 void CMUSHROOM::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -80,7 +80,9 @@ void CMUSHROOM::OnNoCollision(DWORD dt)
 
 void CMUSHROOM::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CBullet*>(e->obj)) return;
 	if (!e->obj->IsBlocking() && e->obj->GetType()!=14) return;
+	
 	if (dynamic_cast<CMUSHROOM*>(e->obj)) return;
 	if (e->obj->GetType() != 14) {
 		if (e->ny != 0)

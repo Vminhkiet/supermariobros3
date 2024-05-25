@@ -124,6 +124,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithMario(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
+	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionblock(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();

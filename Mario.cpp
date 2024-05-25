@@ -6,6 +6,7 @@
 #include "Mushroom.h"
 #include "Goomba.h"
 #include "Coin.h"
+#include "Bullet.h"
 #include "Portal.h"
 #include "Leaf.h"
 #include "QuestionBlock.h"
@@ -93,6 +94,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<CQuestionblock*>(e->obj))
 		OnCollisionWithQuestionblock(e);
+	else if (dynamic_cast<CBullet*>(e->obj))
+		OnCollisionWithBullet(e);
 	else if (dynamic_cast<CTop*>(e->obj)) {
 		CTop* top = dynamic_cast<CTop*>(e->obj);
 		if (e->ny < 0) {
@@ -119,13 +122,25 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	
 	
 }
-
+void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
+	if (level == MARIO_LEVEL_BIG) {
+		level = MARIO_LEVEL_SMALL;
+		e->obj->Delete();
+		SetLevel(level);
+	}
+	else {
+		SetState(MARIO_STATE_DIE);
+	}
+}
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
-	    CQuestionblock* ques = dynamic_cast<CQuestionblock*>(e->obj);
+	if (level == MARIO_LEVEL_SMALL) {
+		CQuestionblock* ques = dynamic_cast<CQuestionblock*>(e->obj);
 
 		e->obj->Delete();
 		level = MARIO_LEVEL_BIG;
+		y -= MARIO_BIG_BBOX_HEIGHT / 2;
 		SetLevel(level);
+	}
 }
 void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {
 	CMario* mario = dynamic_cast<CMario*>(e->obj);

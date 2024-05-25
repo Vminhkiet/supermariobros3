@@ -17,7 +17,6 @@ public:
 	}
 	int IsBlocking() 
 	{
-		// Ch?n khi va ch?m t? m?i h??ng
 		return 1;
 	}
 	void Render();
