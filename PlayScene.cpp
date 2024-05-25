@@ -14,6 +14,7 @@
 #include "Ground.h"
 #include "QuestionBlock.h"
 #include "TopGround.h"
+#include "Venus.h"
 #include "Intro.h"
 #include "SampleKeyEventHandler.h"
 
@@ -277,7 +278,7 @@ void CPlayScene::Update(DWORD dt)
 	}
 	else{
 		//grid->Update(dt);
-
+		tileMap->Update(dt, &objects);
 		vector<LPGAMEOBJECT> coObjects;
 		for (size_t i = 1; i < objects.size(); i++)
 		{
@@ -303,7 +304,7 @@ void CPlayScene::Update(DWORD dt)
 
 		if (cx < 0) cx = 0;
 		CGame::GetInstance()->SetCamPos((int)cx, 0 /*cy*/);
-		tileMap->Update(dt, &objects);
+		
 	}
 	    
 
@@ -449,6 +450,20 @@ void CPlayScene::LoadResource(string s) {
 					);
 				}
 				objects.push_back(obj);
+			}
+		}
+		else if (layer["name"] == "Venus") {
+			for (auto& object : layer["objects"]) {
+				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
+
+				CVenus* venus = new CVenus(
+					float(object["x"]) - 8,
+					float(object["y"]) - 228
+				);
+				// Thêm portal vào danh sách đối tượng của Scene
+				objects.push_back(venus);
+				// Thêm portal vào Grid
+				//grid->InsertObject(ground);
 			}
 		}
 	}

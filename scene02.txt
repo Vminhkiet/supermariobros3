@@ -5,6 +5,7 @@ brick.txt
 Questionblock.txt
 coin.txt
 mushroom.txt
+venus.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
