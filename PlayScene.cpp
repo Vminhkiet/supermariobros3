@@ -15,6 +15,8 @@
 #include "QuestionBlock.h"
 #include "TopGround.h"
 #include "Venus.h"
+#include "Koopa.h"
+#include "Goomba.h"
 #include "Intro.h"
 #include "SampleKeyEventHandler.h"
 
@@ -303,6 +305,7 @@ void CPlayScene::Update(DWORD dt)
 		if (cx < 0) cx = 0;
 		CGame::GetInstance()->SetCamPos((int)cx, 0 /*cy*/);
 		tileMap->Update(dt, &objects);
+
 	}
 	    
 
@@ -473,6 +476,22 @@ void CPlayScene::LoadResource(string s) {
 				objects.push_back(venus);
 				// Thêm portal vào Grid
 				//grid->InsertObject(ground);
+			}
+		}
+		else if (layer["name"] == "Enime") {
+			for (auto& object : layer["objects"]) {
+				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
+				
+				if (object["name"] == "Troopa") {
+					CKOOPA* koopa = new CKOOPA(
+						float(object["x"]) - 8,
+						float(object["y"]) - 250
+					);
+					// Thêm portal vào danh sách đối tượng của Scene
+					objects.push_back(koopa);
+					// Thêm portal vào Grid
+					//grid->InsertObject(ground);
+				}
 			}
 		}
 	}

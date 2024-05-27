@@ -6,6 +6,7 @@ Questionblock.txt
 coin.txt
 mushroom.txt
 venus.txt
+koopa.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -13,7 +14,7 @@ venus.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	20	100
+0	400	100
 
 #Screen
 -1	textures\\world-1-1-map.json
