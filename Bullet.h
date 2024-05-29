@@ -13,6 +13,7 @@ public:
 	CBullet(float x, float y, int huong):CGameObject(x,y) {
 		this->huong = huong;
 		vx = BULLET_SPEED;
+		vx *= 2;
 		vy = BULLET_SPEED;
 		if (huong == 1) {
 			vx *= -1;
@@ -24,7 +25,10 @@ public:
 		else if (huong == 3) {
 			vy *= -1;
 		}
+		SetType(OBJECT_TYPE_BULLET);
 	}
+	int IsCollidable() { return 1; };
+	int IsBlocking() { return 0; }
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);

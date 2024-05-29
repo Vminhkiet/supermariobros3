@@ -39,6 +39,9 @@ public:
 	float Gety() {
 		return y;
 	}
+	int getnx() {
+		return nx;
+	}
 	int GetNy() {
 		return ny;
 	}

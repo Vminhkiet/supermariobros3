@@ -9,7 +9,8 @@
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 25
 #define KOOPA_BBOX_HEIGHT_DIE 7
-
+#define MAI_BBOX_WIDTH 16
+#define MAI_BBOX_HEIGHT 16
 #define KOOPA_DIE_TIMEOUT 500
 
 #define KOOPA_STATE_WALKING 100
@@ -33,6 +34,8 @@ protected:
 	float roiy1 = -1, roiy2 = -1;
 	int isOnTop = 0;
 	int isroi = 1;
+	bool huongdichuyen = false;
+	bool bicam = false;
 public:
 	CKOOPA(float x, float y) :CGameObject(x, y) {
 		state = LIFE;
@@ -43,6 +46,22 @@ public:
 		this->SetType(OBJECT_TYPE_KOOPA);
 	}
 	void SetState(int state);
+	int Getstate() {
+		if (state == LIFE)
+			return 0;
+		else if (state == MAI)
+			return 1;
+		else if (state == MAI_MOVE)
+			return 2;
+		else
+			return 3;
+	}
+	void setcam(bool cam) {
+		this->bicam = cam;
+	}
+	void sethuong(bool huong) {
+		huongdichuyen = huong;
+	}
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     void Render();

@@ -9,7 +9,7 @@ void CVenus::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     switch (state) {
     case MOVING_UP:
         y += vy*dt;
-        if (y+42 < yStart ) {  // Lên tới đỉnh
+        if (y+58 < yStart ) {  // Lên tới đỉnh
 
             state = WAITING_AT_TOP;
             stateTime = now;

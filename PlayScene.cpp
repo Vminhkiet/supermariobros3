@@ -426,7 +426,7 @@ void CPlayScene::LoadResource(string s) {
 					float(object["x"]) - 2,
 					float(object["y"]) - 228,
 					object["width"]-8,
-					object["height"]
+					object["height"]-15
 				);
 				// Thêm portal vào danh sách đối tượng của Scene
 				objects.push_back(ground);

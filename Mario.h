@@ -111,7 +111,7 @@ class CMario : public CGameObject
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
-
+	bool cammai = false;
 	int level; 
 	int untouchable; 
 	ULONGLONG untouchable_start;
@@ -126,6 +126,7 @@ class CMario : public CGameObject
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionblock(LPCOLLISIONEVENT e);
+	void OnCollisionWithTroopa(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	bool mariogreen = false;
@@ -135,6 +136,7 @@ class CMario : public CGameObject
 	float ytop = -1;
 	int kichhoat = 1;
 	int intro=1;
+	bool dacam = false;
 public:
 	CMario(float x, float y,int intro = 1,bool mariogreen=false) : CGameObject(x, y)
 	{
@@ -155,6 +157,13 @@ public:
 	int getintro();
 	void SetSittingFalse() {
 		isSitting = false;
+	}
+	void Setcam(bool cammai) {
+		this->cammai = cammai;
+		
+	}
+	bool getcam() {
+		return this->cammai;
 	}
 	void SetAXY(float ax, float ay) { this->ax = ax; this->ay = ay; }
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

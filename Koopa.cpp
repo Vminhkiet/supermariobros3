@@ -1,5 +1,7 @@
 #include "Koopa.h"
 #include "TopGround.h"
+#include "Mario.h"
+#include "PlayScene.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (roiy1 != -1 && roiy2 != -1) {
 		if (x<roiy1 || x>roiy2) {
@@ -14,13 +16,19 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 	}
+	
 	if (isOnTop) {
 		isroi = 0;
 	}
 	if (!isOnTop)
 	    vy += ay * dt;
 	vx += ax * dt;
-
+	if (state == MAI_MOVE) {
+		if (huongdichuyen)
+			vx = KOOPA_WALKING_SPEED * 5;
+		else
+			vx = -KOOPA_WALKING_SPEED * 5;
+	}
 	if ((state == DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
@@ -49,19 +57,50 @@ void CKOOPA::Render() {
 	}
 	else if (state == MAI) {
 		aniId = 13004;
+		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+		if (!mario->getcam() && bicam) {
+			bicam = false;
+			state = MAI_MOVE;
+			float mx, my;
+			mario->GetPosition(mx, my);
+			if (mx > x) {
+				huongdichuyen = false;
+			}
+			else
+				huongdichuyen = true;
+			
+		}
+		if (bicam) {
+			int nxmario = currentScene->GetPlayer()->getnx();
+			currentScene->GetPlayer()->GetPosition(x, y);
+			if (nxmario > 0)
+				x += 8;
+			else if (nxmario < 0)
+				x -= 8;
+		}
 	}
 	else if (state == MAI_MOVE) {
 		aniId = 13005;
+		
 	}
-	animations->Get(aniId)->Render(x, y,16,26);
+	int w = 16;
+	int h = 16;
+	if (state == LIFE) {
+		w = 16;
+		h = 26;
+	}
+	animations->Get(aniId)->Render(x, y,w,h);
 }
 void CKOOPA::OnNoCollision(DWORD dt)
 {
-	x += vx * dt;
-	y += vy * dt;
+	if (state != MAI) {
+		x += vx * dt;
+		y += vy * dt;
+	}
 };
 void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking() && e->obj->GetType() != 14) return;
+	if (!e->obj->IsBlocking() && e->obj->GetType() != 14 || e->obj->GetType()==16) return;
 	if (e->obj->GetType() != 14) {
 		if (e->ny != 0)
 		{
@@ -70,6 +109,7 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 		else if (e->nx != 0)
 		{
 			vx = -vx;
+			huongdichuyen = !huongdichuyen;
 		}
 	}
 	if (dynamic_cast<CTop*>(e->obj)) {
@@ -105,6 +145,7 @@ void CKOOPA::SetState(int state){
 	}
 	else if (state == 1) {
 		this->state = MAI;
+		y += 5;
 	}
 	else if (state == 2) {
 		this->state = MAI_MOVE;
@@ -119,8 +160,16 @@ void CKOOPA::SetState(int state){
 }
 void CKOOPA::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x - KOOPA_BBOX_WIDTH / 2;
-	t = y - KOOPA_BBOX_HEIGHT / 2;
-	r = l + KOOPA_BBOX_WIDTH;
-	b = t + KOOPA_BBOX_HEIGHT;
+	if (state == LIFE) {
+		l = x - KOOPA_BBOX_WIDTH / 2;
+		t = y - KOOPA_BBOX_HEIGHT / 2;
+		r = l + KOOPA_BBOX_WIDTH;
+		b = t + KOOPA_BBOX_HEIGHT;
+	}
+	else {
+		l = x - MAI_BBOX_WIDTH / 2;
+		t = y - MAI_BBOX_HEIGHT / 2 ;
+		r = l + MAI_BBOX_WIDTH;
+		b = t + MAI_BBOX_HEIGHT;
+	}
 }
