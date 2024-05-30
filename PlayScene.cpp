@@ -16,6 +16,7 @@
 #include "TopGround.h"
 #include "Venus.h"
 #include "Koopa.h"
+#include "Para.h"
 #include "Goomba.h"
 #include "Intro.h"
 #include "SampleKeyEventHandler.h"
@@ -461,6 +462,13 @@ void CPlayScene::LoadResource(string s) {
 					);
 					objects.push_back(obj);
 				}
+				else if (object["name"] == "NN") {
+					obj = new CQuestionblock(
+						float(object["x"]) - 8,
+						float(object["y"]) - 228
+					);
+					objects.push_back(obj);
+				}
 				
 			}
 		}
@@ -492,8 +500,29 @@ void CPlayScene::LoadResource(string s) {
 					// Thêm portal vào Grid
 					//grid->InsertObject(ground);
 				}
+				else if (object["name"] == "Gooba") {
+					CGoomba* goopa = new CGoomba(
+						float(object["x"]) - 8,
+						float(object["y"]) - 250
+					);
+					// Thêm portal vào danh sách đối tượng của Scene
+					objects.push_back(goopa);
+					// Thêm portal vào Grid
+					//grid->InsertObject(ground);
+				}
+				else if (object["name"] == "Para") {
+					CPARA* koopa = new CPARA(
+						float(object["x"]) - 8,
+						float(object["y"]) - 250
+					);
+					// Thêm portal vào danh sách đối tượng của Scene
+					objects.push_back(koopa);
+					// Thêm portal vào Grid
+					//grid->InsertObject(ground);
+				}
 			}
 		}
+		
 	}
 	
 

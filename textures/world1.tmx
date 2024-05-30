@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="176" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="61">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="176" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="63">
  <tileset firstgid="1" source="world1-1.json"/>
  <layer id="1" name="GroundCollision" width="176" height="50">
   <data encoding="csv">
@@ -246,6 +246,7 @@
   <object id="1" x="0.666667" y="416" width="623.333" height="18"/>
   <object id="3" x="624" y="400.667" width="463.333" height="33.3333"/>
   <object id="5" x="352" y="368" width="32.5" height="47.5"/>
+  <object id="61" x="1" y="100.5" height="354.5"/>
  </objectgroup>
  <objectgroup id="7" name="TopGround">
   <object id="19" x="399.636" y="367.636" width="80" height="16.3636"/>
@@ -265,13 +266,13 @@
   <object id="46" name="Coin" x="231.813" y="310.313">
    <point/>
   </object>
-  <object id="47" name="Nam" x="247.781" y="310.313">
+  <object id="47" name="NN" x="247.781" y="310.313">
    <point/>
   </object>
   <object id="48" name="Coin" x="423.957" y="326.435">
    <point/>
   </object>
-  <object id="50" name="Leaf" x="663.957" y="390.261">
+  <object id="50" name="NN" x="663.957" y="390.261">
    <point/>
   </object>
   <object id="51" name="Coin" x="712" y="358.261">

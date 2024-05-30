@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include "Portal.h"
 #include "Koopa.h"
+#include "Venus.h"
 #include "Leaf.h"
 #include "QuestionBlock.h"
 #include "TopGround.h"
@@ -102,6 +103,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBullet(e);
 	else if (dynamic_cast<CKOOPA*>(e->obj))
 		OnCollisionWithTroopa(e);
+	else if (dynamic_cast<CVenus*>(e->obj))
+		OnCollisionWithBullet(e);
 	else if (dynamic_cast<CTop*>(e->obj)) {
 		CTop* top = dynamic_cast<CTop*>(e->obj);
 		if (e->ny < 0) {
@@ -129,13 +132,17 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	
 }
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
-	if (level == MARIO_LEVEL_BIG) {
-		level = MARIO_LEVEL_SMALL;
-		e->obj->Delete();
-		SetLevel(level);
-	}
-	else {
-		SetState(MARIO_STATE_DIE);
+	if (untouchable == 0) {
+		if (level > MARIO_LEVEL_SMALL) {
+			level = MARIO_LEVEL_SMALL;
+			y += 13;
+			if (e->obj->GetType() == 16)
+				e->obj->Delete();
+			SetLevel(level);
+		}
+		else {
+			SetState(MARIO_STATE_DIE);
+		}
 	}
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
@@ -144,7 +151,8 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
 
 		e->obj->Delete();
 		level = MARIO_LEVEL_BIG;
-		y -= MARIO_BIG_BBOX_HEIGHT / 2;
+		y -= MARIO_BIG_BBOX_HEIGHT / 4;
+		
 		SetLevel(level);
 	}
 }
@@ -225,15 +233,17 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 			{
 				if (pstate == 0 || pstate == 2)
 				{
-					if (level > MARIO_LEVEL_SMALL)
-					{
-						level = MARIO_LEVEL_SMALL;
-						StartUntouchable();
-					}
-					else
-					{
-						DebugOut(L">>> Mario DIE >>> \n");
-						SetState(MARIO_STATE_DIE);
+					if (untouchable == 0) {
+						if (level > MARIO_LEVEL_SMALL)
+						{
+							level = MARIO_LEVEL_SMALL;
+							StartUntouchable();
+						}
+						else
+						{
+							DebugOut(L">>> Mario DIE >>> \n");
+							SetState(MARIO_STATE_DIE);
+						}
 					}
 				}
 			}
@@ -257,15 +267,17 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 		}
 	}
 	if (pstate == 2) {
-		if (level > MARIO_LEVEL_SMALL)
-		{
-			level = MARIO_LEVEL_SMALL;
-			StartUntouchable();
-		}
-		else
-		{
-			DebugOut(L">>> Mario DIE >>> \n");
-			SetState(MARIO_STATE_DIE);
+		if (untouchable == 0) {
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
 		}
 	}
 
@@ -353,7 +365,7 @@ int CMario::GetAniIdSmall()
 						aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
 				}
 				else {
-					aniId = 1001;
+					aniId = 1015;
 				}
 			}
 			else // vx < 0
@@ -400,6 +412,12 @@ int CMario::GetAniIdBig()
 			else
 				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
 		}
+		if (dacam) {
+			if (nx >= 0)
+				aniId = 1010;
+			else
+				aniId = 1009;
+		}
 	}
 	else
 		if (isSitting)
@@ -414,6 +432,12 @@ int CMario::GetAniIdBig()
 			{
 				if (nx > 0) aniId = ID_ANI_MARIO_IDLE_RIGHT;
 				else aniId = ID_ANI_MARIO_IDLE_LEFT;
+				if (dacam) {
+					if (nx > 0)
+						aniId = 1012;
+					else
+						aniId = 1011;
+				}
 			}
 			else if (vx > 0)
 			{
@@ -423,6 +447,9 @@ int CMario::GetAniIdBig()
 					aniId = ID_ANI_MARIO_RUNNING_RIGHT;
 				else if (ax == MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_WALKING_RIGHT;
+				if (dacam) {
+					aniId = 1008;
+				}
 			}
 			else // vx < 0
 			{
@@ -432,6 +459,9 @@ int CMario::GetAniIdBig()
 					aniId = ID_ANI_MARIO_RUNNING_LEFT;
 				else if (ax == -MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_WALKING_LEFT;
+				if (dacam) {
+					aniId = 1007;
+				}
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT;
@@ -450,8 +480,8 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
-
 	animations->Get(aniId)->Render(x, y);
+		
 
 	if(mariogreen) RenderBoundingBox();
 	

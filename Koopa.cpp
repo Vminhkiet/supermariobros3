@@ -2,6 +2,8 @@
 #include "TopGround.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "QuestionBlock.h"
+#include "Goomba.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (roiy1 != -1 && roiy2 != -1) {
 		if (x<roiy1 || x>roiy2) {
@@ -13,6 +15,12 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			else {
 				isOnTop = 1;
 				vx *= -1;
+				if (x < roiy1) {
+					x++;
+				}
+				else if (x > roiy2) {
+					x--;
+				}
 			}
 		}
 	}
@@ -25,9 +33,9 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	vx += ax * dt;
 	if (state == MAI_MOVE) {
 		if (huongdichuyen)
-			vx = KOOPA_WALKING_SPEED * 5;
+			vx = KOOPA_WALKING_SPEED * 6;
 		else
-			vx = -KOOPA_WALKING_SPEED * 5;
+			vx = -KOOPA_WALKING_SPEED * 6;
 	}
 	if ((state == DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
 	{
@@ -100,7 +108,7 @@ void CKOOPA::OnNoCollision(DWORD dt)
 	}
 };
 void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (!e->obj->IsBlocking() && e->obj->GetType() != 14 || e->obj->GetType()==16) return;
+	if (!e->obj->IsBlocking() && e->obj->GetType() != 14 && e->obj->GetType()!=2 || e->obj->GetType()==16 ) return;
 	if (e->obj->GetType() != 14) {
 		if (e->ny != 0)
 		{
@@ -137,6 +145,21 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 			return;
 		}
 
+	}
+	else if (dynamic_cast<CQuestionblock*>(e->obj)) {
+		CQuestionblock* qs = dynamic_cast<CQuestionblock*>(e->obj);
+		if (e->nx != 0) {
+			qs->SetCham(true);
+			vx *= -1;
+		}
+	}
+	else if (dynamic_cast<CGoomba*>(e->obj)) {
+		if (state == MAI_MOVE) {
+			CGoomba* go = dynamic_cast<CGoomba*>(e->obj);
+			go->Setrua(true);
+			go->SetState(GOOMBA_STATE_DIE);
+			vx *= -1;
+		}
 	}
 }
 void CKOOPA::SetState(int state){

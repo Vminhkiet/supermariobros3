@@ -1,6 +1,7 @@
 #include "Goomba.h"
 #include "AssetIDs.h"
-
+#include "Koopa.h"
+#include "Ground.h"
 CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 {
 	this->ax = 0;
@@ -38,7 +39,14 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
-
+	if (dynamic_cast<CKOOPA*>(e->obj)) {
+		CKOOPA* obj = dynamic_cast<CKOOPA*>(e->obj);
+		if (obj->Getstate() == 2) {
+			rua = true;
+			SetState(GOOMBA_STATE_DIE);
+			return;
+		}
+	}
 	if (e->ny != 0 )
 	{
 		vy = 0;
@@ -47,10 +55,26 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
+	if (dynamic_cast<CGround*>(e->obj)) {
+		CGround* gr = dynamic_cast<CGround*>(e->obj);
+		float tx, ty;
+		gr->GetPosition(tx, ty);
+		ty = gr->getwidth();
+		yroi1 = tx;
+		yroi2 = ty + tx;
+	}
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (x<yroi1 || x>yroi2) {
+		if (x < yroi1)
+			x++;
+		else if (x > yroi2)
+			x--;
+		vx *= -1;
+		
+	}
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -70,11 +94,14 @@ void CGoomba::Render()
 	int aniId = ID_ANI_GOOMBA_WALKING;
 	if (state == GOOMBA_STATE_DIE) 
 	{
-		aniId = ID_ANI_GOOMBA_DIE;
+		if (!rua)
+			aniId = ID_ANI_GOOMBA_DIE;
+		else
+			aniId = ID_ANI_GOOMBA_DIEKOOPA;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)

@@ -137,6 +137,7 @@ class CMario : public CGameObject
 	int kichhoat = 1;
 	int intro=1;
 	bool dacam = false;
+
 public:
 	CMario(float x, float y,int intro = 1,bool mariogreen=false) : CGameObject(x, y)
 	{
@@ -179,7 +180,9 @@ public:
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
-
+	int Getlevel() {
+		return level;
+	}
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 

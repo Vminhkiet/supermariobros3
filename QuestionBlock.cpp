@@ -16,6 +16,15 @@ void CQuestionblock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		if (!dathem) {
 			CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			if (power == 0) {
+				CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+				int level = mario->Getlevel();
+				if (level == 1) {
+					obj = new CMUSHROOM(x, y, true, true);;
+				}
+				else
+					obj = new CLEAF(x, y);
+			}
 			currentScene->AddObject(obj,this);
 			dathem = true;
 		}

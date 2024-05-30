@@ -22,7 +22,7 @@ class CQuestionblock : public CGameObject {
 	int cnt = 2;
 	bool dathem = false;
 public:
-	CQuestionblock(float x, float y,int power) : CGameObject(x, y) { 
+	CQuestionblock(float x, float y,int power=0) : CGameObject(x, y) { 
 		this->SetType(OBJECT_TYPE_QUES);
 		ycu = y;
 		this->power = power;
