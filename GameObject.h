@@ -48,6 +48,9 @@ public:
 	void SetType(int x) {
 		this->type = x;
 	}
+	float getvx() {
+		return vx;
+	}
 	int GetType() {
 		return this->type;
 	}

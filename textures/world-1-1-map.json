@@ -431,8 +431,8 @@
                  "type":"",
                  "visible":true,
                  "width":63.6364,
-                 "x":464.182,
-                 "y":336.182
+                 "x":464.399391304348,
+                 "y":335.790695652174
                 }, 
                 {
                  "height":16.3636,
@@ -454,7 +454,7 @@
                  "visible":true,
                  "width":79.0909,
                  "x":512.364,
-                 "y":384.364
+                 "y":384.02025
                 }, 
                 {
                  "height":16.3636,
@@ -587,19 +587,19 @@
  "tileheight":16,
  "tilesets":[
         {
-         "columns":29,
-         "image":"world-1-12.png",
-         "imageheight":480,
-         "imagewidth":464,
-         "margin":0,
-         "name":"world-1-12",
-         "spacing":0,
-         "tilecount":870,
-         "tiledversion":"1.10.2",
-         "tileheight":16,
-         "tilewidth":16,
-         "type":"tileset",
-         "version":"1.10"
+              "columns":29,
+              "image":"world-1-12.png",
+              "imageheight":480,
+              "imagewidth":464,
+              "margin":0,
+              "name":"world-1-12",
+              "spacing":0,
+              "tilecount":870,
+              "tiledversion":"1.10.2",
+              "tileheight":16,
+              "tilewidth":16,
+              "type":"tileset",
+              "version":"1.10"
         }],
  "tilewidth":16,
  "type":"map",

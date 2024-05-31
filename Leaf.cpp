@@ -1,4 +1,6 @@
 ﻿#include "LEAF.h"
+#include "PlayScene.h"
+#include "Mario.h"
 
 void CLEAF::Render()
 {

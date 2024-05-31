@@ -250,9 +250,9 @@
  </objectgroup>
  <objectgroup id="7" name="TopGround">
   <object id="19" x="399.636" y="367.636" width="80" height="16.3636"/>
-  <object id="20" x="464.182" y="336.182" width="63.6364" height="16.3636"/>
+  <object id="20" x="464.399" y="335.791" width="63.6364" height="16.3636"/>
   <object id="21" x="512.364" y="303.636" width="63.6364" height="16.3636"/>
-  <object id="23" x="512.364" y="384.364" width="79.0909" height="15.4545"/>
+  <object id="23" x="512.364" y="384.02" width="79.0909" height="15.4545"/>
   <object id="30" x="240.364" y="367.636" width="47.2727" height="16.3636"/>
   <object id="31" x="272" y="335.818" width="47.2727" height="16.3636"/>
  </objectgroup>

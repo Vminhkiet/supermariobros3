@@ -72,6 +72,9 @@ void CKOOPA::Render() {
 			state = MAI_MOVE;
 			float mx, my;
 			mario->GetPosition(mx, my);
+			if (isOnTop == 0 ) {
+				y -= 5;
+			}
 			if (mx > x) {
 				huongdichuyen = false;
 			}
@@ -80,11 +83,11 @@ void CKOOPA::Render() {
 			
 		}
 		if (bicam) {
-			int nxmario = currentScene->GetPlayer()->getnx();
-			currentScene->GetPlayer()->GetPosition(x, y);
-			if (nxmario > 0)
+			bool draw = mario->getdraw();
+			mario->GetPosition(x, y);
+			if (draw)
 				x += 8;
-			else if (nxmario < 0)
+			else
 				x -= 8;
 		}
 	}

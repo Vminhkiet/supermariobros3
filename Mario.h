@@ -88,9 +88,11 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
-
+#define	MARIO_LEVEL_RACOON		3
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
+#define MARIO_RACOON_BBOX_WIDTH  17
+#define MARIO_RACOON_BBOX_HEIGHT 26
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
@@ -113,7 +115,8 @@ class CMario : public CGameObject
 	float ay;				// acceleration on y 
 	bool cammai = false;
 	int level; 
-	int untouchable; 
+	int untouchable;
+	bool draw = false;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 
@@ -129,6 +132,7 @@ class CMario : public CGameObject
 	void OnCollisionWithTroopa(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdRacoon();
 	bool mariogreen = false;
 	int isroi = 0;
 	int isOnTop = 0;
@@ -162,6 +166,9 @@ public:
 	void Setcam(bool cammai) {
 		this->cammai = cammai;
 		
+	}
+	bool getdraw() {
+		return draw;
 	}
 	bool getcam() {
 		return this->cammai;
