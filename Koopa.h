@@ -22,7 +22,7 @@ enum KoopaState {
 	LIFE,
 	MAI,
 	MAI_MOVE,
-	DIE
+	DIE1
 };
 class CKOOPA : public CGameObject
 {

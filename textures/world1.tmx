@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="176" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="63">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="176" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="64">
  <tileset firstgid="1" source="world1-1.json"/>
  <layer id="1" name="GroundCollision" width="176" height="50">
   <data encoding="csv">
@@ -255,6 +255,9 @@
   <object id="23" x="512.364" y="384.02" width="79.0909" height="15.4545"/>
   <object id="30" x="240.364" y="367.636" width="47.2727" height="16.3636"/>
   <object id="31" x="272" y="335.818" width="47.2727" height="16.3636"/>
+ </objectgroup>
+ <objectgroup id="11" name="Createobj">
+  <object id="63" x="260" y="4.66667" width="3.33333" height="474"/>
  </objectgroup>
  <objectgroup id="6" name="Questionblock">
   <object id="44" name="Coin" x="183.719" y="358.5">

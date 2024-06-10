@@ -6,6 +6,7 @@
 #include "Mario.h"
 CPARA::CPARA(float x, float y) :CGameObject(x, y)
 {
+	walk = true;
 	this->ax = 0;
 	this->ay = PARA_GRAVITY;
 	die_start = -1;
@@ -13,6 +14,7 @@ CPARA::CPARA(float x, float y) :CGameObject(x, y)
 	ycu = y;
 	isOnPlatform = false;
 	this->SetType(OBJECT_TYPE_PARA);
+	startjump = -1;
 }
 
 void CPARA::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -74,6 +76,7 @@ void CPARA::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CPARA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
 	if (x<yroi1 || x>yroi2) {
 		if (x < yroi1)
 			x++;
@@ -86,12 +89,40 @@ void CPARA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 	float mx, my;
 	mario->GetPosition(mx, my);
-	if (abs(mx - x) > 50 && isOnPlatform) {
-		SetState(PARA_STATE_JUMP);
+	if (x - mx > 50) {
+		if (vx > 0) {
+			vx *= -1;
+		}
 	}
-	if (ycu < y + 50) {
-		SetState(PARA_STATE_RELEASE_JUMP);
+	else if (mx - x > 50) {
+		if (vx < 0) {
+			vx *= -1;
+		}
 	}
+	
+	if (isOnPlatform) {
+		jump = false;
+	}
+	else jump = true;
+	if (vy < 0 && jump) {
+		vy += (ay + 0.0001f) * (dt);
+	}
+	if (!jump) {
+		if (GetTickCount64() - startjump < 2000) {
+			walk = true;
+		}
+		else if (isOnPlatform && jumpshort > 0 ) {
+			SetState(PARA_STATE_JUMP_SHORT);
+			jumpshort--;
+		}
+		else if (isOnPlatform && jumpshort == 0) {
+			SetState(PARA_STATE_JUMP);
+			startjump = GetTickCount64();
+			
+		}
+	}
+	
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -116,7 +147,12 @@ void CPARA::Render()
 		else
 			aniId = ID_ANI_PARA_DIEKOOPA;
 	}
-
+	else if (jump) {
+		aniId = 5008;
+	}
+	if (walk) {
+		aniId = ID_ANI_PARA_WALKING;
+	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
@@ -135,17 +171,23 @@ void CPARA::SetState(int state)
 		break;
 	case PARA_STATE_WALKING:
 		vx = -PARA_WALKING_SPEED;
+
 		break;
 	case PARA_STATE_JUMP:
-		ay = 0;
 		if (isOnPlatform)
 		{	
 			vy = -PARA_JUMP_SPEED_Y;
+			jumpshort = 2;
 		}
 		break;
-	case PARA_STATE_RELEASE_JUMP:
-		if (vy < 0) vy += PARA_JUMP_SPEED_Y / 2;
+	case PARA_STATE_JUMP_SHORT://;
+		if (isOnPlatform)
+		{
+			jump = true;
+			walk = false;
+			vy = -PARA_JUMP_SPEED_Y_SHORT;
 
+		}
 		break;
 	}
 }

@@ -140,6 +140,7 @@ class CMario : public CGameObject
 	float ytop = -1;
 	int kichhoat = 1;
 	int intro=1;
+	bool dung = false;
 	bool dacam = false;
 
 public:

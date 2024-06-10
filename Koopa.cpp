@@ -37,8 +37,9 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		else
 			vx = -KOOPA_WALKING_SPEED * 6;
 	}
-	if ((state == DIE) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
+	if ((state == DIE1) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
 	{
+		state = LIFE;
 		isDeleted = true;
 		return;
 	}
@@ -177,7 +178,7 @@ void CKOOPA::SetState(int state){
 		this->state = MAI_MOVE;
 	}
 	else if (state == 3) {
-		this->state = DIE;
+		this->state = DIE1;
 		die_start = GetTickCount64();
 		vx = 0;
 		vy = 0;
