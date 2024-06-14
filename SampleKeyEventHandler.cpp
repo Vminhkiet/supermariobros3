@@ -63,6 +63,8 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 {
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (CGame::GetInstance()->GetCurrentScene()->getpause())
+		return;
 	if (mario->getintro() == 0)
 		return;
 

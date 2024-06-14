@@ -21,6 +21,21 @@ int CMario::getintro() {
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	
+	if (CGame::GetInstance()->GetCurrentScene()->getpause()) {
+		if (GetTickCount64() - st > 1500) {
+			hoalon = false;
+			CGame::GetInstance()->GetCurrentScene()->setpause(false);
+			st = GetTickCount64();
+		}
+		return;
+	}
+	if (untouchable != 0) {
+		if (GetTickCount64() - st > 50) {
+			st = GetTickCount64();
+			nhapnhay = !nhapnhay;
+		}
+	}
 	draw = false;
 	if (!cammai) {
 		dacam = false;
@@ -46,8 +61,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME + 1500) 
 	{
+		nhapnhay = false;
 		untouchable_start = 0;
 		untouchable = 0;
 	}
@@ -154,9 +170,12 @@ void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
 }
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
 	if (level == MARIO_LEVEL_SMALL) {
-		CQuestionblock* ques = dynamic_cast<CQuestionblock*>(e->obj);
-
+		
 		e->obj->Delete();
+		st = GetTickCount64();
+		CGame::GetInstance()->GetCurrentScene()->setpause(true);
+		hoalon = true;
+
 		level = MARIO_LEVEL_BIG;
 		y -= MARIO_BIG_BBOX_HEIGHT / 4;
 		
@@ -214,6 +233,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
+					st = GetTickCount64();
+					CGame::GetInstance()->GetCurrentScene()->setpause(true);
+					hoalon = true;
+
 					level = MARIO_LEVEL_SMALL;
 					StartUntouchable();
 				}
@@ -248,6 +271,10 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 					if (untouchable == 0) {
 						if (level > MARIO_LEVEL_SMALL)
 						{
+							st = GetTickCount64();
+							CGame::GetInstance()->GetCurrentScene()->setpause(true);
+							hoalon = true;
+
 							level = MARIO_LEVEL_SMALL;
 							StartUntouchable();
 						}
@@ -318,6 +345,10 @@ void CMario::OnCollisionWithPara(LPCOLLISIONEVENT e) {
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
+					st = GetTickCount64();
+					CGame::GetInstance()->GetCurrentScene()->setpause(true);
+					hoalon = true;
+
 					level = MARIO_LEVEL_SMALL;
 					StartUntouchable();
 				}
@@ -620,27 +651,36 @@ int CMario::GetAniIdRacoon()
 
 void CMario::Render()
 {
-	CAnimations* animations = CAnimations::GetInstance();
-	int aniId = -1;
-	
-	if (state == MARIO_STATE_DIE)
-		aniId = ID_ANI_MARIO_DIE;
-	else if (level == MARIO_LEVEL_BIG)
-		aniId = GetAniIdBig();
-	else if (level == MARIO_LEVEL_SMALL)
-		aniId = GetAniIdSmall();
-	else if (level == MARIO_LEVEL_RACOON)
-		aniId = GetAniIdRacoon();
-	if (change) {
-		if (nx > 0) {
-			aniId = 803;
+	if (!nhapnhay) {
+		CAnimations* animations = CAnimations::GetInstance();
+		int aniId = -1;
+
+		if (state == MARIO_STATE_DIE)
+			aniId = ID_ANI_MARIO_DIE;
+		else if (level == MARIO_LEVEL_BIG)
+			aniId = GetAniIdBig();
+		else if (level == MARIO_LEVEL_SMALL)
+			aniId = GetAniIdSmall();
+		else if (level == MARIO_LEVEL_RACOON)
+			aniId = GetAniIdRacoon();
+		if (change) {
+			if (nx > 0) {
+				aniId = 803;
+			}
+			else {
+				aniId = 802;
+			}
 		}
-		else {
-			aniId = 802;
+		if (hoalon) {
+			if (nx > 0) {
+				aniId = 803;
+			}
+			else {
+				aniId = 802;
+			}
 		}
+		animations->Get(aniId)->Render(x, y);
 	}
-	animations->Get(aniId)->Render(x, y);
-		
 
 	if(mariogreen) RenderBoundingBox();
 	//RenderBoundingBox();

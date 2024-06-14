@@ -310,7 +310,7 @@ void CPlayScene::Load()
 	{
 		Intro::GetInstance()->Setitem(objects, player);
 	}
-	else if (id == 0) {
+	else if (id == 0) {	
 		CScene1::GetInstance()->Setitem(objects, player);
 	}
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
@@ -342,6 +342,10 @@ void CPlayScene::Update(DWORD dt)
 		}
 		
 		vector<LPGAMEOBJECT> coObjects;
+		if (this->getpause()) {
+			objects[0]->Update(dt, &coObjects);
+			return;
+		}
 		for (auto& obj : venus)
 		{
 			coObjects.push_back(obj);
@@ -351,18 +355,16 @@ void CPlayScene::Update(DWORD dt)
 			coObjects.push_back(objects[i]);
 
 		}
-		if (this->getpause()) {
-			return;
-		}
-
+		
 		for (auto& obj : venus)
 		{
-			obj->Update(dt, &coObjects);
+				obj->Update(dt, &coObjects);
 		}
 
 		for (size_t i = 0; i < objects.size(); i++)
 		{
 			objects[i]->Update(dt, &coObjects);
+
 		}
 
 		// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -398,21 +400,15 @@ void CPlayScene::Render()
 		float x, y;
 		CGame::GetInstance()->GetCamPos(x, y);
 
-		for (int i = 0; i < objects.size(); i++)
-			if (objects[i]->GetType() == 15)
-				objects[i]->Render();
 		for (auto i : venus) {
 			i->Render();
 		}
-		if (tileMap)
-			if (tileMap->getload())
-				tileMap->Draw({ 0,0 });
-		
-		for (int i = 0; i < objects.size(); i++)
-			if(objects[i]->GetType()!=15)
-			   objects[i]->Render();
-		
-		
+		if (tileMap && tileMap->getload()) {
+			tileMap->Draw({ 0, 0 });
+		}
+		for (int i = 0; i < objects.size(); i++) {
+			objects[i]->Render();
+		}
 	}
 }
 

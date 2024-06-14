@@ -144,6 +144,9 @@ class CMario : public CGameObject
 	int intro=1;
 	bool dung = false;
 	bool dacam = false;
+	bool hoalon = false;
+	bool battu = false;
+	bool nhapnhay = false;
 
 public:
 	CMario(float x, float y,int intro = 1,bool mariogreen=false) : CGameObject(x, y)
@@ -154,7 +157,7 @@ public:
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
-
+		st = -1;
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;

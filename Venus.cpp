@@ -7,42 +7,48 @@ void CVenus::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
     DWORD now = GetTickCount64();
 
     switch (state) {
-    case MOVING_UP:
-        y += vy*dt;
-        if (y+58 < yStart ) {  // Lên tới đỉnh
+        case MOVING_UP: {
+            y += vy * dt;
+            if (y + 58 < yStart) {  // Lên tới đỉnh
 
-            state = WAITING_AT_TOP;
-            stateTime = now;
-            vy = 0;
+                state = WAITING_AT_TOP;
+                stateTime = now;
+                vy = 0;
+            }
+            break;
         }
-        break;
-
-    case WAITING_AT_TOP:
-        if (now - stateTime >= 2000) {  // Đợi 2 giây tại đỉnh
-            CreateBullet();
-            state = MOVING_DOWN;
-            vy = -VENUS_SPEED;
-            stateTime = now;  // Cập nhật thời gian bắt đầu di chuyển xuống
+        case WAITING_AT_TOP: {
+            float kx, ky;
+            CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+            currentScene->GetPlayer()->GetPosition(kx, ky);
+            if (now - stateTime >= 2000 ) { 
+                // Đợi 2 giây tại đỉnh
+                if( abs(kx - x) < 100)
+                    CreateBullet();
+                state = MOVING_DOWN;
+                vy = -VENUS_SPEED;
+                stateTime = now;  // Cập nhật thời gian bắt đầu di chuyển xuống
+            }
+            break;
         }
-        break;
-
-    case MOVING_DOWN:
-        y += vy*dt;
-        if (y > yStart) {  // Xuống tới đáy
-            y = yStart;
-            state = WAITING_AT_BOTTOM;
-            stateTime = now;
-            vy = 0;
+        case MOVING_DOWN: {
+            y += vy * dt;
+            if (y > yStart) {  // Xuống tới đáy
+                y = yStart;
+                state = WAITING_AT_BOTTOM;
+                stateTime = now;
+                vy = 0;
+            }
+            break;
         }
-        break;
-
-    case WAITING_AT_BOTTOM:
-        if (now - stateTime >= 2000) {  // Đợi 2 giây tại đáy
-            state = MOVING_UP;
-            vy = VENUS_SPEED;
-            stateTime = now;  // Cập nhật thời gian bắt đầu di chuyển lên
+        case WAITING_AT_BOTTOM: {
+            if (now - stateTime >= 2000) {  // Đợi 2 giây tại đáy
+                state = MOVING_UP;
+                vy = VENUS_SPEED;
+                stateTime = now;  // Cập nhật thời gian bắt đầu di chuyển lên
+            }
+            break;
         }
-        break;
     }
 }
 

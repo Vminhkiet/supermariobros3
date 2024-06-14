@@ -5,7 +5,7 @@
 #include "TileMap.h"
 CScene1* CScene1::__instance = NULL;
 void CScene1::Loadfile() {
-    LoadResource("textures\\world-1-1-map.json");
+    LoadResource("textures\\introworldmap.json");
 }
 
 void CScene1::Update(DWORD dt)
@@ -43,6 +43,7 @@ CScene1* CScene1::GetInstance()
 }
 
 void CScene1::Setitem(vector<LPGAMEOBJECT>& objects, LPGAMEOBJECT& player) {
+	Loadfile();
 	mariored = new CMario(10, 150, 0);
 	mariored->SetLevel(MARIO_LEVEL_SMALL);
 
