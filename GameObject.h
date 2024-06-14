@@ -39,6 +39,7 @@ public:
 	float Gety() {
 		return y;
 	}
+	void Setvy(float vy) { this->vy = vy; }
 	int getnx() {
 		return nx;
 	}

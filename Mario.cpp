@@ -154,13 +154,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
 	if (untouchable == 0) {
 		if (level > MARIO_LEVEL_SMALL) {
+
+			st = GetTickCount64();
+			CGame::GetInstance()->GetCurrentScene()->setpause(true);
+			hoalon = true;
+			isOnTop = false;
 			level = MARIO_LEVEL_SMALL;
-			if (isOnTop)
-				y += 3;
-			y += 10;
 			if (e->obj->GetType() == 16)
 				e->obj->Delete();
-			SetLevel(level);
 			StartUntouchable();
 		}
 		else {
@@ -274,7 +275,7 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 							st = GetTickCount64();
 							CGame::GetInstance()->GetCurrentScene()->setpause(true);
 							hoalon = true;
-
+							isOnTop = false;
 							level = MARIO_LEVEL_SMALL;
 							StartUntouchable();
 						}
@@ -329,6 +330,7 @@ void CMario::OnCollisionWithPara(LPCOLLISIONEVENT e) {
 	{
 		if (goomba->getcanh()) {
 			goomba->setcanh(false);
+			goomba->Setvy(0);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (goomba->GetState() != GOOMBA_STATE_DIE)
