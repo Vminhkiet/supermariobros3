@@ -36,7 +36,8 @@ void Intro::Setitem(vector<LPGAMEOBJECT>& objects,LPGAMEOBJECT& player)
 	three = new CThree(155,120);
 	this->objects.push_back(three);
 
-	leaf = new CLEAF(153, 20);
+	leaf = new CLEAF(153, 0,true);
+	leaf->setdraw(false);
 	this->objects.push_back(leaf);
 	objects = this->objects;
 }
@@ -66,9 +67,8 @@ void Intro::PlanIntro() {
 		mariored->SetSittingFalse();
 		draw = true;
 	}
-
 }
-void Intro::EndIntro() {
+void Intro::EndIntro(int x) {
 	if (draw) {
 	//background
 	D3DXCOLOR color(255.0f / 255.0f, 216.0f / 255.0f, 154.0f / 255.0f, 1.0f);
@@ -78,18 +78,18 @@ void Intro::EndIntro() {
     }
 	//tree
 
-	CSprites::GetInstance()->Get(60003)->Draw(30, 135, 64, 70);
-	CSprites::GetInstance()->Get(60004)->Draw(276, 120, 64, 100);
+	CSprites::GetInstance()->Get(60003)->Draw(30, 135 + x, 64, 70);
+	CSprites::GetInstance()->Get(60004)->Draw(276, 120 + x, 64, 100);
 	//title
 
-	CSprites::GetInstance()->Get(60005)->Draw(150, 60, 150, 80);
+	CSprites::GetInstance()->Get(60005)->Draw(150, 60 + x, 150, 80);
     //player
 	//CSprites::GetInstance()->Get(60006)->Draw(, 80, -1, -1);
 	//CSprites::GetInstance()->Get(60007)->Draw(600, 80, -1, -1);
 	//smoke
-	CSprites::GetInstance()->Get(60008)->Draw(50, 40, 30, 30);
-	CSprites::GetInstance()->Get(60008)->Draw(240, 40, 30, 30);
-	CSprites::GetInstance()->Get(60009)->Draw(40, 80, 15, 15);
+	CSprites::GetInstance()->Get(60008)->Draw(50, 40 + x, 30, 30);
+	CSprites::GetInstance()->Get(60008)->Draw(240, 40 + x, 30, 30);
+	CSprites::GetInstance()->Get(60009)->Draw(40, 80 + x, 15, 15);
 	//CSprites::GetInstance()->Get(60010)->Draw(600 80, -1, -1);
 	//CSprites::GetInstance()->Get(60011)->Draw(600, 80, -1, -1);
 	//CSprites::GetInstance()->Get(60012)->Draw(600, 80, -1, -1);
@@ -118,7 +118,10 @@ void Intro::Render()
 {
 	
 	if (draw) {
-		EndIntro();
+		EndIntro(h);
+		if(h<0)
+		    h += 2;
+	
 	}
 	for (size_t i = 0; i < objects.size(); i++)
 	{

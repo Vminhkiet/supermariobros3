@@ -46,10 +46,16 @@ protected:
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
-
+	
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
 	CPARA(float x, float y);
+	bool getcanh() {
+		return canh;
+	}
+	void setcanh(bool co) {
+		canh = co;
+	}
 	virtual void SetState(int state);
 };

@@ -79,3 +79,7 @@ void CLEAF::OnNoCollision(DWORD dt)
 	y += vy * dt;
 };
 
+void CLEAF::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	if (!e->obj->IsBlocking()) return;
+}

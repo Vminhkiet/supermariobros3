@@ -10,6 +10,11 @@
 #include "Grid.h"
 //#include "Koopas.h"
 
+struct Object {
+    string name;
+    float x, y;
+};
+
 class CPlayScene : public CScene
 {
 protected:
@@ -17,6 +22,8 @@ protected:
     LPTILEMAP tileMap;
     LPGRID grid;
     vector<LPGAMEOBJECT> objects;
+    vector<LPGAMEOBJECT> venus;
+    vector<std::pair<Object, bool>> spawn;
     void _ParseSection_SPRITES(string line);
     void _ParseSection_ANIMATIONS(string line);
 
@@ -35,6 +42,7 @@ public:
     virtual void Unload();
 
     LPGAMEOBJECT GetPlayer() { return player; }
+    void Spawn(Object s);
     void AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj = nullptr);
     void Clear();
     void PurgeDeletedObjects();

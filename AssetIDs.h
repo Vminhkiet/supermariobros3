@@ -1,5 +1,4 @@
 #pragma once
-
 //
 // This file contains all IDs of game assets 
 //

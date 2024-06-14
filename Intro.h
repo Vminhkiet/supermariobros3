@@ -19,11 +19,13 @@ class Intro {
 	bool greenjump=false;
 	bool draw = false;
 
+	int h = -40;
+
 public:
 	static Intro* GetInstance();
 	void Setitem(vector<LPGAMEOBJECT>& obj,LPGAMEOBJECT& player);
 	void Update(DWORD dt);
 	void Render();
 	void PlanIntro();
-	void EndIntro();
+	void EndIntro(int x);
 };

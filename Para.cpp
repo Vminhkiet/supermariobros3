@@ -104,10 +104,12 @@ void CPARA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		jump = false;
 	}
 	else jump = true;
-	if (vy < 0 && jump) {
+	if (!canh)
+		jump = false;
+	if (vy < 0 && jump && canh) {
 		vy += (ay + 0.0001f) * (dt);
 	}
-	if (!jump) {
+	if (!jump && canh) {
 		if (GetTickCount64() - startjump < 2000) {
 			walk = true;
 		}
@@ -140,18 +142,21 @@ void CPARA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CPARA::Render()
 {
 	int aniId = ID_ANI_PARA_WALKING;
-	if (state == PARA_STATE_DIE)
-	{
-		if (!rua)
-			aniId = ID_ANI_PARA_DIE;
-		else
-			aniId = ID_ANI_PARA_DIEKOOPA;
-	}
-	else if (jump) {
+	if (jump) {
 		aniId = 5008;
 	}
 	if (walk) {
 		aniId = ID_ANI_PARA_WALKING;
+	}
+	if (!canh) {
+		aniId = 5003;
+	}
+	if (state == PARA_STATE_DIE)
+	{
+		if (rua)
+			aniId = ID_ANI_PARA_DIE;
+		else
+			aniId = ID_ANI_PARA_DIEKOOPA;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();

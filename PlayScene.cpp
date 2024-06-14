@@ -18,7 +18,9 @@
 #include "Koopa.h"
 #include "Para.h"
 #include "Goomba.h"
+#include "Grass.h"
 #include "Intro.h"
+#include "IntroScreen.h"
 #include "SampleKeyEventHandler.h"
 
 
@@ -43,6 +45,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define ASSETS_SECTION_ANIMATIONS 2
 
 #define MAX_SCENE_LINE 1024
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 240
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
@@ -187,11 +191,54 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			// General object setup
 			obj->SetPosition(x, y);
 
-
+			
 			objects.push_back(obj);
 	}
 }
-
+void CPlayScene::Spawn(Object s){
+	float x = s.x;
+	float y = s.y;
+	string enemy = s.name;
+	if (enemy == "Venus") {
+		CVenus* gameObj = new CVenus(
+			x ,
+			y 
+		);
+		venus.push_back(gameObj);
+	}
+	else {
+		if (s.name == "Troopa") {
+			CKOOPA* koopa = new CKOOPA(
+				x ,
+				y 
+			);
+			// Thêm portal vào danh sách đối tượng của Scene
+			objects.push_back(koopa);
+			// Thêm portal vào Grid
+			//grid->InsertObject(ground);
+		}
+		else if (s.name == "Gooba") {
+			CGoomba* goopa = new CGoomba(
+				x ,
+				y
+			);
+			// Thêm portal vào danh sách đối tượng của Scene
+			objects.push_back(goopa);
+			// Thêm portal vào Grid
+			//grid->InsertObject(ground);
+		}
+		else if (s.name == "Para") {
+			CPARA* koopa = new CPARA(
+				x ,
+				y 
+			);
+			// Thêm portal vào danh sách đối tượng của Scene
+			objects.push_back(koopa);
+			// Thêm portal vào Grid
+			//grid->InsertObject(ground);
+		}
+	}
+}
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {
 	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
@@ -263,7 +310,9 @@ void CPlayScene::Load()
 	{
 		Intro::GetInstance()->Setitem(objects, player);
 	}
-
+	else if (id == 0) {
+		CScene1::GetInstance()->Setitem(objects, player);
+	}
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
@@ -277,14 +326,38 @@ void CPlayScene::Update(DWORD dt)
 		Intro::GetInstance()->Update(dt);
 		CGame::GetInstance()->SetCamPos(0, 0 /*cy*/);
 	}
+	else if (id == 0) {
+		CScene1::GetInstance()->Update(dt);
+		CGame::GetInstance()->SetCamPos(0, 0 /*cy*/);
+	}
 	else{
 		//grid->Update(dt);
+		float x, y;
+		CGame::GetInstance()->GetCamPos(x, y);
+		for (auto& i : spawn) {
+			if (i.first.x >= x && i.first.x <= x + SCREEN_WIDTH + 32 && i.first.y >= y && i.first.y <= y + SCREEN_HEIGHT && !i.second) {
+				i.second = true;
+				Spawn(i.first);
+			}
+		}
 		
 		vector<LPGAMEOBJECT> coObjects;
+		for (auto& obj : venus)
+		{
+			coObjects.push_back(obj);
+		}
 		for (size_t i = 1; i < objects.size(); i++)
 		{
 			coObjects.push_back(objects[i]);
 
+		}
+		if (this->getpause()) {
+			return;
+		}
+
+		for (auto& obj : venus)
+		{
+			obj->Update(dt, &coObjects);
 		}
 
 		for (size_t i = 0; i < objects.size(); i++)
@@ -318,6 +391,9 @@ void CPlayScene::Render()
 	if (id == 1) {
 		Intro::GetInstance()->Render();
 	}
+	else if (id == 0) {
+		CScene1::GetInstance()->Render();
+	}
 	else {
 		float x, y;
 		CGame::GetInstance()->GetCamPos(x, y);
@@ -325,9 +401,13 @@ void CPlayScene::Render()
 		for (int i = 0; i < objects.size(); i++)
 			if (objects[i]->GetType() == 15)
 				objects[i]->Render();
+		for (auto i : venus) {
+			i->Render();
+		}
 		if (tileMap)
 			if (tileMap->getload())
 				tileMap->Draw({ 0,0 });
+		
 		for (int i = 0; i < objects.size(); i++)
 			if(objects[i]->GetType()!=15)
 			   objects[i]->Render();
@@ -346,6 +426,12 @@ void CPlayScene::Clear()
 	{
 		delete (*it);
 	}
+	for (auto it = venus.begin(); it != venus.end(); it++)
+	{
+		delete (*it);
+	}
+	
+	spawn.clear();
 	objects.clear();
 }
 
@@ -474,51 +560,45 @@ void CPlayScene::LoadResource(string s) {
 		}
 		else if (layer["name"] == "Venus") {
 			for (auto& object : layer["objects"]) {
-				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
-
-				CVenus* venus = new CVenus(
-					float(object["x"]) - 8,
-					float(object["y"]) - 220
-				);
-				// Thêm portal vào danh sách đối tượng của Scene
-				objects.push_back(venus);
-				// Thêm portal vào Grid
-				//grid->InsertObject(ground);
+				Object s;
+				s.x = float(object["x"]) - 8;
+				s.y = float(object["y"]) - 220;
+				s.name = "Venus";
+				spawn.push_back({ s,false });
+				
+			}
+		}
+		else if (layer["name"] == "Grass") {
+			for (auto& object : layer["objects"]) {
+				Grass* grass = new Grass(float(object["x"]), float(object["y"]));
+				objects.push_back(grass);
 			}
 		}
 		else if (layer["name"] == "Enime") {
 			for (auto& object : layer["objects"]) {
-				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
-				
+
 				if (object["name"] == "Troopa") {
-					CKOOPA* koopa = new CKOOPA(
-						float(object["x"]) - 8,
-						float(object["y"]) - 250
-					);
-					// Thêm portal vào danh sách đối tượng của Scene
-					objects.push_back(koopa);
-					// Thêm portal vào Grid
-					//grid->InsertObject(ground);
+
+					Object s;
+					s.x = float(object["x"]) - 8;
+					s.y = float(object["y"]) - 250;
+					s.name = "Troopa";
+					spawn.push_back({ s,false });
+
 				}
 				else if (object["name"] == "Gooba") {
-					CGoomba* goopa = new CGoomba(
-						float(object["x"]) - 8,
-						float(object["y"]) - 250
-					);
-					// Thêm portal vào danh sách đối tượng của Scene
-					objects.push_back(goopa);
-					// Thêm portal vào Grid
-					//grid->InsertObject(ground);
+					Object s;
+					s.x = float(object["x"]) - 8;
+					s.y = float(object["y"]) - 250;
+					s.name = "Gooba";
+					spawn.push_back({ s,false });
 				}
 				else if (object["name"] == "Para") {
-					CPARA* koopa = new CPARA(
-						float(object["x"]) - 8,
-						float(object["y"]) - 250
-					);
-					// Thêm portal vào danh sách đối tượng của Scene
-					objects.push_back(koopa);
-					// Thêm portal vào Grid
-					//grid->InsertObject(ground);
+					Object s;
+					s.x = float(object["x"]) - 8;
+					s.y = float(object["y"]) - 250;
+					s.name = "Para";
+					spawn.push_back({ s,false });
 				}
 			}
 		}

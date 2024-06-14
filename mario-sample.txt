@@ -7,7 +7,7 @@ height	750
 # type: 0: intro, 1: play scene 
 [SCENES]
 2	scene02.txt
-0	intro.txt
+0	introscene.txt
 1	intro.txt
 5	scene0005.txt
 
@@ -24,3 +24,4 @@ height	750
 50	textures\intro1.png
 60	textures\three.png
 70	textures\misc1.png
+80	textures\MapSelection(x3).png

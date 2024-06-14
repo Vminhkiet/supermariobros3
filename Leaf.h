@@ -31,14 +31,17 @@ protected:
 	float amplitude; // Biên độ dao động
 	float frequency;
 	bool doi = false;
+	bool intro;
 public:
-	CLEAF(float x, float y) : CGameObject(x, y) {
+	CLEAF(float x, float y, bool intro = false) : CGameObject(x, y) {
 		startfalltime= GetTickCount64();
 		this->ycu = y;
 		this->ax = 0;
+		this->intro = intro;
 		this->trucx = x;
 		this->ay = LEAF_GRAVITY;
-		this->vy = -0.12f;
+		if(!intro)
+		  this->vy = -0.12f;
 		die_start = -1;
 		SetState(LEAF_STATE_WALKING);
 		trucx = x;
@@ -52,8 +55,9 @@ public:
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int IsBlocking() { return 0; }
+	int IsBlocking() { return 1; }
 	virtual int IsCollidable() { return 0; };
 	virtual void OnNoCollision(DWORD dt);
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	virtual void SetState(int state);
 };

@@ -11,6 +11,7 @@
 #include "Koopa.h"
 #include "Venus.h"
 #include "Leaf.h"
+#include "Para.h"
 #include "QuestionBlock.h"
 #include "TopGround.h"
 #include "Collision.h"
@@ -106,6 +107,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithTroopa(e);
 	else if (dynamic_cast<CVenus*>(e->obj))
 		OnCollisionWithBullet(e);
+	else if (dynamic_cast<CPARA*>(e->obj))
+		OnCollisionWithPara(e);
 	else if (dynamic_cast<CTop*>(e->obj)) {
 		CTop* top = dynamic_cast<CTop*>(e->obj);
 		if (e->ny < 0) {
@@ -166,7 +169,7 @@ void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {
 	if (mario->GetState() == MARIO_STATE_JUMP)
 	{
 		ay = 0;
-		y -= 5;
+		y -= 10;
 		SetState(MARIO_STATE_SIT);
 		mario->vy = -MARIO_JUMP_RUN_SPEED_Y;
 	}
@@ -183,7 +186,9 @@ void CMario::OnCollisionWithQuestionblock(LPCOLLISIONEVENT e){
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e) {
 	if (level == MARIO_LEVEL_BIG) {
 		CLEAF* leaf = dynamic_cast<CLEAF*>(e->obj);
+
 		SetLevel(MARIO_LEVEL_RACOON);
+
 		e->obj->Delete();
 	}
 
@@ -231,7 +236,7 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 			if (pstate == 0)
 			{
 				p->SetState(1);
-				vy = -MARIO_JUMP_DEFLECT_SPEED;
+				vy = -MARIO_JUMP_DEFLECT_SPEED +0.2f;
 			}
 		}
 		else // hit by Troopa
@@ -288,6 +293,42 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 		}
 	}
 
+}
+void CMario::OnCollisionWithPara(LPCOLLISIONEVENT e) {
+	CPARA* goomba = dynamic_cast<CPARA*>(e->obj);
+
+	// jump on top >> kill Goomba and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (goomba->getcanh()) {
+			goomba->setcanh(false);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (goomba->GetState() != GOOMBA_STATE_DIE)
+		{
+			goomba->SetState(GOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // hit by Goomba
+	{
+		if (untouchable == 0)
+		{
+			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
 }
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
@@ -590,6 +631,14 @@ void CMario::Render()
 		aniId = GetAniIdSmall();
 	else if (level == MARIO_LEVEL_RACOON)
 		aniId = GetAniIdRacoon();
+	if (change) {
+		if (nx > 0) {
+			aniId = 803;
+		}
+		else {
+			aniId = 802;
+		}
+	}
 	animations->Get(aniId)->Render(x, y);
 		
 

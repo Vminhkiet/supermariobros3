@@ -118,8 +118,9 @@ class CMario : public CGameObject
 	int untouchable;
 	bool draw = false;
 	ULONGLONG untouchable_start;
+	ULONGLONG st;
 	BOOLEAN isOnPlatform;
-
+	bool change = false;
 	int coin; 
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -130,6 +131,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionblock(LPCOLLISIONEVENT e);
 	void OnCollisionWithTroopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithPara(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();
