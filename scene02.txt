@@ -15,7 +15,7 @@ goomba.txt
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 # MARIO
-0	100	100
+0	20	100
 #Screen
 -1	textures\\world-1-1-map.json
 
