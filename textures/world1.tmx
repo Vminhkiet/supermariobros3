@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="176" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="222">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="176" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="225">
  <tileset firstgid="1" name="world-1-12" tilewidth="16" tileheight="16" tilecount="870" columns="29">
   <image source="world-1-12.png" width="464" height="480"/>
  </tileset>
@@ -92,6 +92,9 @@
    <point/>
   </object>
   <object id="138" name="Troopa" x="2105" y="366">
+   <point/>
+  </object>
+  <object id="224" name="Troopa" x="199.667" y="321.333">
    <point/>
   </object>
  </objectgroup>
@@ -325,10 +328,10 @@
   <object id="43" name="Venus" x="367.333" y="404">
    <point/>
   </object>
-  <object id="116" name="Venus1" x="1807" y="374.75">
+  <object id="116" name="Venus1" x="1807" y="410">
    <point/>
   </object>
-  <object id="117" name="Venus3" x="1871.75" y="358.5">
+  <object id="117" name="Venus3" x="1871.75" y="408">
    <point/>
   </object>
  </objectgroup>
@@ -417,6 +420,12 @@
    <point/>
   </object>
   <object id="114" name="NN" x="1479" y="376.5">
+   <point/>
+  </object>
+  <object id="222" name="Coin" x="168" y="356.333">
+   <point/>
+  </object>
+  <object id="223" name="Coin" x="216.667" y="357.667">
    <point/>
   </object>
  </objectgroup>

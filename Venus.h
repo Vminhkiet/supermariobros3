@@ -26,9 +26,11 @@ protected:
     int huong = 0;
     bool tren = true;
     bool trai = true;
+    int type;
 public:
-    CVenus(float x, float y) : CGameObject(x, y) {
+    CVenus(float x, float y,int type) : CGameObject(x, y) {
         yStart = y;
+        this->type = type;
         isShooting = false;
         vy = VENUS_SPEED;
         state = MOVING_UP;

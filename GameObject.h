@@ -17,7 +17,7 @@ using namespace std;
 class CGameObject
 {
 protected:
-
+	
 	float x; 
 	float y;
 
@@ -43,6 +43,7 @@ public:
 	int getnx() {
 		return nx;
 	}
+	float getx() { return x; }
 	int GetNy() {
 		return ny;
 	}

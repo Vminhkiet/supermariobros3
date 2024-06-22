@@ -23,7 +23,7 @@ void CVenus::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
             currentScene->GetPlayer()->GetPosition(kx, ky);
             if (now - stateTime >= 2000 ) { 
                 // Đợi 2 giây tại đỉnh
-                if( abs(kx - x) < 100)
+                if( abs(kx - x) < 100 && type != 3)
                     CreateBullet();
                 state = MOVING_DOWN;
                 vy = -VENUS_SPEED;
@@ -57,6 +57,10 @@ void CVenus::Render() {
     float x, y;
     CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
     currentScene->GetPlayer()->GetPosition(x, y);
+    if (type == 3) {
+        animations->Get(11113)->Render(this->x, this->y);
+        return;
+    }
     if (x < this->x) {
         trai = true;
     }
@@ -72,29 +76,53 @@ void CVenus::Render() {
     if (trai) {
         if (tren) {
             if (state==MOVING_UP || state==MOVING_DOWN)
-                animations->Get(11101)->Render(this->x, this->y);
+                if(type == 1)
+                     animations->Get(11101)->Render(this->x, this->y);
+                else
+                    animations->Get(11109)->Render(this->x, this->y);
             else 
-                animations->Get(11105)->Render(this->x, this->y);
+                if (type == 1)
+                    animations->Get(11105)->Render(this->x, this->y);
+                else
+                    animations->Get(11114)->Render(this->x, this->y);
         }
         else {
             if (state == MOVING_UP || state == MOVING_DOWN)
-                animations->Get(11103)->Render(this->x, this->y);
+                if (type == 1)
+                    animations->Get(11103)->Render(this->x, this->y);
+                else
+                    animations->Get(11111)->Render(this->x, this->y);
             else
-                animations->Get(11107)->Render(this->x, this->y);
+                if (type == 1)
+                    animations->Get(11107)->Render(this->x, this->y);
+                else
+                    animations->Get(11116)->Render(this->x, this->y);
         }
     }
     else {
         if (tren) {
             if (state == MOVING_UP || state == MOVING_DOWN)
-                animations->Get(11102)->Render(this->x, this->y);
+                if (type == 1)
+                    animations->Get(11102)->Render(this->x, this->y);
+                else
+                    animations->Get(11110)->Render(this->x, this->y);
             else
-                animations->Get(11106)->Render(this->x, this->y);
+                if (type == 1)
+                    animations->Get(11106)->Render(this->x, this->y);
+                else
+                    animations->Get(11115)->Render(this->x, this->y);
         }
         else {
             if (state == MOVING_UP || state == MOVING_DOWN)
-                animations->Get(11104)->Render(this->x, this->y);
+                if (type == 1)
+                    animations->Get(11104)->Render(this->x, this->y);
+                else
+                    animations->Get(11112)->Render(this->x, this->y);
             else
-                animations->Get(11108)->Render(this->x, this->y);
+                if (type == 1)
+                    animations->Get(11108)->Render(this->x, this->y);
+                else
+                    animations->Get(11117)->Render(this->x, this->y);
         }
     }
 }

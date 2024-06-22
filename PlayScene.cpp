@@ -202,7 +202,24 @@ void CPlayScene::Spawn(Object s){
 	if (enemy == "Venus") {
 		CVenus* gameObj = new CVenus(
 			x ,
-			y 
+			y ,
+			1
+		);
+		venus.push_back(gameObj);
+	}
+	else if (enemy == "Venus1") {
+		CVenus* gameObj = new CVenus(
+			x,
+			y,
+			3
+		);
+		venus.push_back(gameObj);
+	}
+	else if (enemy == "Venus3") {
+		CVenus* gameObj = new CVenus(
+			x,
+			y,
+			2
 		);
 		venus.push_back(gameObj);
 	}
@@ -559,7 +576,7 @@ void CPlayScene::LoadResource(string s) {
 				Object s;
 				s.x = float(object["x"]) - 8;
 				s.y = float(object["y"]) - 220;
-				s.name = "Venus";
+				s.name = object["name"];
 				spawn.push_back({ s,false });
 				
 			}

@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	2
 width	800
 height	750
 
@@ -25,3 +25,4 @@ height	750
 60	textures\three.png
 70	textures\misc1.png
 80	textures\MapSelection(x3).png
+90	textures\mario12.png

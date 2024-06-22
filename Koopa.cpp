@@ -5,6 +5,13 @@
 #include "QuestionBlock.h"
 #include "Goomba.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (this->ny >= 0 && state == LIFE) {
+		vy = 0;
+		if (this->nx < 0)
+			x++;
+		else x--;
+		vx *= -1;
+	}
 	if (roiy1 != -1 && roiy2 != -1) {
 		if (x<roiy1 || x>roiy2) {
 			if (state != LIFE) {
@@ -30,6 +37,7 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 	if (!isOnTop)
 	    vy += ay * dt;
+
 	vx += ax * dt;
 	if (state == MAI_MOVE) {
 		if (huongdichuyen)
@@ -113,7 +121,10 @@ void CKOOPA::OnNoCollision(DWORD dt)
 };
 void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking() && e->obj->GetType() != 14 && e->obj->GetType()!=2 || e->obj->GetType()==16 ) return;
+	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	if (dynamic_cast<CKOOPA*>(e->obj)) return;
 	if (e->obj->GetType() != 14) {
+		
 		if (e->ny != 0)
 		{
 			vy = 0;
@@ -129,16 +140,6 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 		if (e->ny < 0) {
 			isroi = 1;
 		}
-		if (e->obj->GetType() != 14) {
-			if (e->ny != 0)
-			{
-				vy = 0;
-			}
-			else if (e->nx != 0)
-			{
-				vx = -vx;
-			}
-		}
 		if (isroi) {
 			roiy1 = top->getx();
 			roiy2 = roiy1 + top->getwidth();
@@ -152,7 +153,7 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (dynamic_cast<CQuestionblock*>(e->obj)) {
 		CQuestionblock* qs = dynamic_cast<CQuestionblock*>(e->obj);
-		if (e->nx != 0) {
+		if (e->nx != 0 && state == MAI_MOVE) {
 			qs->SetCham(true);
 			vx *= -1;
 		}

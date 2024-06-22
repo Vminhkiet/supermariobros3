@@ -32,6 +32,11 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
+	case DIK_A:
+		if (!a) {
+			a = true;
+			mario->SetDanh(true);
+		}
 	case DIK_R: // reset
 		//Reload();
 		break;
@@ -54,7 +59,8 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
 		break;
 	case DIK_A:
-		mario->Setcam(false);
+		mario->SetDanh(false);
+		a = false;
 		break;
 	}
 }
@@ -67,7 +73,6 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		return;
 	if (mario->getintro() == 0)
 		return;
-
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A)) {

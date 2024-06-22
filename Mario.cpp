@@ -618,6 +618,12 @@ int CMario::GetAniIdRacoon()
 					else
 						aniId = 1011;
 				}
+				if (danh && !dacam) {
+					if (nx > 0) {
+						aniId = 1061;
+					}
+					else aniId = 1060;
+				}
 			}
 			else if (vx > 0)
 			{
@@ -630,6 +636,9 @@ int CMario::GetAniIdRacoon()
 				if (dacam) {
 					aniId = 1008;
 					draw = true;
+				}
+				if (danh && !dacam) {
+					aniId = 1061;
 				}
 			}
 			else // vx < 0
@@ -644,10 +653,13 @@ int CMario::GetAniIdRacoon()
 					aniId = 1007;
 					draw = false;
 				}
+				if (danh && !dacam) {
+					aniId = 1060;
+				}
 			}
 
 	if (aniId == -1) aniId = ID_ANI_MARIO_IDLE_RIGHT+30;
-
+	
 	return aniId;
 }
 
@@ -656,7 +668,9 @@ void CMario::Render()
 	if (!nhapnhay) {
 		CAnimations* animations = CAnimations::GetInstance();
 		int aniId = -1;
-
+		if (GetTickCount64() - sdanh > 200 && danh) {
+			danh = false;
+		}
 		if (state == MARIO_STATE_DIE)
 			aniId = ID_ANI_MARIO_DIE;
 		else if (level == MARIO_LEVEL_BIG)
@@ -681,6 +695,7 @@ void CMario::Render()
 				aniId = 802;
 			}
 		}
+		
 		animations->Get(aniId)->Render(x, y);
 	}
 
@@ -775,7 +790,6 @@ void CMario::SetState(int state)
 			}
 		}
 		break;
-
 	case MARIO_STATE_IDLE:
 		isroi = 0;
 		ax = 0.0f;

@@ -154,6 +154,9 @@ void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 				{
 					if (layer->data[i][j] == 0)
 						continue;
+					if (layer->data[i][j] >= 871) {
+						layer->data[i][j] -= 870;
+					}
 					D3DXVECTOR2 pos;
 					pos.x = position.x + j * tileSet->GetTileWidth()-x ;
 					pos.y = position.y + i * tileSet->GetTileHeight()-y - 220;

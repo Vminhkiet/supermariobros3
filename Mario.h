@@ -34,7 +34,7 @@
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
 
-
+#define MARIO_STATE_FLY				700
 #pragma region ANIMATION_ID
 
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -119,8 +119,10 @@ class CMario : public CGameObject
 	bool draw = false;
 	ULONGLONG untouchable_start;
 	ULONGLONG st;
+	ULONGLONG sdanh;
 	BOOLEAN isOnPlatform;
 	bool change = false;
+	bool danh = false;
 	int coin; 
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -147,10 +149,12 @@ class CMario : public CGameObject
 	bool hoalon = false;
 	bool battu = false;
 	bool nhapnhay = false;
+	
 
 public:
 	CMario(float x, float y,int intro = 1,bool mariogreen=false) : CGameObject(x, y)
 	{
+		sdanh = 0;
 		this->mariogreen=mariogreen;
 		this->intro = intro;
 		isSitting = false;
@@ -195,6 +199,13 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	int Getlevel() {
 		return level;
+	}
+	void SetDanh(bool danh) {
+		if (level == 3) {
+			sdanh = GetTickCount64();
+			this->danh = danh;
+		}
+		else this->danh = false;
 	}
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
