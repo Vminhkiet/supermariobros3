@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="176" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="225">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="176" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="227">
  <tileset firstgid="1" name="world-1-12" tilewidth="16" tileheight="16" tilecount="870" columns="29">
   <image source="world-1-12.png" width="464" height="480"/>
  </tileset>
@@ -328,10 +328,10 @@
   <object id="43" name="Venus" x="367.333" y="404">
    <point/>
   </object>
-  <object id="116" name="Venus1" x="1807" y="410">
+  <object id="116" name="Venus1" x="1807" y="440">
    <point/>
   </object>
-  <object id="117" name="Venus3" x="1871.75" y="408">
+  <object id="117" name="Venus3" x="1871.75" y="415">
    <point/>
   </object>
  </objectgroup>
@@ -339,7 +339,7 @@
   <object id="1" x="0.666667" y="416" width="623.333" height="18"/>
   <object id="3" x="624" y="400.667" width="463.333" height="33.3333"/>
   <object id="5" x="352" y="368" width="32.5" height="47.5"/>
-  <object id="61" x="1" y="0" height="500"/>
+  <object id="61" x="-100" y="-100" width="100" height="600"/>
   <object id="140" x="1152.33" y="416.333" width="351.333" height="16.6667"/>
   <object id="142" x="1503.63" y="335.75" width="32.375" height="16.25"/>
   <object id="143" x="1536.25" y="416" width="79.25" height="16.25"/>
@@ -356,10 +356,8 @@
   <object id="164" x="2321" y="384.25" width="29.875" height="31.75"/>
   <object id="172" x="1791.75" y="383.75" width="31.875" height="33"/>
   <object id="173" x="1855.91" y="368" width="32.1818" height="48.4545"/>
-  <object id="178" x="1407.96" y="159.913" width="64.2174" height="16.0435"/>
-  <object id="179" x="1487.97" y="143.969" width="208.094" height="15.9688"/>
-  <object id="180" x="0" y="-0.333333" width="2815.67" height="1"/>
-  <object id="181" x="2815.33" y="0.666667" width="0.666667" height="442"/>
+  <object id="180" x="0" y="-100" width="2815.67" height="100"/>
+  <object id="181" x="2815.33" y="-100" width="100" height="600"/>
   <object id="197" x="2255.45" y="367.636" width="32.7273" height="15.4545"/>
   <object id="198" x="2079.25" y="464.25" width="16.5" height="191.5"/>
   <object id="200" x="2080.75" y="624.25" width="400.5" height="32.5"/>
@@ -393,6 +391,8 @@
   <object id="177" x="1311.63" y="112" width="64.625" height="17.625"/>
   <object id="220" x="2144.25" y="367.75" width="47.5" height="16.25"/>
   <object id="221" x="2176.25" y="272.25" width="47.2045" height="15.5682"/>
+  <object id="225" x="1408" y="159.818" width="64.0909" height="16.3636"/>
+  <object id="226" x="1487.91" y="143.909" width="208.273" height="15.9091"/>
  </objectgroup>
  <objectgroup id="6" name="Questionblock">
   <object id="44" name="Coin" x="183.719" y="358.5">

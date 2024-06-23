@@ -15,6 +15,7 @@
 #include "QuestionBlock.h"
 #include "TopGround.h"
 #include "Collision.h"
+#include "PlayScene.h"
 
 int CMario::getintro() {
 	return intro;
@@ -29,6 +30,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			st = GetTickCount64();
 		}
 		return;
+	}
+
+	if (isOnPlatform || isOnTop==1) {
+		fly = false;
 	}
 	if (untouchable != 0) {
 		if (GetTickCount64() - st > 50) {
@@ -58,8 +63,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	vx += ax * dt;
 	
-	if (abs(vx) > abs(maxVx)) vx = maxVx;
-
+	if (abs(vx) > abs(maxVx)) { vx = maxVx;  }
+	
+	
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME + 1500) 
 	{
@@ -67,6 +73,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+	if (GetTickCount64() - isfly > 1000 && fly)
+	{
+		isfly = GetTickCount64();
+		//fly = false;
+	}
+
 	if (intro == 0 && !mariogreen) {
 		isOnPlatform = true;
 	}
@@ -595,6 +607,17 @@ int CMario::GetAniIdRacoon()
 			else
 				aniId = 1009;
 		}
+		if (fly) {
+
+		}
+		else {
+			if (nx >= 0) {
+				aniId = 1041;
+			}
+			else {
+				aniId = 1051;
+			}
+		}
 	}
 	else
 		if (isSitting)
@@ -744,9 +767,17 @@ void CMario::SetState(int state)
 	case MARIO_STATE_JUMP:
 		
 		if (isSitting) break;
+		
+		if (abs(vx) >= MARIO_RUNNING_SPEED && !(isOnTop == 1 || isOnPlatform)) {
+			fly = true;
+			isfly = GetTickCount64();
+			break;
+		}
+		
 		if (isOnPlatform || isOnTop==1)
 		{
 			isroi = 0;
+			isfly = GetTickCount64();
 			isOnTop = 0;
 			if (abs(this->vx) == MARIO_RUNNING_SPEED)
 				vy = -MARIO_JUMP_RUN_SPEED_Y;
@@ -754,13 +785,32 @@ void CMario::SetState(int state)
 				vy = -MARIO_JUMP_SPEED_Y;
 		}
 		break;
-
+	case MARIO_STATE_FLY:
+		if (vy > 0.5f || abs(ax) < MARIO_ACCEL_RUN_X) {
+			fly = false;
+		}
+		else if (fly) {
+			vy = -0.3f;
+			isfly = GetTickCount64();
+		}
+		break;
 	case MARIO_STATE_RELEASE_JUMP:
 		isroi = 1;
-		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+		if (!(isOnPlatform || isOnTop == 1) && level == 3 && !fly) {
+			if(vy>0.0f)
+			   vy = 0.0f;
+			break;
+		}
+		if (vy < 0 && !fly) vy += MARIO_JUMP_SPEED_Y / 2;
 
 		break;
-
+	case MARIO_STATE_ROICHAM:
+		if (!(isOnPlatform || isOnTop == 1) && level == 3) {
+			if(vy > 0.1f)
+			   vy = 0.1f;
+			
+		}
+		break;
 	case MARIO_STATE_SIT:
 		if(!dacam)
 		if ((isOnTop == 1 ||isOnPlatform) && level != MARIO_LEVEL_SMALL)
@@ -783,11 +833,13 @@ void CMario::SetState(int state)
 		{
 			isSitting = false;
 			state = MARIO_STATE_IDLE;
+			if (level == 3) {
+				y -= 10;
+				vy = 0.1f;
+			}
 			if(isOnTop == 0)
 			    y -= MARIO_SIT_HEIGHT_ADJUST;
-			else {
-				y -= MARIO_SIT_HEIGHT_ADJUST;
-			}
+
 		}
 		break;
 	case MARIO_STATE_IDLE:
@@ -795,7 +847,6 @@ void CMario::SetState(int state)
 		ax = 0.0f;
 		vx = 0.0f;
 		break;
-
 	case MARIO_STATE_DIE:
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;

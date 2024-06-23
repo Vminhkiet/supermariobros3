@@ -10,7 +10,7 @@
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
-#define MARIO_ACCEL_WALK_X	0.0005f
+#define MARIO_ACCEL_WALK_X	0.0003f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
@@ -27,7 +27,7 @@
 
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_RELEASE_JUMP    301
-
+#define MARIO_STATE_ROICHAM			800
 #define MARIO_STATE_RUNNING_RIGHT	400
 #define MARIO_STATE_RUNNING_LEFT	500
 
@@ -120,6 +120,7 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG st;
 	ULONGLONG sdanh;
+	BOOLEAN isfly;
 	BOOLEAN isOnPlatform;
 	bool change = false;
 	bool danh = false;
@@ -149,7 +150,8 @@ class CMario : public CGameObject
 	bool hoalon = false;
 	bool battu = false;
 	bool nhapnhay = false;
-	
+	bool fly = false;
+	bool roicham = false;
 
 public:
 	CMario(float x, float y,int intro = 1,bool mariogreen=false) : CGameObject(x, y)
@@ -158,6 +160,7 @@ public:
 		this->mariogreen=mariogreen;
 		this->intro = intro;
 		isSitting = false;
+		isfly = 0;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
@@ -206,6 +209,9 @@ public:
 			this->danh = danh;
 		}
 		else this->danh = false;
+	}
+	bool checkfly() {
+		return fly;
 	}
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
