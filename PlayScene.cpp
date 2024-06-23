@@ -140,7 +140,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				DebugOut(L"[INFO] Player object has been created!\n");
 				break;
 			case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
-			case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+			case OBJECT_TYPE_BRICK: obj = new CBrick(x, y,false); break;
 			case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 			case OBJECT_TYPE_MAN: obj = new CCurtain(x, y); break;
 			case OBJECT_TYPE_NEN: {
@@ -538,6 +538,20 @@ void CPlayScene::LoadResource(string s) {
 				objects.push_back(ground);
 				// Thêm portal vào Grid
 				//grid->InsertObject(ground);
+			}
+		}
+		else if (layer["name"] == "Brick") {
+			for (auto& object : layer["objects"]) {
+				bool kt = false;
+				if (object["name"] == "P") {
+					kt = true;
+				}
+				CBrick* brick = new CBrick(
+					float(object["x"]) - 2,
+					float(object["y"]) - 228,
+					kt
+				);
+				objects.push_back(brick);
 			}
 		}
 		else if (layer["name"] == "Questionblock") {
