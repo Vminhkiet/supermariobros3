@@ -6,6 +6,7 @@ C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Coin.cpp;C:\
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Collision.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Collision.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Curtain.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Curtain.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\debug.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\debug.obj
+C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Duoi.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Duoi.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Game.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Game.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\GameObject.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\GameObject.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Goomba.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Goomba.obj
@@ -29,6 +30,7 @@ C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\SampleKeyEve
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Sprite.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Sprite.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Sprites.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Sprites.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Textures.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Textures.obj
+C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Thebox.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Thebox.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Three.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Three.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\TileMap.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\TileMap.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\TopGround.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\TopGround.obj

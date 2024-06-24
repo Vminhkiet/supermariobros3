@@ -7,10 +7,10 @@
 #include "debug.h"
 #include "AssetIDs.h"
 
-#define MARIO_WALKING_SPEED		0.1f
-#define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_WALKING_SPEED		0.15f
+#define MARIO_RUNNING_SPEED		0.3f
 
-#define MARIO_ACCEL_WALK_X	0.0003f
+#define MARIO_ACCEL_WALK_X	0.0004f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
@@ -135,6 +135,7 @@ class CMario : public CGameObject
 	void OnCollisionWithQuestionblock(LPCOLLISIONEVENT e);
 	void OnCollisionWithTroopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithPara(LPCOLLISIONEVENT e);
+	void OnCollisionWithKick(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();

@@ -16,6 +16,7 @@
 #include "TopGround.h"
 #include "Collision.h"
 #include "PlayScene.h"
+#include "Brick.h"
 
 int CMario::getintro() {
 	return intro;
@@ -32,7 +33,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 
-	if (isOnPlatform || isOnTop==1) {
+	if (isOnPlatform) {
 		fly = false;
 	}
 	if (untouchable != 0) {
@@ -73,7 +74,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-	if (GetTickCount64() - isfly > 1000 && fly)
+	if (GetTickCount64() - isfly > 300 && fly)
 	{
 		isfly = GetTickCount64();
 		//fly = false;
@@ -162,6 +163,22 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	
 	
+}
+void CMario::OnCollisionWithKick(LPCOLLISIONEVENT e) {
+	if (level == 3 && danh ) {
+		if ((this->nx < 0 && e->obj->getnx() > 0) || (this->nx > 0 && e->obj->getnx() < 0)) {
+			if (dynamic_cast<CVenus*>(e->obj)) {
+				e->obj->Delete();
+			}
+			else if (dynamic_cast<CGoomba*>(e->obj)) {
+
+			}
+			else if (dynamic_cast<CBrick*>(e->obj)) {
+
+			}
+			
+		}
+	}
 }
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
 	if (untouchable == 0) {
@@ -723,7 +740,7 @@ void CMario::Render()
 	}
 
 	if(mariogreen) RenderBoundingBox();
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
@@ -788,6 +805,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_FLY:
 		if (vy > 0.5f || abs(ax) < MARIO_ACCEL_RUN_X) {
 			fly = false;
+			vy = 0.0f;
 		}
 		else if (fly) {
 			vy = -0.3f;
@@ -890,6 +908,9 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			top = y - MARIO_RACOON_BBOX_HEIGHT / 2 ;
 			right = left + MARIO_RACOON_BBOX_WIDTH ;
 			bottom = top + MARIO_RACOON_BBOX_HEIGHT;
+				if (nx < 0) {
+					left -= 3;
+				}
 		}
 	}
 	else

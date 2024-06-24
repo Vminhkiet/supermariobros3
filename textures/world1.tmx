@@ -422,10 +422,10 @@
   <object id="114" name="NN" x="1479" y="376.5">
    <point/>
   </object>
-  <object id="222" name="Coin" x="168" y="356.333">
+  <object id="222" name="Coin" x="168.545" y="358.606">
    <point/>
   </object>
-  <object id="223" name="Coin" x="216.667" y="357.667">
+  <object id="223" name="Coin" x="216.667" y="358.576">
    <point/>
   </object>
  </objectgroup>

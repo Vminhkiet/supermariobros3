@@ -31,7 +31,7 @@ void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &botto
 
 void CGoomba::OnNoCollision(DWORD dt)
 {
-	x += vx * dt;
+	x -= vx * dt;
 	y += vy * dt;
 };
 
@@ -55,8 +55,9 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		vx = -vx;
 	}
-	if (dynamic_cast<CGround*>(e->obj)) {
+	if (dynamic_cast<CGround*>(e->obj) && e->nx == 0) {
 		CGround* gr = dynamic_cast<CGround*>(e->obj);
+		
 		float tx, ty;
 		gr->GetPosition(tx, ty);
 		ty = gr->getwidth();

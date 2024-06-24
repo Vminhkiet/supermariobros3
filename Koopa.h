@@ -2,6 +2,8 @@
 #pragma once
 #include "GameObject.h"
 #include "AssetIDs.h"
+#include "Thebox.h"
+#include "Playscene.h"
 #define KOOPA_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.05f
 
@@ -30,6 +32,7 @@ protected:
 	float ax;
 	float ay;
 	KoopaState state;
+	Thebox* box;
 	ULONGLONG die_start;
 	float roiy1 = -1, roiy2 = -1;
 	int isOnTop = 0;
@@ -44,6 +47,9 @@ public:
 		vx = -KOOPA_WALKING_SPEED;
 		die_start = -1;
 		this->SetType(OBJECT_TYPE_KOOPA);
+		box = new Thebox(x - 8, y);
+		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+		currentScene->AddObject(box);
 	}
 	void SetState(int state);
 	int Getstate() {

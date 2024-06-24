@@ -43,6 +43,9 @@ public:
     }
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     void Render();
+    void Setstate(VenusState state) {
+        this->state = state;
+    }
     void GetBoundingBox(float& l, float& t, float& r, float& b);
     void CreateBullet();
     void OnCollisionWith(LPCOLLISIONEVENT e);

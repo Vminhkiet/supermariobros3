@@ -47,6 +47,9 @@ public:
 	int GetNy() {
 		return ny;
 	}
+	void SetX(float x) {
+		this->x = x;
+	}
 	void SetType(int x) {
 		this->type = x;
 	}

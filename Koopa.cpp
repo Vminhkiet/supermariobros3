@@ -3,15 +3,9 @@
 #include "Mario.h"
 #include "PlayScene.h"
 #include "QuestionBlock.h"
+#include "Brick.h"
 #include "Goomba.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	if (this->ny >= 0 && state == LIFE) {
-		vy = 0;
-		if (this->nx < 0)
-			x++;
-		else x--;
-		vx *= -1;
-	}
 	if (roiy1 != -1 && roiy2 != -1) {
 		if (x<roiy1 || x>roiy2) {
 			if (state != LIFE) {
@@ -30,6 +24,18 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				}
 			}
 		}
+	}
+	if (isOnTop==1 && !box->IsDeleted()) {
+		box->Delete();
+	}
+	if (box->getroi() && isOnTop==0){
+		vx *= -1;
+		box->setbandau();
+		if (vx > 0) {
+			box->SetPosition(x, y);
+		}
+		else
+			box->SetPosition(x - 2, y);
 	}
 	
 	if (isOnTop) {
@@ -121,12 +127,22 @@ void CKOOPA::OnNoCollision(DWORD dt)
 };
 void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking() && e->obj->GetType() != 14 && e->obj->GetType()!=2 || e->obj->GetType()==16 ) return;
-	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	if (dynamic_cast<Thebox*>(e->obj)) return;
+	if (dynamic_cast<CGoomba*>(e->obj)) {
+		CGoomba* gooba = dynamic_cast<CGoomba*>(e->obj);
+		if(state==LIFE)
+		   return;
+		if (state == MAI_MOVE && gooba->GetState()==200) {
+			return;
+		}
+	}
 	if (dynamic_cast<CKOOPA*>(e->obj)) return;
+	
 	if (e->obj->GetType() != 14) {
 		
 		if (e->ny != 0)
 		{
+			box->setdoituong(true);
 			vy = 0;
 		}
 		else if (e->nx != 0)
@@ -144,6 +160,7 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 			roiy1 = top->getx();
 			roiy2 = roiy1 + top->getwidth();
 			vy = 0;
+			box->setdoituong(true);
 			y = top->Gety() - KOOPA_BBOX_HEIGHT / 2;
 			//ay = 0;
 			isOnTop = 1;
