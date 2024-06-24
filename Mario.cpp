@@ -2,10 +2,12 @@
 #include "debug.h"
 
 #include "Mario.h"
+#include"Thebox.h"
 #include "Game.h"
 #include "Mushroom.h"
 #include "Goomba.h"
 #include "Coin.h"
+#include "Swap.h"
 #include "Bullet.h"
 #include "Portal.h"
 #include "Koopa.h"
@@ -33,6 +35,48 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 
+	if (dichchuyen && down && cground) {
+		dangdichuyen = true;
+		float cx, cy;
+		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+		currentScene->findgetposition(cx, cy, name);
+		x = cx;
+		y = cy;
+		len = 2;
+		vitri = cy;
+	}
+	if (dichchuyen && up && !cground) {
+		dangdichuyen = true;
+		float cx, cy;
+		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+		currentScene->findgetposition(cx, cy, name);
+		x = cx;
+		y = cy;
+		len = 1;
+		vitri = cy;
+	}
+	if (dangdichuyen) {
+		
+		if (len == 1) {
+			if (vitri - 50 > y) {
+				dangdichuyen = false;
+				dichchuyen = false;
+			}
+			else y--;
+		}
+		else if (len == 2) {
+			if (vitri + 50 < y) {
+				dangdichuyen = false;
+				dichchuyen = false;
+			}
+			else y++;
+		}
+		return;
+	}
+	else {
+
+		len = 0;
+	}
 	if (isOnPlatform) {
 		fly = false;
 	}
@@ -87,19 +131,24 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		isOnPlatform = false;
 		//isOnTop = 0;
 	}
+	
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	
 }
 
 void CMario::OnNoCollision(DWORD dt)
 {
-
-	x += vx * dt;
-	y += vy * dt;
+	if (!dangdichuyen) {
+		x += vx * dt;
+		y += vy * dt;
+	}
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dangdichuyen) return;
+	if (dynamic_cast<Thebox*>(e->obj))
+		return;
 	if (e->obj->IsBlocking())
 	{
 		if (e->ny != 0)
@@ -118,6 +167,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	else if(dynamic_cast<Swap*>(e->obj))
+		OnCollisionWithSwap(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
@@ -163,6 +214,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	
 	
+}
+void CMario::OnCollisionWithSwap(LPCOLLISIONEVENT e) {
+	dichchuyen = true;
+	name = dynamic_cast<Swap*>(e->obj)->getname();
+	cground = dynamic_cast<Swap*>(e->obj)->getdown();
 }
 void CMario::OnCollisionWithKick(LPCOLLISIONEVENT e) {
 	if (level == 3 && danh ) {
@@ -782,7 +838,7 @@ void CMario::SetState(int state)
 		nx = -1;
 		break;
 	case MARIO_STATE_JUMP:
-		
+		up = true;
 		if (isSitting) break;
 		
 		if (abs(vx) >= MARIO_RUNNING_SPEED && !(isOnTop == 1 || isOnPlatform)) {
@@ -803,6 +859,7 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_FLY:
+		up = true;
 		if (vy > 0.5f || abs(ax) < MARIO_ACCEL_RUN_X) {
 			fly = false;
 			vy = 0.0f;
@@ -813,6 +870,7 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_RELEASE_JUMP:
+		up = false;
 		isroi = 1;
 		if (!(isOnPlatform || isOnTop == 1) && level == 3 && !fly) {
 			if(vy>0.0f)
@@ -830,6 +888,8 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_SIT:
+		if ((isOnTop == 1 || isOnPlatform))
+		    down = true;
 		if(!dacam)
 		if ((isOnTop == 1 ||isOnPlatform) && level != MARIO_LEVEL_SMALL)
 		{
@@ -847,6 +907,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_SIT_RELEASE:
+		down = false;
 		if (isSitting)
 		{
 			isSitting = false;

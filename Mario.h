@@ -122,6 +122,14 @@ class CMario : public CGameObject
 	ULONGLONG sdanh;
 	BOOLEAN isfly;
 	BOOLEAN isOnPlatform;
+	string name;
+	bool dangdichuyen = false;
+	int len = 0;
+	float vitri = 0;
+	bool dichchuyen = false;
+	bool down = false;
+	bool cground = true;
+	bool up = false;
 	bool change = false;
 	bool danh = false;
 	int coin; 
@@ -132,6 +140,7 @@ class CMario : public CGameObject
 	void OnCollisionWithMario(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
+	void OnCollisionWithSwap(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionblock(LPCOLLISIONEVENT e);
 	void OnCollisionWithTroopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithPara(LPCOLLISIONEVENT e);

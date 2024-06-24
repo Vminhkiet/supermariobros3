@@ -43,6 +43,18 @@ public:
 
     LPGAMEOBJECT GetPlayer() { return player; }
     void Spawn(Object s);
+    vector<std::pair<Object, bool>> getspawn() {
+        return spawn;
+    }
+    void findgetposition(float& x, float& y, string name) {
+        for (auto i : spawn) {
+            if (i.first.name == name) {
+                x = i.first.x;
+                y = i.first.y;
+                break;
+            }
+        }
+    }
     void AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj = nullptr);
     void Clear();
     void PurgeDeletedObjects();

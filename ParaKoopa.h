@@ -1,11 +1,10 @@
 #pragma once
-#pragma once
 #include "GameObject.h"
 #include "AssetIDs.h"
 #include "Thebox.h"
 #include "Playscene.h"
 #define KOOPA_GRAVITY 0.002f
-#define KOOPA_WALKING_SPEED 0.05f
+#define KOOPA_WALKING_SPEED 0.08f
 
 
 #define KOOPA_BBOX_WIDTH 16
@@ -20,46 +19,45 @@
 
 #define ID_ANI_KOOPA_WALKING 5000
 #define ID_ANI_KOOPA_DIE 5001
-enum KoopaState {
-	LIFE,
-	MAI,
-	MAI_MOVE,
-	DIE1
+enum ParaKoopaState {
+	LIFE2,
+	MAI2,
+	MAI_MOVE2,
+	DIE2
 };
-class CKOOPA : public CGameObject
+class CParaKoopa : public CGameObject
 {
 protected:
 	float ax;
 	float ay;
-	KoopaState state;
-	Thebox* box;
+	ParaKoopaState state;
 	ULONGLONG die_start;
+	BOOLEAN jump;
+	BOOLEAN isOnPlatform;
 	float roiy1 = -1, roiy2 = -1;
 	int isOnTop = 0;
 	int isroi = 1;
 	bool huongdichuyen = false;
 	bool bicam = false;
-	bool green = false;
+	bool green = true;
+	bool canh = true;
 public:
-	CKOOPA(float x, float y, bool green = false) :CGameObject(x, y) {
-		state = LIFE;
+	CParaKoopa(float x, float y, bool green = true) :CGameObject(x, y) {
+		state = LIFE2;
 		this->ax = 0;
 		this->green = green;
 		this->ay = KOOPA_GRAVITY;
 		vx = -KOOPA_WALKING_SPEED;
 		die_start = -1;
 		this->SetType(OBJECT_TYPE_KOOPA);
-		box = new Thebox(x - 8, y);
-		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-		currentScene->AddObject(box);
 	}
 	void SetState(int state);
 	int Getstate() {
-		if (state == LIFE)
+		if (state == LIFE2)
 			return 0;
-		else if (state == MAI)
+		else if (state == MAI2)
 			return 1;
-		else if (state == MAI_MOVE)
+		else if (state == MAI_MOVE2)
 			return 2;
 		else
 			return 3;

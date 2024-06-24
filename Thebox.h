@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#define THEBOX_WIDTH 10
+#define THEBOX_WIDTH 1
 #define THEBOX_HEIGHT 25
 #define THEBOX_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.05f

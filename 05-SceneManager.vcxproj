@@ -172,6 +172,7 @@
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="Nen.cpp" />
     <ClCompile Include="Para.cpp" />
+    <ClCompile Include="ParaKoopa.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Swap.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Thebox.cpp" />
     <ClCompile Include="Three.cpp" />
@@ -215,6 +217,7 @@
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Nen.h" />
     <ClInclude Include="Para.h" />
+    <ClInclude Include="ParaKoopa.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
@@ -223,6 +226,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Swap.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Thebox.h" />

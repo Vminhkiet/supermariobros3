@@ -29,7 +29,7 @@ protected:
 	int state;
 
 	bool isDeleted;
-	int type;
+	int type=-1;
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }

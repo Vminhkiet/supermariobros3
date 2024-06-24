@@ -7,6 +7,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "Swap.h"
 #include "Coin.h"
 #include "Platform.h"
 #include "Curtain.h"
@@ -20,6 +21,7 @@
 #include "Goomba.h"
 #include "Grass.h"
 #include "Intro.h"
+#include "ParaKoopa.h"
 #include "IntroScreen.h"
 #include "SampleKeyEventHandler.h"
 
@@ -234,6 +236,27 @@ void CPlayScene::Spawn(Object s){
 			// Thêm portal vào Grid
 			//grid->InsertObject(ground);
 		}
+		else if (s.name == "Paratroopa") {
+			CParaKoopa* koopa = new CParaKoopa(
+				x,
+				y
+			);
+			// Thêm portal vào danh sách đối tượng của Scene
+			objects.push_back(koopa);
+			// Thêm portal vào Grid
+			//grid->InsertObject(ground);
+		}
+		else if (s.name == "Troopa1") {
+			CKOOPA* koopa = new CKOOPA(
+				x,
+				y,
+				true
+			);
+			// Thêm portal vào danh sách đối tượng của Scene
+			objects.push_back(koopa);
+			// Thêm portal vào Grid
+			//grid->InsertObject(ground);
+		}
 		else if (s.name == "Gooba") {
 			CGoomba* goopa = new CGoomba(
 				x ,
@@ -395,13 +418,13 @@ void CPlayScene::Update(DWORD dt)
 		cx -= game->GetBackBufferWidth() / 2;
 		cy -= game->GetBackBufferHeight() / 2;
 		
-		if (cx < 0) cx = 0;
+		/*if (cx < 0) cx = 0;
 		if (!mario->checkfly() && cy > -100) {
 			cy = 0;
 		}
 		if (mario->checkfly() && cy > 0) {
 			cy = 0;
-		}
+		}*/
 		CGame::GetInstance()->SetCamPos((int)cx, (int)cy);
 		tileMap->Update(dt, &objects);
 
@@ -607,6 +630,31 @@ void CPlayScene::LoadResource(string s) {
 				objects.push_back(grass);
 			}
 		}
+		else if (layer["name"] == "Coin") {
+			for (auto& object : layer["objects"]) {
+				CCoin* grass = new CCoin(float(object["x"]) - 8, float(object["y"]) - 220);
+				objects.push_back(grass);
+			}
+		}
+		else if (layer["name"] == "Label") {
+			for (auto& object : layer["objects"]) {
+				if (object["name"] == "Swap1") {
+					Swap* s=new Swap(float(object["x"]) - 2, float(object["y"]) - 230,true, object["width"]-2,object["height"] ,object["name"],true);
+					objects.push_back(s);
+				}
+				else if (object["name"] == "Swap2") {
+					Swap* s = new Swap(float(object["x"]) - 2, float(object["y"]) - 230, true, object["width"]-2, object["height"] , object["name"],false);
+					objects.push_back(s);
+				}
+				else {
+					Object s;
+					s.x = float(object["x"]) - 8;
+					s.y = float(object["y"]) - 220;
+					s.name = object["name"];
+					spawn.push_back({ s,false });
+				}
+			}
+		}
 		else if (layer["name"] == "Enime") {
 			for (auto& object : layer["objects"]) {
 
@@ -615,7 +663,25 @@ void CPlayScene::LoadResource(string s) {
 					Object s;
 					s.x = float(object["x"]) - 8;
 					s.y = float(object["y"]) - 250;
-					s.name = "Troopa";
+					s.name = object["name"];
+					spawn.push_back({ s,false });
+
+				}
+				else if (object["name"] == "Troopa1") {
+
+					Object s;
+					s.x = float(object["x"]) - 8;
+					s.y = float(object["y"]) - 250;
+					s.name = object["name"];
+					spawn.push_back({ s,false });
+
+				}
+				else if (object["name"] == "Paratroopa") {
+
+					Object s;
+					s.x = float(object["x"]) - 8;
+					s.y = float(object["y"]) - 250;
+					s.name = object["name"];
 					spawn.push_back({ s,false });
 
 				}
