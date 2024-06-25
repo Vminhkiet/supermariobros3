@@ -86,7 +86,7 @@ public:
 
 
 	void LoadFromFile(LPCWSTR filePath);
-	void Draw(D3DXVECTOR2 position, int alpha = 255);
+	void Draw(D3DXVECTOR2 position, int alpha = 255,bool background=false);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* object = NULL);
 
 	int GetWidth();

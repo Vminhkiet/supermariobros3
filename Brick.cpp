@@ -5,6 +5,11 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		isDeleted = true;
 		return;
 	}
+	if (bat && !p) {
+		die = true;
+		p = true;
+		isdie = GetTickCount64();
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -15,7 +20,7 @@ void CBrick::Render()
 		animations->Get(ID_ANI_BRICK - 2)->Render(x, y);
 	else if(!bat)
 	    animations->Get(ID_ANI_BRICK)->Render(x, y);
-	else 
+	else if(bat && p)
 		animations->Get(ID_ANI_BRICK - 1)->Render(x, y);
 	//RenderBoundingBox();
 }

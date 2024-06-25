@@ -6,6 +6,8 @@
 #include "Game.h"
 #include "Mushroom.h"
 #include "Goomba.h"
+#include "ParaKoopa.h"
+#include "Die.h"
 #include "Coin.h"
 #include "Swap.h"
 #include "Bullet.h"
@@ -43,6 +45,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		x = cx;
 		y = cy;
 		len = 2;
+		tele = true;
 		vitri = cy;
 	}
 	if (dichchuyen && up && !cground) {
@@ -54,27 +57,29 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		y = cy;
 		len = 1;
 		vitri = cy;
+		tele = true;
 	}
 	if (dangdichuyen) {
 		
 		if (len == 1) {
-			if (vitri - 50 > y) {
+			if (vitri - 40 > y) {
 				dangdichuyen = false;
 				dichchuyen = false;
+				tele = false;
 			}
 			else y--;
 		}
 		else if (len == 2) {
-			if (vitri + 50 < y) {
+			if (vitri + 40 < y) {
 				dangdichuyen = false;
 				dichchuyen = false;
+				tele = false;
 			}
 			else y++;
 		}
 		return;
 	}
 	else {
-
 		len = 0;
 	}
 	if (isOnPlatform) {
@@ -131,7 +136,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		isOnPlatform = false;
 		//isOnTop = 0;
 	}
-	
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	
 }
@@ -141,6 +146,9 @@ void CMario::OnNoCollision(DWORD dt)
 	if (!dangdichuyen) {
 		x += vx * dt;
 		y += vy * dt;
+	}
+	if (dichchuyen) {
+		dichchuyen = false;
 	}
 }
 
@@ -167,6 +175,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	else if (dynamic_cast<CDie*>(e->obj))
+		OnCollisionWithDie(e);
 	else if(dynamic_cast<Swap*>(e->obj))
 		OnCollisionWithSwap(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
@@ -189,6 +199,15 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBullet(e);
 	else if (dynamic_cast<CPARA*>(e->obj))
 		OnCollisionWithPara(e);
+	else if(dynamic_cast<CParaKoopa*>(e->obj))
+		OnCollisionWithParakoopa(e);
+	else if (dynamic_cast<CBrick*>(e->obj)) {
+		CBrick* b=dynamic_cast<CBrick*>(e->obj);
+		if (b->gettien()) {
+			CPlayScene* cur = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			cur->deletebrick(true);
+		}
+	}
 	else if (dynamic_cast<CTop*>(e->obj)) {
 		CTop* top = dynamic_cast<CTop*>(e->obj);
 		if (e->ny < 0) {
@@ -215,6 +234,141 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	
 	
 }
+void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
+	CParaKoopa* p = dynamic_cast<CParaKoopa*>(e->obj);
+	if (p->getcanh()) {
+		if (e->ny < 0)
+		{
+			p->SetState(0);
+			vy = -MARIO_JUMP_DEFLECT_SPEED + 0.2f;
+		}
+		else // hit by Troopa
+		{
+			if (untouchable == 0)
+			{
+				if (untouchable == 0) {
+					if (level == 3)
+					{
+						st = GetTickCount64();
+						CGame::GetInstance()->GetCurrentScene()->setpause(true);
+						hoalon = true;
+						isOnTop = false;
+						level = 2;
+						StartUntouchable();
+					}
+					else if (level == 2)
+					{
+						st = GetTickCount64();
+						CGame::GetInstance()->GetCurrentScene()->setpause(true);
+						hoalon = true;
+						isOnTop = false;
+						level = MARIO_LEVEL_SMALL;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+					}
+				}
+			}
+		}
+		return;
+	}
+	int pstate = p->Getstate();
+
+	if (pstate == 0) {
+		if (e->ny < 0)
+		{
+			if (pstate == 0)
+			{
+				p->SetState(1);
+				vy = -MARIO_JUMP_DEFLECT_SPEED + 0.2f;
+			}
+		}
+		else // hit by Troopa
+		{
+			if (untouchable == 0)
+			{
+				if (pstate == 0 || pstate == 2)
+				{
+					if (untouchable == 0) {
+						if (level == 3)
+						{
+							st = GetTickCount64();
+							CGame::GetInstance()->GetCurrentScene()->setpause(true);
+							hoalon = true;
+							isOnTop = false;
+							level = 2;
+							StartUntouchable();
+						}
+						else if (level == 2)
+						{
+							st = GetTickCount64();
+							CGame::GetInstance()->GetCurrentScene()->setpause(true);
+							hoalon = true;
+							isOnTop = false;
+							level = MARIO_LEVEL_SMALL;
+							StartUntouchable();
+						}
+						else
+						{
+							DebugOut(L">>> Mario DIE >>> \n");
+							SetState(MARIO_STATE_DIE);
+						}
+					}
+				}
+			}
+		}
+	}
+	else if (pstate == 1) {
+		if (!cammai) {
+			dacam = false;
+			p->SetState(2);
+			p->setcam(false);
+			if (nx > 0) {
+				p->sethuong(true);
+			}
+			else if (nx < 0) {
+				p->sethuong(false);
+			}
+		}
+		else {
+			dacam = true;
+			p->setcam(true);
+		}
+	}
+	else if (pstate == 2) {
+		if (untouchable == 0) {
+			if (level == 3)
+			{
+				st = GetTickCount64();
+				CGame::GetInstance()->GetCurrentScene()->setpause(true);
+				hoalon = true;
+
+				level = MARIO_LEVEL_SMALL + 1;
+				StartUntouchable();
+			}
+			if (level == 2)
+			{
+				st = GetTickCount64();
+				CGame::GetInstance()->GetCurrentScene()->setpause(true);
+				hoalon = true;
+
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
+	}
+}
+void CMario::OnCollisionWithDie(LPCOLLISIONEVENT e) {
+
+}
 void CMario::OnCollisionWithSwap(LPCOLLISIONEVENT e) {
 	dichchuyen = true;
 	name = dynamic_cast<Swap*>(e->obj)->getname();
@@ -238,7 +392,18 @@ void CMario::OnCollisionWithKick(LPCOLLISIONEVENT e) {
 }
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
 	if (untouchable == 0) {
-		if (level > MARIO_LEVEL_SMALL) {
+		if (level == 3) {
+
+			st = GetTickCount64();
+			CGame::GetInstance()->GetCurrentScene()->setpause(true);
+			hoalon = true;
+			isOnTop = false;
+			level = MARIO_LEVEL_SMALL + 1;
+			if (e->obj->GetType() == 16)
+				e->obj->Delete();
+			StartUntouchable();
+		}
+		else if (level == 2) {
 
 			st = GetTickCount64();
 			CGame::GetInstance()->GetCurrentScene()->setpause(true);
@@ -317,7 +482,16 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
-				if (level > MARIO_LEVEL_SMALL)
+				if (level == 3)
+				{
+					st = GetTickCount64();
+					CGame::GetInstance()->GetCurrentScene()->setpause(true);
+					hoalon = true;
+
+					level = 2;
+					StartUntouchable();
+				}
+				else if (level == 2)
 				{
 					st = GetTickCount64();
 					CGame::GetInstance()->GetCurrentScene()->setpause(true);
@@ -355,7 +529,16 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 				if (pstate == 0 || pstate == 2)
 				{
 					if (untouchable == 0) {
-						if (level > MARIO_LEVEL_SMALL)
+						if (level == 3)
+						{
+							st = GetTickCount64();
+							CGame::GetInstance()->GetCurrentScene()->setpause(true);
+							hoalon = true;
+							isOnTop = false;
+							level = 2;
+							StartUntouchable();
+						}
+						else if (level == 2)
 						{
 							st = GetTickCount64();
 							CGame::GetInstance()->GetCurrentScene()->setpause(true);
@@ -374,7 +557,7 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 			}
 		}
 	}
-	if (pstate == 1) {
+	else if (pstate == 1) {
 		if (!cammai) {
 			dacam = false;
 			p->SetState(2);
@@ -391,10 +574,23 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 			p->setcam(true);
 		}
 	}
-	if (pstate == 2) {
+	else if (pstate == 2) {
 		if (untouchable == 0) {
-			if (level > MARIO_LEVEL_SMALL)
+			if (level == 3)
 			{
+				st = GetTickCount64();
+				CGame::GetInstance()->GetCurrentScene()->setpause(true);
+				hoalon = true;
+
+				level = MARIO_LEVEL_SMALL + 1;
+				StartUntouchable();
+			}
+			if (level == 2)
+			{
+				st = GetTickCount64();
+				CGame::GetInstance()->GetCurrentScene()->setpause(true);
+				hoalon = true;
+
 				level = MARIO_LEVEL_SMALL;
 				StartUntouchable();
 			}
@@ -428,9 +624,17 @@ void CMario::OnCollisionWithPara(LPCOLLISIONEVENT e) {
 	{
 		if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
-			{
-				if (level > MARIO_LEVEL_SMALL)
+			if (goomba->GetState() != GOOMBA_STATE_DIE){
+				if (level == 3)
+				{
+					st = GetTickCount64();
+					CGame::GetInstance()->GetCurrentScene()->setpause(true);
+					hoalon = true;
+
+					level = 2;
+					StartUntouchable();
+				}
+				if (level == 2)
 				{
 					st = GetTickCount64();
 					CGame::GetInstance()->GetCurrentScene()->setpause(true);

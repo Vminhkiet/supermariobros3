@@ -33,6 +33,7 @@ protected:
 	float ay;
 	KoopaState state;
 	Thebox* box;
+	ULONGLONG dung;
 	ULONGLONG die_start;
 	float roiy1 = -1, roiy2 = -1;
 	int isOnTop = 0;

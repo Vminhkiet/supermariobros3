@@ -124,7 +124,7 @@ void CTileMap::LoadFromFile(LPCWSTR filePath)
 	load = true;
 }
 
-void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
+void CTileMap::Draw(D3DXVECTOR2 position, int alpha, bool background)
 {
 
 	float x, y;
@@ -147,7 +147,9 @@ void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 		//if (alpha == 80)
 			//CGame::GetInstance()->GetDirect3DDevice()->ColorFill(CGame::GetInstance()->GetBackBuffer(), NULL, D3DXCOLOR(0xBBBBBB));
 	}
+	
 	for (auto& layer : layers) {
+		if (!background && layer->name != "Background")
 			for (int i = hStart; i < hEnd; i++)
 			{
 				for (int j = wStart; j < wEnd; j++)
@@ -165,7 +167,28 @@ void CTileMap::Draw(D3DXVECTOR2 position, int alpha)
 
 				}
 			}
-        
+		else if (background) {
+			if (layer->name == "Background") {
+				for (int i = hStart; i < hEnd; i++)
+				{
+					for (int j = wStart; j < wEnd; j++)
+					{
+						if (layer->data[i][j] == 0)
+							continue;
+						if (layer->data[i][j] >= 871) {
+							layer->data[i][j] -= 870;
+						}
+						D3DXVECTOR2 pos;
+						pos.x = position.x + j * tileSet->GetTileWidth() - x;
+						pos.y = position.y + i * tileSet->GetTileHeight() - y - 220;
+						if (layer->visible)
+							tileSet->DrawTile(layer->data[i][j], pos, 255);
+
+					}
+				}
+				break;
+			}
+		}
 	}
 }
 

@@ -4,7 +4,7 @@
 #include "Thebox.h"
 #include "Playscene.h"
 #define KOOPA_GRAVITY 0.002f
-#define KOOPA_WALKING_SPEED 0.08f
+#define KOOPA_WALKING_SPEED 0.05f
 
 
 #define KOOPA_BBOX_WIDTH 16
@@ -32,6 +32,7 @@ protected:
 	float ay;
 	ParaKoopaState state;
 	ULONGLONG die_start;
+	ULONGLONG dung;
 	BOOLEAN jump;
 	BOOLEAN isOnPlatform;
 	float roiy1 = -1, roiy2 = -1;
@@ -61,6 +62,12 @@ public:
 			return 2;
 		else
 			return 3;
+	}
+	void setcanh(bool canh) {
+		this->canh = canh;
+	}
+	bool getcanh() {
+		return canh;
 	}
 	void setcam(bool cam) {
 		this->bicam = cam;

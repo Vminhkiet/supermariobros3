@@ -138,6 +138,9 @@
     <ClCompile Include="Swap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Die.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -273,6 +276,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Swap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Die.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

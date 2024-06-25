@@ -13,8 +13,10 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			roiy1 = -1;
 			roiy2 = -1;
 			isOnTop = 0;
-		
 		}
+	}
+	if (GetTickCount64() - dung > 3000 && state == MAI_MOVE) {
+		SetState(3);
 	}
 	if (!(isOnPlatform || isOnTop==1)) {
 		jump = false;
@@ -42,7 +44,6 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 	if ((state == DIE2) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
 	{
-		state = LIFE2;
 		isDeleted = true;
 		return;
 	}
@@ -95,6 +96,7 @@ void CParaKoopa::Render() {
 			bicam = false;
 			state = MAI_MOVE2;
 			float mx, my;
+			dung = GetTickCount64();
 			mario->GetPosition(mx, my);
 			if (isOnTop == 0) {
 				y -= 5;
@@ -134,7 +136,8 @@ void CParaKoopa::Render() {
 		else
 			aniId = 13015;
 	}
-
+	if (state == DIE2)
+		return;
 	animations->Get(aniId)->Render(x, y, w, h);
 }
 void CParaKoopa::OnNoCollision(DWORD dt)
@@ -207,6 +210,8 @@ void CParaKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 void CParaKoopa::SetState(int state) {
 	if (state == 0) {
 		this->state = LIFE2;
+		canh = false;
+		vx = 0;
 	}
 	else if (state == 1) {
 		this->state = MAI2;
@@ -214,6 +219,7 @@ void CParaKoopa::SetState(int state) {
 	}
 	else if (state == 2) {
 		this->state = MAI_MOVE2;
+		dung = GetTickCount64();
 	}
 	else if (state == 3) {
 		this->state = DIE2;

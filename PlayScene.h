@@ -55,6 +55,16 @@ public:
             }
         }
     }
+    void deletebrick(bool deleted) {
+        if (deleted) {
+            for (auto i : objects) {
+                if (dynamic_cast<CBrick*>(i)) {
+                    CBrick* k = dynamic_cast<CBrick*>(i);
+                    k->setdie(true);
+                }
+            }
+        }
+    }
     void AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj = nullptr);
     void Clear();
     void PurgeDeletedObjects();

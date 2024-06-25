@@ -5,6 +5,7 @@
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
+#include "Die.h"
 #include "Sprites.h"
 #include "Portal.h"
 #include "Swap.h"
@@ -445,16 +446,22 @@ void CPlayScene::Render()
 	else {
 		float x, y;
 		CGame::GetInstance()->GetCamPos(x, y);
-
+		tileMap->Draw({ 0,0 }, 255, true);
+		bool tele = dynamic_cast<CMario*>(player)->gettele();
+		if (tele)
+			player->Render();
 		for (auto i : venus) {
 			i->Render();
 		}
 		if (tileMap && tileMap->getload()) {
 			tileMap->Draw({ 0, 0 });
 		}
-		for (int i = 0; i < objects.size(); i++) {
+		if (!tele)
+			player->Render();
+		for (int i = 1; i < objects.size(); i++) {
 			objects[i]->Render();
 		}
+		
 	}
 }
 
@@ -520,6 +527,8 @@ void CPlayScene::LoadResource(string s) {
 	D3DXCOLOR blueColor = D3DXCOLOR(0.53f, 0.81f, 0.92f, 1.0f);
 
 	CGame::GetInstance()->SetBackgroundColor(blueColor);
+
+
 	// Khởi tạo TileMap và Grid
 	tileMap = new CTileMap();
 	//grid = new CGrid(40, 30, 16, 16);
@@ -540,6 +549,22 @@ void CPlayScene::LoadResource(string s) {
 					float(object["y"])-228,
 					 object["width"]-8,
 					 object["height"]
+				);
+				// Thêm portal vào danh sách đối tượng của Scene
+				objects.push_back(ground);
+				// Thêm portal vào Grid
+				//grid->InsertObject(ground);
+			}
+		}
+		else if (layer["name"] == "Die") {
+			for (auto& object : layer["objects"]) {
+				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
+
+				CDie* ground = new CDie(
+					float(object["x"]) - 2,
+					float(object["y"]) - 228,
+					object["width"] ,
+					object["height"]
 				);
 				// Thêm portal vào danh sách đối tượng của Scene
 				objects.push_back(ground);

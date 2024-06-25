@@ -14,7 +14,7 @@ public:
 		this->down = down;
 		this->name = name;
 	}
-	void Render(){ RenderBoundingBox();
+	void Render(){ //RenderBoundingBox();
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects){
 		CGameObject::Update(dt, coObjects);
@@ -30,7 +30,7 @@ public:
 			return "C2";
 	}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int IsBlocking() { return 0; }
+	int IsBlocking() { return 1; }
 	virtual int IsCollidable() {
 		return 1;
 	};

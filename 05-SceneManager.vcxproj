@@ -156,6 +156,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Curtain.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="Die.cpp" />
     <ClCompile Include="Duoi.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Curtain.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="Die.h" />
     <ClInclude Include="Duoi.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

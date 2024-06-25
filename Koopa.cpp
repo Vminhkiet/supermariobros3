@@ -4,6 +4,7 @@
 #include "PlayScene.h"
 #include "QuestionBlock.h"
 #include "Brick.h"
+#include "Die.h"
 #include "Goomba.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (roiy1 != -1 && roiy2 != -1) {
@@ -25,7 +26,12 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 	}
-
+	if (GetTickCount64() - dung > 3000 && state == MAI_MOVE) {
+		SetState(3);
+	}
+	if (state != LIFE && !box->IsDeleted()) {
+		box->Delete();
+	}
 	if (isOnTop==1 && !box->IsDeleted()) {
 		box->Delete();
 	}
@@ -53,9 +59,8 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		else
 			vx = -KOOPA_WALKING_SPEED * 6;
 	}
-	if ((state == DIE1) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT))
+	if ((state == DIE1) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT) )
 	{
-		state = LIFE;
 		isDeleted = true;
 		return;
 	}
@@ -97,6 +102,7 @@ void CKOOPA::Render() {
 		}
 	}
 	else if (state == MAI) {
+
 		if (!green)
 			aniId = 13004;
 		else
@@ -106,6 +112,7 @@ void CKOOPA::Render() {
 		if (!mario->getcam() && bicam) {
 			bicam = false;
 			state = MAI_MOVE;
+			dung = GetTickCount64();
 			float mx, my;
 			mario->GetPosition(mx, my);
 			if (isOnTop == 0 ) {
@@ -140,6 +147,8 @@ void CKOOPA::Render() {
 		w = 16;
 		h = 26;
 	}
+	if (state == DIE1)
+		return;
 	animations->Get(aniId)->Render(x, y,w,h);
 }
 void CKOOPA::OnNoCollision(DWORD dt)
@@ -192,6 +201,17 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 
 	}
+	else if (dynamic_cast<CBrick*>(e->obj)) {
+		CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+		if (e->nx != 0 && state == MAI_MOVE && !brick->getbat()) {
+			brick->setbat(true);
+			vx *= -1;
+		}
+	}
+	else if (dynamic_cast<CDie*>(e->obj))
+	{
+		this->Delete();
+	}
 	else if (dynamic_cast<CQuestionblock*>(e->obj)) {
 		CQuestionblock* qs = dynamic_cast<CQuestionblock*>(e->obj);
 		if (e->nx != 0 && state == MAI_MOVE) {
@@ -214,9 +234,11 @@ void CKOOPA::SetState(int state){
 	}
 	else if (state == 1) {
 		this->state = MAI;
+		vx = 0;
 		y += 5;
 	}
 	else if (state == 2) {
+		dung = GetTickCount64();
 		this->state = MAI_MOVE;
 	}
 	else if (state == 3) {

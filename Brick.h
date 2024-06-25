@@ -23,6 +23,15 @@ public:
 	bool getp() {
 		return p;
 	}
+	bool getbat() {
+		return bat;
+	}
+	bool gettien() {
+		if (p && bat) {
+			return true;
+		}
+		return false;
+	}
 	void setdie(bool die) {
 		this->die = die;
 		isdie = GetTickCount64();

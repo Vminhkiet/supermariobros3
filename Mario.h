@@ -126,6 +126,7 @@ class CMario : public CGameObject
 	bool dangdichuyen = false;
 	int len = 0;
 	float vitri = 0;
+	bool tele = false;
 	bool dichchuyen = false;
 	bool down = false;
 	bool cground = true;
@@ -138,12 +139,14 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithMario(LPCOLLISIONEVENT e);
+	void OnCollisionWithDie(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithBullet(LPCOLLISIONEVENT e);
 	void OnCollisionWithSwap(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionblock(LPCOLLISIONEVENT e);
 	void OnCollisionWithTroopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithPara(LPCOLLISIONEVENT e);
+	void OnCollisionWithParakoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithKick(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -183,6 +186,9 @@ public:
 		this->SetType(OBJECT_TYPE_MARIO);
 	}
 	int getintro();
+	bool gettele() {
+		return tele;
+	}
 	void SetSittingFalse() {
 		isSitting = false;
 	}
