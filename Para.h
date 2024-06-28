@@ -58,4 +58,7 @@ public:
 		canh = co;
 	}
 	virtual void SetState(int state);
+	void Setrua(bool rua) {
+		this->rua = rua;
+	}
 };

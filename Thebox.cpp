@@ -1,4 +1,6 @@
 #include "Thebox.h"
+#include "Mario.h"
+#include "Brick.h"
 void Thebox::Render()
 {
 	RenderBoundingBox();
@@ -15,6 +17,9 @@ void Thebox::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 void Thebox::OnCollisionWith(LPCOLLISIONEVENT e) {
+	if (dynamic_cast<CMario*>(e->obj))
+		return;
+	if (!e->obj->IsBlocking()) return;
 	if (e->obj->IsBlocking()) {
 		if (e->ny < 0) {
 			vy = 0;

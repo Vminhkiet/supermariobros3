@@ -23,6 +23,8 @@ protected:
     bool isShooting;  // Tr?ng thái b?n
     DWORD stateTime; // Th?i gian b?t ??u b?n
     VenusState state;
+    bool die = false;
+    ULONGLONG isdie;
     int huong = 0;
     bool tren = true;
     bool trai = true;
@@ -33,22 +35,31 @@ public:
         this->type = type;
         isShooting = false;
         vy = VENUS_SPEED;
+        isdie = -1;
         state = MOVING_UP;
         vx = 0;
         SetType(OBJECT_TYPE_VENUS);
-    }
-    int IsBlocking()
-    {
-        return 0;
     }
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     void Render();
     void Setstate(VenusState state) {
         this->state = state;
     }
+    bool getdie() {
+        return die;
+    }
+    void setdie(bool die) {
+        this->die = die;
+        vy = 0;
+        if(this->die)
+            isdie = GetTickCount64();
+    }
+    int IsCollidable() { return 1; };
+    int IsBlocking() { return 0; }
     void GetBoundingBox(float& l, float& t, float& r, float& b);
     void CreateBullet();
     void OnCollisionWith(LPCOLLISIONEVENT e);
+    void OnNoCollision(DWORD dt);
 };
 
 typedef CVenus* LPVENUS;

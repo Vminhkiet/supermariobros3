@@ -20,7 +20,10 @@ void CQuestionblock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 				int level = mario->Getlevel();
 				if (level == 1) {
-					obj = new CMUSHROOM(x, y, true, true);;
+					if (!brick)
+						obj = new CMUSHROOM(x, y, true, true);
+					else
+						obj = new CMUSHROOM(x, y, false, true);
 				}
 				else
 					obj = new CLEAF(x, y);
@@ -36,10 +39,14 @@ void CQuestionblock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 void CQuestionblock::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if(!bicham)
-	    animations->Get(ID_ANI_QUES)->Render(x, y,19,19);
+	if (!bicham) {
+		if (brick) {
+			animations->Get(ID_ANI_QUES-1)->Render(x, y);
+		}
+		else animations->Get(ID_ANI_QUES)->Render(x, y, 18, 18);
+	}
 	else {
-		animations->Get(ID_ANI_QUES + 1)->Render(x, y, 19, 19);
+		animations->Get(ID_ANI_QUES + 1)->Render(x, y, 18, 18);
 	}
 	//RenderBoundingBox();
 }

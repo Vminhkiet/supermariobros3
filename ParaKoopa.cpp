@@ -4,6 +4,7 @@
 #include"ParaKoopa.h"
 #include "PlayScene.h"
 #include "QuestionBlock.h"
+#include "Die.h"
 #include "Brick.h"
 #include "Goomba.h"
 void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -197,6 +198,10 @@ void CParaKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 			qs->SetCham(true);
 			vx *= -1;
 		}
+	}
+	else if (dynamic_cast<CDie*>(e->obj))
+	{
+		this->Delete();
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj)) {
 		if (state == MAI_MOVE) {

@@ -4,6 +4,7 @@
 #include "PlayScene.h"
 #include "QuestionBlock.h"
 #include "Brick.h"
+#include "Ground.h"
 #include "Die.h"
 #include "Goomba.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -26,6 +27,14 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 	}
+
+	if (!box->IsDeleted()) {
+		float cx, cy;
+		box->GetSpeed(cx, cy);
+		if (cx * vx < 0) {
+			box->SetSpeed(vx, cy);
+		}
+	}
 	if (GetTickCount64() - dung > 3000 && state == MAI_MOVE) {
 		SetState(3);
 	}
@@ -35,7 +44,7 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (isOnTop==1 && !box->IsDeleted()) {
 		box->Delete();
 	}
-	if (box->getroi() && isOnTop==0){
+	if (box->getroi() && isOnTop == 0 && !box->IsDeleted()) {
 		
 		if (vx > 0) {
 			box->SetPosition(x-2, y);
@@ -201,10 +210,15 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 
 	}
+	else if (dynamic_cast<CGround*>(e->obj)) {
+		if (box != NULL && !box->IsDeleted()) {
+			box->Delete();
+		}
+	}
 	else if (dynamic_cast<CBrick*>(e->obj)) {
 		CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-		if (e->nx != 0 && state == MAI_MOVE && !brick->getbat()) {
-			brick->setbat(true);
+		if (e->nx != 0 && state == MAI_MOVE) {
+			brick->setdie(true);
 			vx *= -1;
 		}
 	}
@@ -219,6 +233,7 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 			vx *= -1;
 		}
 	}
+	
 	else if (dynamic_cast<CGoomba*>(e->obj)) {
 		if (state == MAI_MOVE) {
 			CGoomba* go = dynamic_cast<CGoomba*>(e->obj);
@@ -244,6 +259,9 @@ void CKOOPA::SetState(int state){
 	else if (state == 3) {
 		this->state = DIE1;
 		die_start = GetTickCount64();
+		if (box != NULL && !box->IsDeleted()) {
+			box->Delete();
+		}
 		vx = 0;
 		vy = 0;
 		ay = 0;

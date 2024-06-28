@@ -1,15 +1,14 @@
 #include "Brick.h"
+#include "Coin.h"
+#include "PlayScene.h"
+
 void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (die && (GetTickCount64() - isdie > 300))
 	{
 		isDeleted = true;
 		return;
 	}
-	if (bat && !p) {
-		die = true;
-		p = true;
-		isdie = GetTickCount64();
-	}
+	
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -18,13 +17,17 @@ void CBrick::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	if(die)
 		animations->Get(ID_ANI_BRICK - 2)->Render(x, y);
-	else if(!bat)
+	else
 	    animations->Get(ID_ANI_BRICK)->Render(x, y);
-	else if(bat && p)
-		animations->Get(ID_ANI_BRICK - 1)->Render(x, y);
+
 	//RenderBoundingBox();
 }
-
+void CBrick::settien(bool te) {
+	this->Delete();
+	LPGAMEOBJECT c = new CCoin(x, y);
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+	currentScene->AddObject(c);
+}
 void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 {
 	l = x - BRICK_BBOX_WIDTH/2;

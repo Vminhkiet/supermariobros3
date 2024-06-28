@@ -562,18 +562,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":134,
-                 "name":"P",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":2039.75,
-                 "y":377
-                }, 
-                {
-                 "height":0,
                  "id":135,
                  "name":"",
                  "point":true,
@@ -670,7 +658,7 @@
          "name":"BlockQuestion",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":176,
          "x":0,
          "y":0
@@ -701,8 +689,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1807,
-                 "y":440
+                 "x":1808,
+                 "y":430
                 }, 
                 {
                  "height":0,
@@ -713,7 +701,7 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1871.75,
+                 "x":1872,
                  "y":415
                 }],
          "opacity":1,
@@ -921,8 +909,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":31.875,
-                 "x":1791.75,
+                 "width":33.2,
+                 "x":1790.42,
                  "y":383.75
                 }, 
                 {
@@ -932,8 +920,8 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":32.1818,
-                 "x":1855.91,
+                 "width":33.82,
+                 "x":1854.27,
                  "y":368
                 }, 
                 {
@@ -1464,18 +1452,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":89,
-                 "name":"Nam",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1447,
-                 "y":104
-                }, 
-                {
-                 "height":0,
                  "id":114,
                  "name":"NN",
                  "point":true,
@@ -1509,6 +1485,30 @@
                  "width":0,
                  "x":216.667,
                  "y":358.576
+                }, 
+                {
+                 "height":0,
+                 "id":237,
+                 "name":"NN1",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1447,
+                 "y":104
+                }, 
+                {
+                 "height":0,
+                 "id":238,
+                 "name":"P",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2039.75,
+                 "y":377
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1948,7 +1948,7 @@
          "y":0
         }],
  "nextlayerid":22,
- "nextobjectid":237,
+ "nextobjectid":239,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

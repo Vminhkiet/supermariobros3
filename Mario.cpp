@@ -15,10 +15,12 @@
 #include "Koopa.h"
 #include "Venus.h"
 #include "Leaf.h"
+#include "ButtonP.h"
 #include "Para.h"
 #include "QuestionBlock.h"
 #include "TopGround.h"
 #include "Collision.h"
+#include "Thebox.h"
 #include "PlayScene.h"
 #include "Brick.h"
 
@@ -138,8 +140,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
-	
+
 }
+
 
 void CMario::OnNoCollision(DWORD dt)
 {
@@ -156,6 +159,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (dangdichuyen) return;
 	if (dynamic_cast<Thebox*>(e->obj))
+		return;
+	if (dynamic_cast<Duoi*>(e->obj))
 		return;
 	if (e->obj->IsBlocking())
 	{
@@ -177,7 +182,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CDie*>(e->obj))
 		OnCollisionWithDie(e);
-	else if(dynamic_cast<Swap*>(e->obj))
+	else if (dynamic_cast<Swap*>(e->obj))
 		OnCollisionWithSwap(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
@@ -195,19 +200,23 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBullet(e);
 	else if (dynamic_cast<CKOOPA*>(e->obj))
 		OnCollisionWithTroopa(e);
-	else if (dynamic_cast<CVenus*>(e->obj))
+	else if (dynamic_cast<CVenus*>(e->obj)) {
+		if (dynamic_cast<CVenus*>(e->obj)->getdie()) {
+			return;
+		}
 		OnCollisionWithBullet(e);
+	}
+	else if (dynamic_cast<ButtonP*>(e->obj)) {
+		if (e->ny < 0 && !dynamic_cast<ButtonP*>(e->obj)->getdie()) {
+			dynamic_cast<ButtonP*>(e->obj)->setdie(true);
+			CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			currentScene->deletebrick(true);
+		}
+	}
 	else if (dynamic_cast<CPARA*>(e->obj))
 		OnCollisionWithPara(e);
 	else if(dynamic_cast<CParaKoopa*>(e->obj))
 		OnCollisionWithParakoopa(e);
-	else if (dynamic_cast<CBrick*>(e->obj)) {
-		CBrick* b=dynamic_cast<CBrick*>(e->obj);
-		if (b->gettien()) {
-			CPlayScene* cur = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-			cur->deletebrick(true);
-		}
-	}
 	else if (dynamic_cast<CTop*>(e->obj)) {
 		CTop* top = dynamic_cast<CTop*>(e->obj);
 		if (e->ny < 0) {
@@ -454,7 +463,7 @@ void CMario::OnCollisionWithQuestionblock(LPCOLLISIONEVENT e){
 	}
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e) {
-	if (level == MARIO_LEVEL_BIG) {
+	if (level >= MARIO_LEVEL_BIG ) {
 		CLEAF* leaf = dynamic_cast<CLEAF*>(e->obj);
 
 		SetLevel(MARIO_LEVEL_RACOON);
@@ -895,6 +904,12 @@ int CMario::GetAniIdRacoon()
 				aniId = 1051;
 			}
 		}
+		if (danh && !dacam) {
+			if (nx > 0) {
+				aniId = 1061;
+			}
+			else aniId = 1060;
+		}
 	}
 	else
 		if (isSitting)
@@ -969,7 +984,12 @@ void CMario::Render()
 		CAnimations* animations = CAnimations::GetInstance();
 		int aniId = -1;
 		if (GetTickCount64() - sdanh > 200 && danh) {
+			if (duoi != NULL && !duoi->IsDeleted()) {
+				duoi->Delete();
+				duoi = NULL;
+			}
 			danh = false;
+			
 		}
 		if (state == MARIO_STATE_DIE)
 			aniId = ID_ANI_MARIO_DIE;
@@ -1142,7 +1162,7 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (level==MARIO_LEVEL_BIG)
+	if (level==MARIO_LEVEL_BIG || level==3)
 	{
 		if (isSitting)
 		{
@@ -1159,25 +1179,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}
 	}
-	else if (level == MARIO_LEVEL_RACOON) {
-		if (isSitting)
-		{
-			left = x - MARIO_BIG_SITTING_BBOX_WIDTH / 2;
-			top = y - MARIO_BIG_SITTING_BBOX_HEIGHT / 2;
-			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
-			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
-		}
-		else
-		{
-			left = x - MARIO_RACOON_BBOX_WIDTH / 2 ;
-			top = y - MARIO_RACOON_BBOX_HEIGHT / 2 ;
-			right = left + MARIO_RACOON_BBOX_WIDTH ;
-			bottom = top + MARIO_RACOON_BBOX_HEIGHT;
-				if (nx < 0) {
-					left -= 3;
-				}
-		}
-	}
+
 	else
 	{
 		left = x - MARIO_SMALL_BBOX_WIDTH/2;
@@ -1193,9 +1195,32 @@ void CMario::SetLevel(int l)
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
 		
-		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+		y -= (MARIO_BIG_BBOX_HEIGHT + 4 - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
-	
+	if (this->level == 2) {
+		if (l == 3) {
+			y -= 2;
+		}
+	}
 	level = l;
 }
 
+void CMario::SetDanh(bool danh) {
+	if (level == 3 && danh) {
+		sdanh = GetTickCount64();
+		if (duoi == NULL) {
+			duoi = new Duoi(x + 2*nx , y+5,nx);
+			CPlayScene* k = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			k->AddObject(duoi);
+		}
+		this->danh = danh;
+	}
+	else {
+		this->danh = false;
+		if (duoi != NULL) {
+			duoi->Delete();
+			duoi = NULL;
+		}
+		
+	}
+}

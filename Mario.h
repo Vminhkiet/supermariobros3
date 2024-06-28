@@ -3,7 +3,8 @@
 
 #include "Animation.h"
 #include "Animations.h"
-
+#include "Duoi.h"
+#include "PlayScene.h"
 #include "debug.h"
 #include "AssetIDs.h"
 
@@ -114,7 +115,7 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 	bool cammai = false;
-	int level; 
+	int level;
 	int untouchable;
 	bool draw = false;
 	ULONGLONG untouchable_start;
@@ -122,6 +123,7 @@ class CMario : public CGameObject
 	ULONGLONG sdanh;
 	BOOLEAN isfly;
 	BOOLEAN isOnPlatform;
+	LPGAMEOBJECT duoi;
 	string name;
 	bool dangdichuyen = false;
 	int len = 0;
@@ -133,7 +135,7 @@ class CMario : public CGameObject
 	bool up = false;
 	bool change = false;
 	bool danh = false;
-	int coin; 
+	int coin;
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -151,13 +153,14 @@ class CMario : public CGameObject
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();
+	void TailUpdate();
 	bool mariogreen = false;
 	int isroi = 0;
 	int isOnTop = 0;
-	float roiy1=-1, roiy2=-1;
+	float roiy1 = -1, roiy2 = -1;
 	float ytop = -1;
 	int kichhoat = 1;
-	int intro=1;
+	int intro = 1;
 	bool dung = false;
 	bool dacam = false;
 	bool hoalon = false;
@@ -167,17 +170,18 @@ class CMario : public CGameObject
 	bool roicham = false;
 
 public:
-	CMario(float x, float y,int intro = 1,bool mariogreen=false) : CGameObject(x, y)
+	CMario(float x, float y, int intro = 1, bool mariogreen = false) : CGameObject(x, y)
 	{
 		sdanh = 0;
-		this->mariogreen=mariogreen;
+		this->mariogreen = mariogreen;
 		this->intro = intro;
 		isSitting = false;
 		isfly = 0;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 		st = -1;
+		duoi = NULL;
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
@@ -194,7 +198,7 @@ public:
 	}
 	void Setcam(bool cammai) {
 		this->cammai = cammai;
-		
+
 	}
 	bool getdraw() {
 		return draw;
@@ -208,24 +212,18 @@ public:
 	void SetState(int state);
 
 	int IsCollidable()
-	{ 
-		return (state != MARIO_STATE_DIE); 
+	{
+		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	int Getlevel() {
 		return level;
 	}
-	void SetDanh(bool danh) {
-		if (level == 3) {
-			sdanh = GetTickCount64();
-			this->danh = danh;
-		}
-		else this->danh = false;
-	}
+	void SetDanh(bool danh);
 	bool checkfly() {
 		return fly;
 	}

@@ -5,6 +5,7 @@
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
+#include "Brick.h"
 #include "Die.h"
 #include "Sprites.h"
 #include "Portal.h"
@@ -21,6 +22,7 @@
 #include "Para.h"
 #include "Goomba.h"
 #include "Grass.h"
+#include "Duoi.h"
 #include "Intro.h"
 #include "ParaKoopa.h"
 #include "IntroScreen.h"
@@ -115,6 +117,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		vector<string> tokens = split(line);
 		CGameObject* obj;
+
 		// skip invalid lines - an object set must have at least id, x, y
 		if (tokens.size() < 2) return;
 
@@ -138,12 +141,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				}
 				obj = new CMario(x, y);
 				player = (CMario*)obj;
-
-
 				DebugOut(L"[INFO] Player object has been created!\n");
+				return;
 				break;
 			case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
-			case OBJECT_TYPE_BRICK: obj = new CBrick(x, y,false); break;
+			case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 			case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 			case OBJECT_TYPE_MAN: obj = new CCurtain(x, y); break;
 			case OBJECT_TYPE_NEN: {
@@ -383,30 +385,35 @@ void CPlayScene::Update(DWORD dt)
 		}
 		
 		vector<LPGAMEOBJECT> coObjects;
-		if (this->getpause()) {
-			objects[0]->Update(dt, &coObjects);
-			return;
+		coObjects.push_back(player);
+		
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			coObjects.push_back(objects[i]);
+
 		}
 		for (auto& obj : venus)
 		{
 			coObjects.push_back(obj);
 		}
-		for (size_t i = 1; i < objects.size(); i++)
-		{
-			coObjects.push_back(objects[i]);
-
+		if (this->getpause()) {
+			player->Update(dt, &coObjects);
+			return;
 		}
-		
+		if (player != NULL) {
+			player->Update(dt, &coObjects);
+		}
 		for (auto& obj : venus)
 		{
-				obj->Update(dt, &coObjects);
+			obj->Update(dt, &coObjects);
 		}
-
+		
 		for (size_t i = 0; i < objects.size(); i++)
 		{
 			objects[i]->Update(dt, &coObjects);
 
 		}
+	
 
 		// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 		if (player == NULL) return;
@@ -456,12 +463,12 @@ void CPlayScene::Render()
 		if (tileMap && tileMap->getload()) {
 			tileMap->Draw({ 0, 0 });
 		}
-		if (!tele)
-			player->Render();
-		for (int i = 1; i < objects.size(); i++) {
+		
+		for (int i = 0; i < objects.size(); i++) {
 			objects[i]->Render();
 		}
-		
+		if (!tele)
+			player->Render();
 	}
 }
 
@@ -590,14 +597,9 @@ void CPlayScene::LoadResource(string s) {
 		}
 		else if (layer["name"] == "Brick") {
 			for (auto& object : layer["objects"]) {
-				bool kt = false;
-				if (object["name"] == "P") {
-					kt = true;
-				}
 				CBrick* brick = new CBrick(
 					float(object["x"]) - 2,
-					float(object["y"]) - 228,
-					kt
+					float(object["y"]) - 228
 				);
 				objects.push_back(brick);
 			}
@@ -633,6 +635,24 @@ void CPlayScene::LoadResource(string s) {
 					obj = new CQuestionblock(
 						float(object["x"]) - 8,
 						float(object["y"]) - 228
+					);
+					objects.push_back(obj);
+				}
+				else if (object["name"] == "NN1") {
+					obj = new CQuestionblock(
+						float(object["x"]) - 2,
+						float(object["y"]) - 228,
+						0,
+						true
+					);
+					objects.push_back(obj);
+				}
+				else if (object["name"] == "P") {
+					obj = new CQuestionblock(
+						float(object["x"]) - 2,
+						float(object["y"]) - 228,
+						4,
+						true
 					);
 					objects.push_back(obj);
 				}
@@ -742,6 +762,16 @@ void CPlayScene::AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj){
 		}
 		else {
 			objects.push_back(obj);
+		}
+	}
+}
+void CPlayScene::deletebrick(bool deleted) {
+	if (deleted) {
+		for (auto& i : objects) {
+			if (dynamic_cast<CBrick*>(i)) {
+				CBrick* k = dynamic_cast<CBrick*>(i);
+				k->settien(true);
+			}
 		}
 	}
 }

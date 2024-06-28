@@ -26,6 +26,8 @@
 90019	180	0	196	16	11
 90020	160	100	176	116	11
 90021	120	139	137	155	11
+#die
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 #idle

@@ -3,7 +3,6 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "GameObject.h"
-#include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
 #include "TileMap.h"
@@ -55,16 +54,7 @@ public:
             }
         }
     }
-    void deletebrick(bool deleted) {
-        if (deleted) {
-            for (auto i : objects) {
-                if (dynamic_cast<CBrick*>(i)) {
-                    CBrick* k = dynamic_cast<CBrick*>(i);
-                    k->setdie(true);
-                }
-            }
-        }
-    }
+    void deletebrick(bool deleted);
     void AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj = nullptr);
     void Clear();
     void PurgeDeletedObjects();

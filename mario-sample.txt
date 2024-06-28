@@ -26,3 +26,4 @@ height	750
 70	textures\misc1.png
 80	textures\MapSelection(x3).png
 90	textures\mario12.png
+100	textures\misc3.png

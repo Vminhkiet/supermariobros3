@@ -37,11 +37,16 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<Thebox*>(e->obj)) {
+		rua = true;
+		SetState(GOOMBA_STATE_DIE);
+		return;
+	}
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
 	if (dynamic_cast<CKOOPA*>(e->obj)) {
 		CKOOPA* obj = dynamic_cast<CKOOPA*>(e->obj);
-		if (obj->Getstate() == 2 || obj->Getstate() == 1) {
+		if (obj->Getstate() == 2) {
 			rua = true;
 			SetState(GOOMBA_STATE_DIE);
 			return;
