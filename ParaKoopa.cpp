@@ -18,6 +18,10 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			isOnTop = 0;
 		}
 	}
+	if (respawn && GetTickCount64()-timespawn>3000) {
+		this->SetPosition(startx, starty);
+		respawn = false;
+	}
 	if (GetTickCount64() - dung > 3000 && state == MAI_MOVE) {
 		SetState(3);
 	}
@@ -170,9 +174,9 @@ void CParaKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (dynamic_cast<CKOOPA*>(e->obj) &&( state == LIFE2 || canh ==true)) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) {
 		CGoomba* gooba = dynamic_cast<CGoomba*>(e->obj);
-		if (state == LIFE)
+		if (state == LIFE2)
 			return;
-		if (state == MAI_MOVE && gooba->GetState() == 200) {
+		if (state == MAI_MOVE2 && gooba->GetState() == 200) {
 			return;
 		}
 	}
@@ -189,8 +193,13 @@ void CParaKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 		dynamic_cast<CKOOPA*>(e->obj)->SetState(3);
 		return;
 	}
+	if (dynamic_cast<CDie*>(e->obj))
+	{
+		SetState(4);
+		return;
+	}
 	if (dynamic_cast<CGoomba*>(e->obj)) {
-		if (state == MAI_MOVE) {
+		if (state == MAI_MOVE2) {
 			CGoomba* go = dynamic_cast<CGoomba*>(e->obj);
 			go->Setrua(true);
 			go->SetState(GOOMBA_STATE_DIE);
@@ -228,14 +237,10 @@ void CParaKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (dynamic_cast<CQuestionblock*>(e->obj)) {
 		CQuestionblock* qs = dynamic_cast<CQuestionblock*>(e->obj);
-		if (e->nx != 0 && state == MAI_MOVE) {
+		if (e->nx != 0 && state == MAI_MOVE2) {
 			qs->SetCham(true);
 			vx *= -1;
 		}
-	}
-	else if (dynamic_cast<CDie*>(e->obj))
-	{
-		this->Delete();
 	}
 	else if (dynamic_cast<CBrick*>(e->obj))
 	{
@@ -280,10 +285,19 @@ void CParaKoopa::SetState(int state) {
 		vy = 0;
 		ay = 0;
 	}
+	else if (state == 4) {
+		canh = true;
+		this->SetPosition(startx, starty);
+		state = LIFE2;
+		timespawn = GetTickCount64();
+		danghoisinh = false;
+		respawn = true;
+		vx = -KOOPA_WALKING_SPEED;
+	}
 }
 void CParaKoopa::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	if (state == LIFE) {
+	if (state == LIFE2) {
 		l = x - KOOPA_BBOX_WIDTH / 2;
 		t = y - KOOPA_BBOX_HEIGHT / 2;
 		r = l + KOOPA_BBOX_WIDTH;

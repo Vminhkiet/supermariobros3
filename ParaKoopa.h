@@ -30,7 +30,10 @@ class CParaKoopa : public CGameObject
 protected:
 	float ax;
 	float ay;
+	bool respawn = false;
+	ULONGLONG timespawn;
 	ParaKoopaState state;
+	float startx, starty;
 	bool danghoisinh = false;
 	ULONGLONG hoisinh;
 	ULONGLONG stop;
@@ -51,6 +54,9 @@ public:
 		this->ax = 0;
 		stop = 0;
 		hoisinh = 0;
+		timespawn = 0;
+		startx = x;
+		starty = y;
 		this->green = green;
 		this->ay = KOOPA_GRAVITY;
 		vx = -KOOPA_WALKING_SPEED;
