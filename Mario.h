@@ -121,6 +121,7 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG st;
 	ULONGLONG sdanh;
+	ULONGLONG roicham1;
 	BOOLEAN isfly;
 	BOOLEAN isOnPlatform;
 	LPGAMEOBJECT duoi;
@@ -148,6 +149,7 @@ class CMario : public CGameObject
 	void OnCollisionWithQuestionblock(LPCOLLISIONEVENT e);
 	void OnCollisionWithTroopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithPara(LPCOLLISIONEVENT e);
+	void OnCollisionWithFinish(LPCOLLISIONEVENT e);
 	void OnCollisionWithParakoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithKick(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
@@ -181,6 +183,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
 		st = -1;
+		roicham1 = 0;
 		duoi = NULL;
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
@@ -198,10 +201,12 @@ public:
 	}
 	void Setcam(bool cammai) {
 		this->cammai = cammai;
+		if( !cammai )
+		   this->dacam = cammai;
 
 	}
-	bool getdraw() {
-		return draw;
+	int getdraw() {
+		return nx;
 	}
 	bool getcam() {
 		return this->cammai;
@@ -210,12 +215,15 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
-
+	void Vacham();
 	int IsCollidable()
 	{
 		return (state != MARIO_STATE_DIE);
 	}
-
+	void setroicham() {
+		roicham1 = GetTickCount64();
+		vy = 0;
+	}
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);

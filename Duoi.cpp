@@ -35,8 +35,11 @@ void Duoi::OnCollisionWith(LPCOLLISIONEVENT e) {
 		dynamic_cast<CBrick*>(e->obj)->setdie(true);
 	else if (dynamic_cast<CQuestionblock*>(e->obj))
 		dynamic_cast<CQuestionblock*>(e->obj)->SetCham(true);
-	else if (dynamic_cast<CKOOPA*>(e->obj))
-		dynamic_cast<CKOOPA*>(e->obj)->SetState(3);
+	else if (dynamic_cast<CKOOPA*>(e->obj)) {
+		CKOOPA* p = dynamic_cast<CKOOPA*>(e->obj);
+			if(p->Getstate() == 0) p->SetState(3);
+			if (p->Getstate() == 1) p->SetState(2);
+	}
 	else if (dynamic_cast<CVenus*>(e->obj)) {
 		if (dynamic_cast<CVenus*>(e->obj)->getdie()) {
 			return;
@@ -44,7 +47,7 @@ void Duoi::OnCollisionWith(LPCOLLISIONEVENT e) {
 		dynamic_cast<CVenus*>(e->obj)->setdie(true);
 	}
 	else if (dynamic_cast<CGoomba*>(e->obj)) {
-		dynamic_cast<CPARA*>(e->obj)->Setrua(true);
+		dynamic_cast<CGoomba*>(e->obj)->Setrua(true);
 		dynamic_cast<CGoomba*>(e->obj)->SetState(200);
 	}
 	else if (dynamic_cast<CPARA*>(e->obj)) {

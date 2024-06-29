@@ -41,13 +41,22 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_4:
 		mario->SetPosition(2250, -300);
 		break;
+	case DIK_5:
+		mario->SetPosition(1200, 0);
+		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
 	case DIK_A:
 		if (!a) {
+			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 			a = true;
-			mario->SetDanh(true);
+			float vx, vy;
+			mario->GetSpeed(vx, vy);
+			if (vy <= 0)
+				mario->SetDanh(true);
+			else
+				mario->SetSpeed(vx, 0);
 		}
 	case DIK_R: // reset
 		//Reload();

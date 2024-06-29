@@ -23,10 +23,12 @@ void CBrick::Render()
 	//RenderBoundingBox();
 }
 void CBrick::settien(bool te) {
-	this->Delete();
+	
 	LPGAMEOBJECT c = new CCoin(x, y);
 	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-	currentScene->AddObject(c);
+	currentScene->AddObject(c); 
+	if (!IsDeleted())
+		this->Delete();
 }
 void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 {

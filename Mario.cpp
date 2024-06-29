@@ -20,6 +20,7 @@
 #include "QuestionBlock.h"
 #include "TopGround.h"
 #include "Collision.h"
+#include "Finish.h"
 #include "Thebox.h"
 #include "PlayScene.h"
 #include "Brick.h"
@@ -38,7 +39,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 		return;
 	}
-
+	if (  vy<= 0 && GetTickCount64() - roicham1 < 2000) {
+		vy = 0;
+	}
 	if (dichchuyen && down && cground) {
 		dangdichuyen = true;
 		float cx, cy;
@@ -188,6 +191,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<Finish*>(e->obj))
+		OnCollisionWithFinish(e);
 	else if (dynamic_cast<CMario*>(e->obj))
 		OnCollisionWithMario(e);
 	else if (dynamic_cast<CMUSHROOM*>(e->obj))
@@ -243,6 +248,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	
 	
 }
+void CMario::OnCollisionWithFinish(LPCOLLISIONEVENT e) {
+	Finish* a = dynamic_cast<Finish*>(e->obj);
+	if (!a->getdung() && e->ny > 0) {
+		a->Setdung(true);
+	}
+}
 void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 	CParaKoopa* p = dynamic_cast<CParaKoopa*>(e->obj);
 	if (p->getcanh()) {
@@ -287,6 +298,7 @@ void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 	int pstate = p->Getstate();
 
 	if (pstate == 0) {
+
 		if (e->ny < 0)
 		{
 			if (pstate == 0)
@@ -571,6 +583,9 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 			dacam = false;
 			p->SetState(2);
 			p->setcam(false);
+			float cx, cy;
+			p->GetPosition(cx, cy);
+			p->SetPosition(cx, cy - 3);
 			if (nx > 0) {
 				p->sethuong(true);
 			}
@@ -1217,10 +1232,40 @@ void CMario::SetDanh(bool danh) {
 	}
 	else {
 		this->danh = false;
-		if (duoi != NULL) {
+		if (duoi != NULL && !duoi->IsDeleted()) {
 			duoi->Delete();
 			duoi = NULL;
 		}
 		
+	}
+}
+void CMario::Vacham() {
+	if (untouchable == 0)
+	{
+		if (untouchable == 0) {
+			if (level == 3)
+			{
+				st = GetTickCount64();
+				CGame::GetInstance()->GetCurrentScene()->setpause(true);
+				hoalon = true;
+				isOnTop = false;
+				level = 2;
+				StartUntouchable();
+			}
+			else if (level == 2)
+			{
+				st = GetTickCount64();
+				CGame::GetInstance()->GetCurrentScene()->setpause(true);
+				hoalon = true;
+				isOnTop = false;
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
 	}
 }

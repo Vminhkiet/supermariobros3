@@ -1,5 +1,6 @@
 #include "Thebox.h"
 #include "Mario.h"
+#include "Koopa.h"
 #include "Brick.h"
 void Thebox::Render()
 {
@@ -18,6 +19,8 @@ void Thebox::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 void Thebox::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (dynamic_cast<CMario*>(e->obj))
+		return;
+	if (dynamic_cast<CKOOPA*>(e->obj))
 		return;
 	if (!e->obj->IsBlocking()) return;
 	if (e->obj->IsBlocking()) {

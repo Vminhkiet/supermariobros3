@@ -33,8 +33,12 @@ protected:
 	float ay;
 	KoopaState state;
 	Thebox* box;
+	bool danghoisinh = false;
+	ULONGLONG hoisinh;
+	ULONGLONG stop;
 	ULONGLONG dung;
 	ULONGLONG die_start;
+	ULONGLONG timeroi;
 	float roiy1 = -1, roiy2 = -1;
 	int isOnTop = 0;
 	int isroi = 1;
@@ -44,10 +48,13 @@ protected:
 public:
 	CKOOPA(float x, float y, bool green = false) :CGameObject(x, y) {
 		state = LIFE;
+		stop = 0;
+		hoisinh = 0;
 		this->ax = 0;
 		this->green = green;
 		this->ay = KOOPA_GRAVITY;
 		vx = -KOOPA_WALKING_SPEED;
+		timeroi = -1;
 		die_start = -1;
 		this->SetType(OBJECT_TYPE_KOOPA);
 		box = new Thebox(x - 8, y);
@@ -75,7 +82,7 @@ public:
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     void Render();
 
-	int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return 1; };
 	int IsBlocking() { return 0; }
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);

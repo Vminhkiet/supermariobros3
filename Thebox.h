@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
-#define THEBOX_WIDTH 1
-#define THEBOX_HEIGHT 25
+#define THEBOX_WIDTH 5
+#define THEBOX_HEIGHT 5
 #define THEBOX_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.05f
 class Thebox : public CGameObject {
@@ -34,6 +34,7 @@ public:
 		doituong = false;
 		count = -1;
 		vx *= -1;
+		
 	}
 	void doihuong() {
 		vx = -vx;

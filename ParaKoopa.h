@@ -31,6 +31,9 @@ protected:
 	float ax;
 	float ay;
 	ParaKoopaState state;
+	bool danghoisinh = false;
+	ULONGLONG hoisinh;
+	ULONGLONG stop;
 	ULONGLONG die_start;
 	ULONGLONG dung;
 	BOOLEAN jump;
@@ -46,6 +49,8 @@ public:
 	CParaKoopa(float x, float y, bool green = true) :CGameObject(x, y) {
 		state = LIFE2;
 		this->ax = 0;
+		stop = 0;
+		hoisinh = 0;
 		this->green = green;
 		this->ay = KOOPA_GRAVITY;
 		vx = -KOOPA_WALKING_SPEED;

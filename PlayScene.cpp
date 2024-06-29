@@ -9,6 +9,7 @@
 #include "Die.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "Finish.h"
 #include "Swap.h"
 #include "Coin.h"
 #include "Platform.h"
@@ -426,13 +427,22 @@ void CPlayScene::Update(DWORD dt)
 		cx -= game->GetBackBufferWidth() / 2;
 		cy -= game->GetBackBufferHeight() / 2;
 		
-		/*if (cx < 0) cx = 0;
-		if (!mario->checkfly() && cy > -100) {
+		if (cx < 0) cx = 0;
+		
+		if (cx > 2503) cx = 2503;
+		if (cy > 155) {
+			cy = 240;
+		}
+		else if (mario->gettele() && cy < 150 && cy > 0) {
 			cy = 0;
 		}
-		if (mario->checkfly() && cy > 0) {
+		else if (!mario->checkfly() && cy > -100 && !mario->gettele()) {
 			cy = 0;
-		}*/
+		}
+		else if (mario->checkfly() && cy > 0 && !mario->gettele()) {
+			cy = 0;
+		}
+		
 		CGame::GetInstance()->SetCamPos((int)cx, (int)cy);
 		tileMap->Update(dt, &objects);
 
@@ -579,6 +589,18 @@ void CPlayScene::LoadResource(string s) {
 				//grid->InsertObject(ground);
 			}
 		}
+		else if (layer["name"] == "Finish") {
+			for (auto& object : layer["objects"]) {
+				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
+				Finish* ground = new Finish(
+					float(object["x"]) - 7,
+					float(object["y"]) - 226);
+				// Thêm portal vào danh sách đối tượng của Scene
+				objects.push_back(ground);
+				// Thêm portal vào Grid
+				//grid->InsertObject(ground);
+			}
+		}
 		else if (layer["name"] == "TopGround") {
 			for (auto& object : layer["objects"]) {
 				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
@@ -684,11 +706,11 @@ void CPlayScene::LoadResource(string s) {
 		else if (layer["name"] == "Label") {
 			for (auto& object : layer["objects"]) {
 				if (object["name"] == "Swap1") {
-					Swap* s=new Swap(float(object["x"]) - 2, float(object["y"]) - 230,true, object["width"]-2,object["height"] ,object["name"],true);
+					Swap* s=new Swap(float(object["x"]) - 8, float(object["y"]) - 228,true, object["width"]-2,object["height"] ,object["name"],true);
 					objects.push_back(s);
 				}
 				else if (object["name"] == "Swap2") {
-					Swap* s = new Swap(float(object["x"]) - 2, float(object["y"]) - 230, true, object["width"]-2, object["height"] , object["name"],false);
+					Swap* s = new Swap(float(object["x"]) - 8, float(object["y"]) - 228, true, object["width"]-2, object["height"] , object["name"],false);
 					objects.push_back(s);
 				}
 				else {
@@ -774,4 +796,7 @@ void CPlayScene::deletebrick(bool deleted) {
 			}
 		}
 	}
+}
+void CPlayScene::deleteenime() {
+	
 }

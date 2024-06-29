@@ -11,6 +11,7 @@
 
 struct Object {
     string name;
+    LPGAMEOBJECT obj;
     float x, y;
 };
 
@@ -55,6 +56,7 @@ public:
         }
     }
     void deletebrick(bool deleted);
+    void deleteenime();
     void AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj = nullptr);
     void Clear();
     void PurgeDeletedObjects();

@@ -6,7 +6,10 @@
 #include "Brick.h"
 #include "Ground.h"
 #include "Die.h"
+#include "Mario.h"
 #include "Goomba.h"
+#include "Para.h"
+#include "ParaKoopa.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (roiy1 != -1 && roiy2 != -1) {
 		if (x<roiy1 || x>roiy2) {
@@ -120,11 +123,11 @@ void CKOOPA::Render() {
 		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 		if (!mario->getcam() && bicam) {
 			bicam = false;
-			state = MAI_MOVE;
+			SetState(2);
 			dung = GetTickCount64();
 			float mx, my;
 			mario->GetPosition(mx, my);
-			if (isOnTop == 0 ) {
+			if (isOnTop == 0) {
 				y -= 5;
 			}
 			if (mx > x) {
@@ -132,22 +135,36 @@ void CKOOPA::Render() {
 			}
 			else
 				huongdichuyen = true;
-			
+
 		}
 		if (bicam) {
-			bool draw = mario->getdraw();
+			int draw = mario->getdraw();
 			mario->GetPosition(x, y);
-			if (draw)
+			if (draw>0)
 				x += 8;
 			else
 				x -= 8;
+		}
+		if (GetTickCount64() - hoisinh >= 10000 && !danghoisinh) {
+			danghoisinh = true;
+			stop = GetTickCount64();
+		}
+		if (danghoisinh && GetTickCount64() - stop < 500) {
+			if (!green)
+				aniId = 13016;
+			else
+				aniId = 13017;
+		}
+	    if (danghoisinh && GetTickCount64() - stop > 500) {
+			SetState(0);
+
 		}
 	}
 	else if (state == MAI_MOVE) {
 		if (!green)
 			aniId = 13005;
 		else
-			aniId = 13015;
+			aniId = 13013;
 		
 	}
 	int w = 16;
@@ -178,13 +195,37 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 			return;
 		}
 	}
+	if (dynamic_cast<CParaKoopa*>(e->obj) && state == MAI_MOVE) {
+		dynamic_cast<CParaKoopa*>(e->obj)->SetState(3);
+		return;
+	}
+	if (dynamic_cast<CPARA*>(e->obj) && state == MAI_MOVE) {
+		dynamic_cast<CPARA*>(e->obj)->Setrua(true);
+		dynamic_cast<CPARA*>(e->obj)->SetState(200);
+	}
+	if (dynamic_cast<CKOOPA*>(e->obj) && state == MAI_MOVE) {
+		dynamic_cast<CKOOPA*>(e->obj)->SetState(3);
+		return;
+	}
+	if (dynamic_cast<CMario*>(e->obj))
+		return;
+    if (dynamic_cast<CGoomba*>(e->obj)) {
+		if (state == MAI_MOVE) {
+			CGoomba* go = dynamic_cast<CGoomba*>(e->obj);
+			go->Setrua(true);
+			go->SetState(GOOMBA_STATE_DIE);
+			vx *= -1;
+		}
+		return;
+	}
 	if (dynamic_cast<CKOOPA*>(e->obj)) return;
 	
 	if (e->obj->GetType() != 14) {
 		
 		if (e->ny != 0)
 		{
-			box->setdoituong(true);
+			if(state==LIFE)
+			    box->setdoituong(true);
 			vy = 0;
 		}
 		else if (e->nx != 0)
@@ -193,6 +234,7 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 			huongdichuyen = !huongdichuyen;
 		}
 	}
+
 	if (dynamic_cast<CTop*>(e->obj)) {
 		CTop* top = dynamic_cast<CTop*>(e->obj);
 		if (e->ny < 0) {
@@ -211,7 +253,7 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 
 	}
 	else if (dynamic_cast<CGround*>(e->obj)) {
-		if (box != NULL && !box->IsDeleted()) {
+		if (box != NULL && !box->IsDeleted() && state == LIFE) {
 			box->Delete();
 		}
 	}
@@ -234,26 +276,53 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 	}
 	
-	else if (dynamic_cast<CGoomba*>(e->obj)) {
-		if (state == MAI_MOVE) {
-			CGoomba* go = dynamic_cast<CGoomba*>(e->obj);
-			go->Setrua(true);
-			go->SetState(GOOMBA_STATE_DIE);
-			vx *= -1;
-		}
-	}
+	
 }
 void CKOOPA::SetState(int state){
 	if (state == 0) {
+		
+		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+		if (mario->getcam()) {
+			float cx, cy;
+			mario->Vacham();
+			mario->GetSpeed(cx, cy);
+			mario->SetSpeed(cx, cy - 0.1f);
+			mario->Setcam(false);
+			
+		}
 		this->state = LIFE;
+		y -= 5;
+		danghoisinh = false;
+		if (box->IsDeleted()) {
+			if (vx < 0)
+				box = new Thebox(x - 8, y );
+			else
+				box = new Thebox(x + 8, y );
+			CPlayScene* k = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			k->AddObject(box);
+		}
+	
+		if (nx < 0)
+			vx = -KOOPA_WALKING_SPEED;
+		else
+			vx = KOOPA_WALKING_SPEED;
 	}
 	else if (state == 1) {
 		this->state = MAI;
 		vx = 0;
-		y += 5;
+		if (bicam) {
+			vy = 0;
+		}
+		if (isOnTop == 1) {
+			y += 5;
+		}
+		hoisinh = GetTickCount64();
+		
 	}
 	else if (state == 2) {
 		dung = GetTickCount64();
+		
 		this->state = MAI_MOVE;
 	}
 	else if (state == 3) {

@@ -141,6 +141,7 @@ void CVenus::Render() {
     //RenderBoundingBox();
 }
 void CVenus::CreateBullet() {
+    if (die) return;
     float bx, by;
     bx = x;
     by = y;

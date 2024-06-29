@@ -6,6 +6,7 @@ Questionblock.txt
 coin.txt
 mushroom.txt
 venus.txt
+Finish.txt
 koopa.txt
 leaf.txt
 goomba.txt
