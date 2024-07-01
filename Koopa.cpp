@@ -11,6 +11,16 @@
 #include "Para.h"
 #include "ParaKoopa.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (res) {
+		
+		this->SetPosition(startx, starty);
+		SetState(0);
+		res = false;
+		die = false;
+		return;
+	}
+	if (die)
+		return;
 	if (roiy1 != -1 && roiy2 != -1) {
 		if (x<roiy1 || x>roiy2) {
 			if (state != LIFE) {
@@ -30,7 +40,18 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 	}
-
+	if (!die) {
+		float cx, cy;
+		float kx,ky;
+		CGame::GetInstance()->GetCamPos(cx, cy);
+		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+		mario->GetSpeed(kx, ky);
+		if ((cx - x > SCREEN_WIDTH / 2 - 200 && kx > 0) || (x-cx>SCREEN_WIDTH/2+60) && kx<0 ) {
+			die = true;
+			return;
+		}
+	}
 	if (!box->IsDeleted()) {
 		float cx, cy;
 		box->GetSpeed(cx, cy);
@@ -38,9 +59,7 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			box->SetSpeed(vx, cy);
 		}
 	}
-	if (GetTickCount64() - dung > 3000 && state == MAI_MOVE) {
-		SetState(3);
-	}
+	
 	if (state != LIFE && !box->IsDeleted()) {
 		box->Delete();
 	}
@@ -80,6 +99,8 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 void CKOOPA::Render() {
+	if (res || die)
+		return;
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 	if (state == LIFE) {
@@ -266,7 +287,7 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (dynamic_cast<CDie*>(e->obj))
 	{
-		this->Delete();
+		die = true;
 	}
 	else if (dynamic_cast<CQuestionblock*>(e->obj)) {
 		CQuestionblock* qs = dynamic_cast<CQuestionblock*>(e->obj);
@@ -280,18 +301,23 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 }
 void CKOOPA::SetState(int state){
 	if (state == 0) {
-		
-		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
-		if (mario->getcam()) {
-			float cx, cy;
-			mario->Vacham();
-			mario->GetSpeed(cx, cy);
-			mario->SetSpeed(cx, cy - 0.1f);
-			mario->Setcam(false);
-			
+		if (!die) {
+			CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+			if (mario->getcam()) {
+				float cx, cy;
+				mario->Vacham();
+				mario->GetSpeed(cx, cy);
+				mario->SetSpeed(cx, cy - 0.1f);
+				mario->Setcam(false);
+
+			}
 		}
 		this->state = LIFE;
+		roiy1 = -1;
+		roiy2 = -1;
+		isOnTop = 0;
+		this->ay = KOOPA_GRAVITY;
 		y -= 5;
 		danghoisinh = false;
 		if (box->IsDeleted()) {
@@ -302,7 +328,7 @@ void CKOOPA::SetState(int state){
 			CPlayScene* k = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 			k->AddObject(box);
 		}
-	
+		
 		if (nx < 0)
 			vx = -KOOPA_WALKING_SPEED;
 		else

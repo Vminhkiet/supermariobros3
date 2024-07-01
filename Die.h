@@ -9,6 +9,7 @@
 class CDie : public CGameObject {
 	float height;
 	float width;
+
 public:
 	CDie(float x, float y, float width, float height) : CGameObject(x, y) {
 		this->width = width;

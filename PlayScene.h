@@ -56,7 +56,7 @@ public:
         }
     }
     void deletebrick(bool deleted);
-    void deleteenime();
+    void deleteenime(float cx, float cy,float vx);
     void AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj = nullptr);
     void Clear();
     void PurgeDeletedObjects();

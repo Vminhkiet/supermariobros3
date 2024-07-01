@@ -10,6 +10,16 @@
 #include "Goomba.h"
 #include "Para.h"
 void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (res) {
+
+		this->SetPosition(startx, starty);
+		SetState(4);
+		res = false;
+		die = false;
+		return;
+	}
+	if (die)
+		return;
 	if (roiy1 != -1 && roiy2 != -1) {
 		if (x<roiy1 || x>roiy2) {
 			
@@ -18,23 +28,23 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			isOnTop = 0;
 		}
 	}
-	if (respawn && GetTickCount64()-timespawn>3000) {
-		this->SetPosition(startx, starty);
-		respawn = false;
-	}
 	if (GetTickCount64() - dung > 3000 && state == MAI_MOVE) {
 		SetState(3);
 	}
 	if (!(isOnPlatform || isOnTop==1)) {
 		jump = false;
 	}
-	else jump = true;
+	else if(GetTickCount64()-dibo>800) {
+		jump = true;
+	}
 	if (!canh)
 		jump = false;
 	if (jump) {
+		dibo = GetTickCount64();
 		vy = -0.4f;
 		isOnTop = 0;
 	}
+	
 
 	if (isOnTop) {
 		isroi = 0;
@@ -59,6 +69,8 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 void CParaKoopa::Render() {
+	if (res || die)
+		return;
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 	if (state == LIFE) {
@@ -163,7 +175,7 @@ void CParaKoopa::Render() {
 }
 void CParaKoopa::OnNoCollision(DWORD dt)
 {
-	if (state != MAI) {
+	if (state != MAI && !die) {
 		x += vx * dt;
 		y += vy * dt;
 	}
@@ -195,7 +207,7 @@ void CParaKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	if (dynamic_cast<CDie*>(e->obj))
 	{
-		SetState(4);
+		die = true;
 		return;
 	}
 	if (dynamic_cast<CGoomba*>(e->obj)) {
@@ -250,17 +262,22 @@ void CParaKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
 }
 void CParaKoopa::SetState(int state) {
 	if (state == 0) {
-		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
-		if (mario->getcam()) {
-			float cx, cy;
-			mario->Vacham();
-			mario->GetSpeed(cx, cy);
-			mario->SetSpeed(cx, cy - 0.1f);
-			mario->Setcam(false);
+		if (!die) {
+			CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+			if (mario->getcam()) {
+				float cx, cy;
+				mario->Vacham();
+				mario->GetSpeed(cx, cy);
+				mario->SetSpeed(cx, cy - 0.1f);
+				mario->Setcam(false);
 
+			}
 		}
 		this->state = LIFE2;
+		roiy1 = -1;
+		roiy2 = -1;
+		isOnTop = 0;
 		canh = false;
 		y -= 5;
 		danghoisinh = false;
@@ -289,9 +306,7 @@ void CParaKoopa::SetState(int state) {
 		canh = true;
 		this->SetPosition(startx, starty);
 		state = LIFE2;
-		timespawn = GetTickCount64();
 		danghoisinh = false;
-		respawn = true;
 		vx = -KOOPA_WALKING_SPEED;
 	}
 }

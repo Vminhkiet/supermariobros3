@@ -31,6 +31,8 @@ class CKOOPA : public CGameObject
 protected:
 	float ax;
 	float ay;
+	bool res = false;
+	bool die = false;
 	KoopaState state;
 	Thebox* box;
 	bool danghoisinh = false;
@@ -45,10 +47,13 @@ protected:
 	bool huongdichuyen = false;
 	bool bicam = false;
 	bool green = false;
+	float startx, starty;
 public:
 	CKOOPA(float x, float y, bool green = false) :CGameObject(x, y) {
 		state = LIFE;
 		stop = 0;
+		startx = x;
+		starty = y;
 		hoisinh = 0;
 		this->ax = 0;
 		this->green = green;
@@ -72,8 +77,18 @@ public:
 		else
 			return 3;
 	}
+	void getstart(float& startx, float& starty) {
+		startx = this->startx;
+		starty = this->starty;
+	}
+	bool getdie() {
+		return die;
+	}
 	void setcam(bool cam) {
 		this->bicam = cam;
+	}
+	void setres(bool res) {
+		this->res = res;
 	}
 	void sethuong(bool huong) {
 		huongdichuyen = huong;

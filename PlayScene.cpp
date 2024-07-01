@@ -379,7 +379,7 @@ void CPlayScene::Update(DWORD dt)
 		float x, y;
 		CGame::GetInstance()->GetCamPos(x, y);
 		for (auto& i : spawn) {
-			if (i.first.x >= x && i.first.x <= x + SCREEN_WIDTH + 32 && i.first.y >= y && i.first.y <= y + SCREEN_HEIGHT && !i.second) {
+			if (i.first.x >= x && i.first.x <= x + SCREEN_WIDTH && i.first.y >= y && i.first.y <= y + SCREEN_HEIGHT && !i.second) {
 				i.second = true;
 				Spawn(i.first);
 			}
@@ -404,16 +404,7 @@ void CPlayScene::Update(DWORD dt)
 		if (player != NULL) {
 			player->Update(dt, &coObjects);
 		}
-		for (auto& obj : venus)
-		{
-			obj->Update(dt, &coObjects);
-		}
-		
-		for (size_t i = 0; i < objects.size(); i++)
-		{
-			objects[i]->Update(dt, &coObjects);
-
-		}
+       
 	
 
 		// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -442,7 +433,19 @@ void CPlayScene::Update(DWORD dt)
 		else if (mario->checkfly() && cy > 0 && !mario->gettele()) {
 			cy = 0;
 		}
-		
+		float vx, vy;
+		mario->GetSpeed(vx, vy);
+		deleteenime(cx, cy,vx);
+		for (auto& obj : venus)
+		{
+			obj->Update(dt, &coObjects);
+		}
+
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(dt, &coObjects);
+
+		}
 		CGame::GetInstance()->SetCamPos((int)cx, (int)cy);
 		tileMap->Update(dt, &objects);
 
@@ -797,6 +800,63 @@ void CPlayScene::deletebrick(bool deleted) {
 		}
 	}
 }
-void CPlayScene::deleteenime() {
-	
+void CPlayScene::deleteenime(float cx,float cy,float vx) {
+	for (auto& i : venus) {
+		if (dynamic_cast<CVenus*>(i)) {
+
+		}
+	}
+	for(auto& i:objects){
+		float mx, my;
+		/*
+		if (dynamic_cast<CBrick*>(i)) {
+			if (mx >= cx - SCREEN_WIDTH && mx <= cx + SCREEN_WIDTH && my >= cy && my <= cy + SCREEN_HEIGHT) {
+
+			}
+		}
+		else if (dynamic_cast<CGoomba*>(i)) {
+			if (mx >= cx - SCREEN_WIDTH && mx <= cx + SCREEN_WIDTH && my >= cy && my <= cy + SCREEN_HEIGHT) {
+
+			}
+		}
+		else if (dynamic_cast<CPARA*>(i)) {
+
+		}
+		else*/ if (dynamic_cast<CKOOPA*>(i)) {
+			CKOOPA* h = dynamic_cast<CKOOPA*>(i);
+
+			if (!h->getdie())
+				continue;
+			h->getstart(mx, my);
+			if (vx > 0) {
+				if (mx <= cx + SCREEN_WIDTH+10 && mx >= cx + SCREEN_WIDTH  && my >= cy && my <= cy + SCREEN_HEIGHT) {
+					dynamic_cast<CKOOPA*>(i)->setres(true);
+				}
+			}
+			else if (vx < 0) {
+				if (mx >= cx + 30 && mx <= cx + 40 && my >= cy && my <= cy + SCREEN_HEIGHT) {
+					dynamic_cast<CKOOPA*>(i)->setres(true);
+				}
+			}
+		}
+		else if (dynamic_cast<CParaKoopa*>(i)) {
+			CParaKoopa* h = dynamic_cast<CParaKoopa*>(i);
+			
+			if (!h->getdie())
+				continue;
+			h->getstart(mx, my);
+			if (vx > 0) {
+				if (mx <= cx + SCREEN_WIDTH-50 && mx >= cx + SCREEN_WIDTH - 60 && my >= cy && my <= cy + SCREEN_HEIGHT) {
+					dynamic_cast<CParaKoopa*>(i)->setres(true);
+				}
+			}
+			else if (vx < 0) {
+				if (mx >= cx + 30 && mx <= cx + 40 && my >= cy && my <= cy + SCREEN_HEIGHT) {
+					dynamic_cast<CParaKoopa*>(i)->setres(true);
+				}
+			}
+		}
+		
+		
+	}
 }

@@ -35,10 +35,13 @@ protected:
 	ParaKoopaState state;
 	float startx, starty;
 	bool danghoisinh = false;
+	bool die = false;
+	ULONGLONG bienmat;
 	ULONGLONG hoisinh;
 	ULONGLONG stop;
 	ULONGLONG die_start;
 	ULONGLONG dung;
+	ULONGLONG dibo;
 	BOOLEAN jump;
 	BOOLEAN isOnPlatform;
 	float roiy1 = -1, roiy2 = -1;
@@ -47,6 +50,7 @@ protected:
 	bool huongdichuyen = false;
 	bool bicam = false;
 	bool green = true;
+	bool res = false;
 	bool canh = true;
 public:
 	CParaKoopa(float x, float y, bool green = true) :CGameObject(x, y) {
@@ -55,6 +59,7 @@ public:
 		stop = 0;
 		hoisinh = 0;
 		timespawn = 0;
+		dibo = 0;
 		startx = x;
 		starty = y;
 		this->green = green;
@@ -74,8 +79,22 @@ public:
 		else
 			return 3;
 	}
+	bool getdie() {
+		return die;
+	}
 	void setcanh(bool canh) {
 		this->canh = canh;
+	}
+	void getstart(float& startx, float& starty) {
+		startx = this->startx;
+		starty = this->starty;
+	}
+	bool getres() {
+		bienmat = GetTickCount64();
+		return res;
+	}
+	void setres(bool res) {
+		this->res = res;
 	}
 	bool getcanh() {
 		return canh;
@@ -89,7 +108,6 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
     void Render();
-
 	int IsCollidable() { return 1; };
 	int IsBlocking() { return 0; }
 	void OnNoCollision(DWORD dt);
