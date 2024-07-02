@@ -31,7 +31,6 @@ public:
 			return 0;
 		return 1;
 	}
-	void settien(bool te);
 	void setdie(bool die) {
 		this->die = die;
 		isdie = GetTickCount64();

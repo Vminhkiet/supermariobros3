@@ -44,8 +44,10 @@ protected:
 	float roiy1 = -1, roiy2 = -1;
 	int isOnTop = 0;
 	int isroi = 1;
+	bool cho = false;
 	bool huongdichuyen = false;
 	bool bicam = false;
+	bool lat = false;
 	bool green = false;
 	float startx, starty;
 public:
@@ -76,6 +78,15 @@ public:
 			return 2;
 		else
 			return 3;
+	}
+	bool getlat() {
+		return lat;
+	}
+	void setlat(bool lat) {
+		this->lat = lat;
+	}
+	bool getcho() {
+		return cho;
 	}
 	void getstart(float& startx, float& starty) {
 		startx = this->startx;

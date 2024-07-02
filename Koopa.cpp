@@ -12,9 +12,10 @@
 #include "ParaKoopa.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (res) {
-		
 		this->SetPosition(startx, starty);
+
 		SetState(0);
+		
 		res = false;
 		die = false;
 		return;
@@ -66,6 +67,9 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (isOnTop==1 && !box->IsDeleted()) {
 		box->Delete();
 	}
+	if (GetTickCount64() - hoisinh > 200 && cho) {
+		cho = false;
+	}
 	if (box->getroi() && isOnTop == 0 && !box->IsDeleted()) {
 		
 		if (vx > 0) {
@@ -84,12 +88,6 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	    vy += ay * dt;
 
 	vx += ax * dt;
-	if (state == MAI_MOVE) {
-		if (huongdichuyen)
-			vx = KOOPA_WALKING_SPEED * 6;
-		else
-			vx = -KOOPA_WALKING_SPEED * 6;
-	}
 	if ((state == DIE1) && (GetTickCount64() - die_start > KOOPA_DIE_TIMEOUT) )
 	{
 		isDeleted = true;
@@ -135,11 +133,18 @@ void CKOOPA::Render() {
 		}
 	}
 	else if (state == MAI) {
-
-		if (!green)
-			aniId = 13004;
-		else
-			aniId = 13012;
+		if (!lat) {
+			if (!green)
+				aniId = 13004;
+			else
+				aniId = 13012;
+		}
+		else {
+			if (!green)
+				aniId = 13019;
+			else
+				aniId = 13018;
+		}
 		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
 		if (!mario->getcam() && bicam) {
@@ -166,15 +171,24 @@ void CKOOPA::Render() {
 			else
 				x -= 8;
 		}
+		
 		if (GetTickCount64() - hoisinh >= 10000 && !danghoisinh) {
 			danghoisinh = true;
 			stop = GetTickCount64();
 		}
 		if (danghoisinh && GetTickCount64() - stop < 500) {
-			if (!green)
-				aniId = 13016;
-			else
-				aniId = 13017;
+			if (!lat) {
+				if (!green)
+					aniId = 13016;
+				else
+					aniId = 13017;
+			}
+			else {
+				if (!green)
+					aniId = 13022;
+				else
+					aniId = 13023;
+			}
 		}
 	    if (danghoisinh && GetTickCount64() - stop > 500) {
 			SetState(0);
@@ -182,10 +196,18 @@ void CKOOPA::Render() {
 		}
 	}
 	else if (state == MAI_MOVE) {
-		if (!green)
-			aniId = 13005;
-		else
-			aniId = 13013;
+		if (!lat) {
+			if (!green)
+				aniId = 13005;
+			else
+				aniId = 13013;
+		}
+		else {
+			if (!green)
+				aniId = 13021;
+			else
+				aniId = 13020;
+		}
 		
 	}
 	int w = 16;
@@ -241,7 +263,7 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	if (dynamic_cast<CKOOPA*>(e->obj)) return;
 	
-	if (e->obj->GetType() != 14) {
+	if (e->obj->GetType() != 14 && (!dynamic_cast<Thebox*>(e->obj))) {
 		
 		if (e->ny != 0)
 		{
@@ -313,29 +335,34 @@ void CKOOPA::SetState(int state){
 
 			}
 		}
+		vx = -KOOPA_WALKING_SPEED;
 		this->state = LIFE;
+		lat = false;
 		roiy1 = -1;
 		roiy2 = -1;
 		isOnTop = 0;
 		this->ay = KOOPA_GRAVITY;
-		y -= 5;
+		if(!die)
+		    y -= 5;
+		timeroi = -1;
+		die_start = -1;
 		danghoisinh = false;
 		if (box->IsDeleted()) {
-			if (vx < 0)
-				box = new Thebox(x - 8, y );
-			else
-				box = new Thebox(x + 8, y );
-			CPlayScene* k = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-			k->AddObject(box);
+			box = new Thebox(x - 8, y);
+			CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+			currentScene->AddObject(box);
 		}
-		
-		if (nx < 0)
-			vx = -KOOPA_WALKING_SPEED;
-		else
-			vx = KOOPA_WALKING_SPEED;
+		else{
+			box->SetPosition(x - 2, y);
+			box->setbandau();
+		}
 	}
 	else if (state == 1) {
+		cho = true;
 		this->state = MAI;
+		if (!box->IsDeleted()) {
+			box->Delete();
+		}
 		vx = 0;
 		if (bicam) {
 			vy = 0;
@@ -344,12 +371,21 @@ void CKOOPA::SetState(int state){
 			y += 5;
 		}
 		hoisinh = GetTickCount64();
+
 		
 	}
 	else if (state == 2) {
 		dung = GetTickCount64();
 		
 		this->state = MAI_MOVE;
+		CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+		CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
+		float cx, cy;
+		mario->GetPosition(cx, cy);
+		if (cx>x)
+			vx = -KOOPA_WALKING_SPEED * 6;
+		else
+			vx = KOOPA_WALKING_SPEED * 6;
 	}
 	else if (state == 3) {
 		this->state = DIE1;

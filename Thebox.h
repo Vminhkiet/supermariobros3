@@ -17,6 +17,7 @@ public:
 		ax = 0;
 		Isroi = -1;
 		vx = -KOOPA_WALKING_SPEED;
+		isDeleted = false;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

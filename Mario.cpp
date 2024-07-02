@@ -183,6 +183,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	else if (dynamic_cast<CBrick*>(e->obj)) {
+        if(e->ny>0)
+		    dynamic_cast<CBrick*>(e->obj)->setdie(true);
+	}
 	else if (dynamic_cast<CDie*>(e->obj))
 		OnCollisionWithDie(e);
 	else if (dynamic_cast<Swap*>(e->obj))
@@ -213,9 +217,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (dynamic_cast<ButtonP*>(e->obj)) {
 		if (e->ny < 0 && !dynamic_cast<ButtonP*>(e->obj)->getdie()) {
-			dynamic_cast<ButtonP*>(e->obj)->setdie(true);
-			CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
-			currentScene->deletebrick(true);
+			ButtonP* c = dynamic_cast<ButtonP*>(e->obj);
+			c->setdie(true);
 		}
 	}
 	else if (dynamic_cast<CPARA*>(e->obj))
@@ -564,7 +567,7 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 							st = GetTickCount64();
 							CGame::GetInstance()->GetCurrentScene()->setpause(true);
 							hoalon = true;
-							isOnTop = false;
+							isOnTop = 0;
 							level = MARIO_LEVEL_SMALL;
 							StartUntouchable();
 						}
@@ -1206,6 +1209,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 
 void CMario::SetLevel(int l)
 {
+	isOnTop = 0;
 	// Adjust position to avoid falling off platform
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
@@ -1213,6 +1217,7 @@ void CMario::SetLevel(int l)
 		y -= (MARIO_BIG_BBOX_HEIGHT + 4 - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
 	if (this->level == 2) {
+
 		if (l == 3) {
 			y -= 2;
 		}
@@ -1223,7 +1228,7 @@ void CMario::SetLevel(int l)
 void CMario::SetDanh(bool danh) {
 	if (level == 3 && danh) {
 		sdanh = GetTickCount64();
-		if (duoi == NULL) {
+		if (duoi == NULL || (duoi!=NULL && duoi->IsDeleted())) {
 			duoi = new Duoi(x + 2*nx , y+5,nx);
 			CPlayScene* k = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 			k->AddObject(duoi);

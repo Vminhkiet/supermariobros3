@@ -790,16 +790,7 @@ void CPlayScene::AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj){
 		}
 	}
 }
-void CPlayScene::deletebrick(bool deleted) {
-	if (deleted) {
-		for (auto& i : objects) {
-			if (dynamic_cast<CBrick*>(i)) {
-				CBrick* k = dynamic_cast<CBrick*>(i);
-				k->settien(true);
-			}
-		}
-	}
-}
+
 void CPlayScene::deleteenime(float cx,float cy,float vx) {
 	for (auto& i : venus) {
 		if (dynamic_cast<CVenus*>(i)) {

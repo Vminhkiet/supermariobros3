@@ -22,6 +22,8 @@ public:
 	}
 	void setdie(bool die) {
 		this->die = die;
+		ChangeCoin();
 	}
+	void ChangeCoin();
 };
 

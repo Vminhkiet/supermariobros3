@@ -55,7 +55,9 @@ public:
             }
         }
     }
-    void deletebrick(bool deleted);
+    vector<LPGAMEOBJECT> getobjects() {
+        return objects;
+    }
     void deleteenime(float cx, float cy,float vx);
     void AddObject(LPGAMEOBJECT obj, LPGAMEOBJECT referenceObj = nullptr);
     void Clear();

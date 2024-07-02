@@ -1,4 +1,5 @@
 #include "Bullet.h"
+
 void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	x += vx * dt;
 	y += vy * dt;

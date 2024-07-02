@@ -28,7 +28,7 @@ protected:
 	int ny;
 	int state;
 
-	bool isDeleted;
+	bool isDeleted=false;
 	int type=-1;
 
 public: 
