@@ -51,6 +51,9 @@ protected:
 	bool bicam = false;
 	bool green = true;
 	bool res = false;
+	bool nhay = false;
+	bool lat = false;
+	bool cho = false;
 	bool canh = true;
 public:
 	CParaKoopa(float x, float y, bool green = true) :CGameObject(x, y) {
@@ -78,6 +81,21 @@ public:
 			return 2;
 		else
 			return 3;
+	}
+	bool getlat() {
+		return lat;
+	}
+	void setlat(bool lat) {
+		this->lat = lat;
+		if (lat) {
+
+			vy = -0.4f;
+			nhay = true;
+		}
+
+	}
+	bool getcho() {
+		return cho;
 	}
 	bool getdie() {
 		return die;

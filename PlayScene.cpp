@@ -815,17 +815,20 @@ void CPlayScene::deleteenime(float cx,float cy,float vx) {
 		}
 		else*/ if (dynamic_cast<CKOOPA*>(i)) {
 			CKOOPA* h = dynamic_cast<CKOOPA*>(i);
-
+			if (h->Getstate() != 0)
+				return;
 			if (!h->getdie())
 				continue;
 			h->getstart(mx, my);
 			if (vx > 0) {
 				if (mx <= cx + SCREEN_WIDTH+10 && mx >= cx + SCREEN_WIDTH  && my >= cy && my <= cy + SCREEN_HEIGHT) {
+					dynamic_cast<CKOOPA*>(i)->SetState(0);
 					dynamic_cast<CKOOPA*>(i)->setres(true);
 				}
 			}
 			else if (vx < 0) {
 				if (mx >= cx + 30 && mx <= cx + 40 && my >= cy && my <= cy + SCREEN_HEIGHT) {
+					dynamic_cast<CKOOPA*>(i)->SetState(0);
 					dynamic_cast<CKOOPA*>(i)->setres(true);
 				}
 			}
@@ -838,11 +841,15 @@ void CPlayScene::deleteenime(float cx,float cy,float vx) {
 			h->getstart(mx, my);
 			if (vx > 0) {
 				if (mx <= cx + SCREEN_WIDTH-50 && mx >= cx + SCREEN_WIDTH - 60 && my >= cy && my <= cy + SCREEN_HEIGHT) {
+					dynamic_cast<CParaKoopa*>(i)->setcanh(true);
+					dynamic_cast<CParaKoopa*>(i)->SetState(0);
 					dynamic_cast<CParaKoopa*>(i)->setres(true);
 				}
 			}
 			else if (vx < 0) {
 				if (mx >= cx + 30 && mx <= cx + 40 && my >= cy && my <= cy + SCREEN_HEIGHT) {
+					dynamic_cast<CParaKoopa*>(i)->setcanh(true);
+					dynamic_cast<CParaKoopa*>(i)->SetState(0);
 					dynamic_cast<CParaKoopa*>(i)->setres(true);
 				}
 			}

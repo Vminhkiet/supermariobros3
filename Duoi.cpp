@@ -37,11 +37,8 @@ void Duoi::OnCollisionWith(LPCOLLISIONEVENT e) {
 		dynamic_cast<CQuestionblock*>(e->obj)->SetCham(true);
 	else if (dynamic_cast<CKOOPA*>(e->obj)) {
 		CKOOPA* p = dynamic_cast<CKOOPA*>(e->obj);
-		if (p->Getstate() == 0) {
-			p->setlat(true);
-			p->SetState(1);
-		}
-		else if (p->Getstate() == 1 && !p->getcho()) p->SetState(2);
+		p->setlat(true);
+		p->SetState(1);
 	}
 	else if (dynamic_cast<CVenus*>(e->obj)) {
 		if (dynamic_cast<CVenus*>(e->obj)->getdie()) {
@@ -59,7 +56,8 @@ void Duoi::OnCollisionWith(LPCOLLISIONEVENT e) {
 	}
 	else if (dynamic_cast<CParaKoopa*>(e->obj)) {
 		dynamic_cast<CParaKoopa*>(e->obj)->setcanh(false);
-		dynamic_cast<CParaKoopa*>(e->obj)->SetState(3);
+		dynamic_cast<CParaKoopa*>(e->obj)->setlat(true);
+		dynamic_cast<CParaKoopa*>(e->obj)->SetState(1);
 	}
 }
 void Duoi::OnNoCollision(DWORD dt) {

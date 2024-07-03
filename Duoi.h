@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#define Duoi_WIDTH 6
+#define Duoi_WIDTH 10
 #define Duoi_HEIGHT 5
 #define Duoi_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.05f

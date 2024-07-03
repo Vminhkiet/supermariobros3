@@ -170,7 +170,7 @@ class CMario : public CGameObject
 	bool nhapnhay = false;
 	bool fly = false;
 	bool roicham = false;
-
+	bool dangcam = false;
 public:
 	CMario(float x, float y, int intro = 1, bool mariogreen = false) : CGameObject(x, y)
 	{
@@ -199,10 +199,18 @@ public:
 	void SetSittingFalse() {
 		isSitting = false;
 	}
+	bool getdangcam() {
+		return dangcam;
+	}
+	void setdangcam(bool dangcam) {
+		this->dangcam = dangcam;
+	}
 	void Setcam(bool cammai) {
 		this->cammai = cammai;
-		if( !cammai )
-		   this->dacam = cammai;
+		if (!cammai) {
+			this->dacam = cammai;
+			dangcam = false;
+		}
 
 	}
 	int getdraw() {

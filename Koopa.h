@@ -49,6 +49,7 @@ protected:
 	bool bicam = false;
 	bool lat = false;
 	bool green = false;
+	bool nhay = false;
 	float startx, starty;
 public:
 	CKOOPA(float x, float y, bool green = false) :CGameObject(x, y) {
@@ -84,6 +85,12 @@ public:
 	}
 	void setlat(bool lat) {
 		this->lat = lat;
+		if (lat) {
+
+			vy = -0.4f;
+			nhay = true;
+		}
+		
 	}
 	bool getcho() {
 		return cho;

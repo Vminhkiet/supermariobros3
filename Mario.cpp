@@ -227,7 +227,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithParakoopa(e);
 	else if (dynamic_cast<CTop*>(e->obj)) {
 		CTop* top = dynamic_cast<CTop*>(e->obj);
-		if (e->ny < 0) {
+		if (e->ny < 0 ) {
 			isroi = 1;
 		}
 
@@ -348,8 +348,12 @@ void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 	else if (pstate == 1) {
 		if (!cammai) {
 			dacam = false;
+			dangcam = false;
 			p->SetState(2);
 			p->setcam(false);
+			float cx, cy;
+			p->GetPosition(cx, cy);
+			p->SetPosition(cx, cy - 3);
 			if (nx > 0) {
 				p->sethuong(true);
 			}
@@ -357,8 +361,9 @@ void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 				p->sethuong(false);
 			}
 		}
-		else {
+		else if (!dangcam) {
 			dacam = true;
+			dangcam = true;
 			p->setcam(true);
 		}
 	}
@@ -536,7 +541,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 	CKOOPA* p = (CKOOPA*)e->obj;
 	int pstate = p->Getstate();
-	
+	if (p->getcho())
+		return;
 	if (pstate == 0) {
 		if (e->ny < 0)
 		{
@@ -584,6 +590,7 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 	else if (pstate == 1) {
 		if (!cammai) {
 			dacam = false;
+			dangcam = false;
 			p->SetState(2);
 			p->setcam(false);
 			float cx, cy;
@@ -596,8 +603,9 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 				p->sethuong(false);
 			}
 		}
-		else {
+		else if (!dangcam) {
 			dacam = true;
+			dangcam = true;
 			p->setcam(true);
 		}
 	}
@@ -751,7 +759,7 @@ int CMario::GetAniIdSmall()
 				}
 				else {
 					draw = false;
-					if (nx > 0) {
+					if (nx >= 0) {
 						aniId = 1003;
 						draw = true;
 					}
@@ -1233,6 +1241,7 @@ void CMario::SetDanh(bool danh) {
 			CPlayScene* k = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 			k->AddObject(duoi);
 		}
+		Setcam(false);
 		this->danh = danh;
 	}
 	else {
