@@ -55,7 +55,7 @@ public:
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int IsBlocking() { return 1; }
+	int IsBlocking() { return 0; }
 	virtual int IsCollidable() { return 0; };
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);

@@ -9,6 +9,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Para.h"
+#include "Leaf.h"
 #include "ParaKoopa.h"
 void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (res) {
@@ -22,6 +23,12 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 	if (die)
 		return;
+	if (!draw) {
+		SetState(1);
+		vx = 0; vy = 0;
+
+		return;
+	}
 	if (roiy1 != -1 && roiy2 != -1) {
 		if (x<roiy1 || x>roiy2) {
 			if (state != LIFE) {
@@ -110,6 +117,8 @@ void CKOOPA::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 void CKOOPA::Render() {
 	if (res || die)
+		return;
+	if (!draw)
 		return;
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
@@ -253,6 +262,8 @@ void CKOOPA::OnNoCollision(DWORD dt)
 	y += vy * dt;
 };
 void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
+	if (dynamic_cast<CLEAF*>(e->obj))
+		return;
 	if (!e->obj->IsBlocking() && e->obj->GetType() != 14 && e->obj->GetType()!=2&&(!dynamic_cast<CParaKoopa*>(e->obj)) && (!dynamic_cast<CKOOPA*>(e->obj)) || e->obj->GetType()==16 ) return;
 	if (dynamic_cast<Thebox*>(e->obj)) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) {

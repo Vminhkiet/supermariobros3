@@ -23,6 +23,9 @@ public:
 
 	LPKEYEVENTHANDLER GetKeyEventHandler() { return key_handler; }
 	virtual void Load() = 0;
+	int getid() {
+		return id;
+	}
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;

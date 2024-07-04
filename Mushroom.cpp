@@ -3,6 +3,8 @@
 #include "Bullet.h"
 void CMUSHROOM::Render()
 {
+	if (!draw)
+		return;
 	CAnimations* animations = CAnimations::GetInstance();
 	if (red)
 		animations->Get(ID_ANI_MUSHROOM)->Render(x, y);
@@ -20,6 +22,12 @@ void CMUSHROOM::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void CMUSHROOM::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (!draw) {
+		vy = 0;
+		vx = 0;
+		ay = MUSHROOM_GRAVITY/20;
+		return;
+	}
 	if (ques && !chamdinh) {
 		y -=0.2;
 		if (ycu > y + 18) {
@@ -67,13 +75,15 @@ void CMUSHROOM::SetState(int state)
 		float x, y;
 		CGame::GetInstance()->GetCamPos(x, y);
 		vx = -MUSHROOM_WALKING_SPEED;
-		if (this->x > x)
+		if (this->x < x)
 			vx *= -1;
 		break;
 	}
 }
 void CMUSHROOM::OnNoCollision(DWORD dt)
 {
+	if (!draw)
+		return;
 	x += vx * dt;
 	y += vy * dt;
 };

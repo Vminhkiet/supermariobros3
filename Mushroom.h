@@ -28,6 +28,7 @@ protected:
 	float roiy1 = -1, roiy2 = -1;
 	float ytop = -1;
 	ULONGLONG die_start;
+	bool draw = true;
 public:
 	CMUSHROOM(float x, float y,bool red=true,bool ques=false) : CGameObject(x, y) {
 		this->ax = 0;
@@ -36,8 +37,11 @@ public:
 		die_start = -1;
 		this->ques = ques;
 		this->red = red;
-
+		isOnTop = 0;
 		this->SetType(OBJECT_TYPE_NAM);
+	}
+	void setdraw(bool draw) {
+		this->draw = draw;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

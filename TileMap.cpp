@@ -2,6 +2,7 @@
 #include "AssetIDs.h"
 #include <fstream>
 #include "Utils.h"
+#include "PlayScene.h"
 #include "QuestionBlock.h"
 
 CTileSet::CTileSet()

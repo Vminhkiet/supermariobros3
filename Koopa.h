@@ -51,6 +51,7 @@ protected:
 	bool green = false;
 	bool nhay = false;
 	float startx, starty;
+	bool draw = true;
 public:
 	CKOOPA(float x, float y, bool green = false) :CGameObject(x, y) {
 		state = LIFE;
@@ -110,6 +111,9 @@ public:
 	}
 	void sethuong(bool huong) {
 		huongdichuyen = huong;
+	}
+	void setdraw(bool draw) {
+		this->draw = draw;
 	}
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
     void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

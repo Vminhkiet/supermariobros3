@@ -8,6 +8,7 @@
 #include "Goomba.h"
 #include "ParaKoopa.h"
 #include "Die.h"
+#include "NODE.h"
 #include "Coin.h"
 #include "Swap.h"
 #include "Bullet.h"
@@ -24,6 +25,7 @@
 #include "Thebox.h"
 #include "PlayScene.h"
 #include "Brick.h"
+#include "Ground.h"
 
 int CMario::getintro() {
 	return intro;
@@ -119,7 +121,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vx += ax * dt;
 	
 	if (abs(vx) > abs(maxVx)) { vx = maxVx;  }
-	
+	if (id != -1) {
+		if (abs(vy) > abs(maxVx)) {
+			vy = maxVx;
+		}
+	}
 	
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME + 1500) 
@@ -180,7 +186,6 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			vx = 0; // Đặt tốc độ ngang bằng 0 khi va chạm theo trục x
 		}
 	}
-
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CBrick*>(e->obj)) {
@@ -209,6 +214,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBullet(e);
 	else if (dynamic_cast<CKOOPA*>(e->obj))
 		OnCollisionWithTroopa(e);
+	else if(dynamic_cast<NODE*>(e->obj))
+		OnCollisionWithNODE(e);
 	else if (dynamic_cast<CVenus*>(e->obj)) {
 		if (dynamic_cast<CVenus*>(e->obj)->getdie()) {
 			return;
@@ -250,6 +257,20 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	
 	
+}
+void CMario::OnCollisionWithNODE(LPCOLLISIONEVENT e) {
+	NODE* n = dynamic_cast<NODE*>(e->obj);
+	
+	if (vitri1 == n->getname()) {
+		return;
+	}
+	vitri1 = n->getname();
+	duocphep = true;
+	n->gethuong(l, r, t, b);
+	vx = 0;
+	vy = 0;
+	ax = 0;
+	ay = 0;
 }
 void CMario::OnCollisionWithFinish(LPCOLLISIONEVENT e) {
 	Finish* a = dynamic_cast<Finish*>(e->obj);
@@ -501,6 +522,11 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
+			if (intro == 0) {
+				vx = 0;
+				ax = 0;
+				nx = 1;
+			}
 			goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
@@ -589,6 +615,13 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 	}
 	else if (pstate == 1) {
 		if (!cammai) {
+			if (e->ny > 0) {
+				if (intro == 0) {
+					nx = -1;
+					p->SetSpeed(-0.2, 0);
+				}
+				return;
+			}
 			dacam = false;
 			dangcam = false;
 			p->SetState(2);
@@ -596,6 +629,7 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 			float cx, cy;
 			p->GetPosition(cx, cy);
 			p->SetPosition(cx, cy - 3);
+			
 			if (nx > 0) {
 				p->sethuong(true);
 			}
@@ -1009,37 +1043,43 @@ void CMario::Render()
 	if (!nhapnhay) {
 		CAnimations* animations = CAnimations::GetInstance();
 		int aniId = -1;
-		if (GetTickCount64() - sdanh > 200 && danh) {
-			if (duoi != NULL && !duoi->IsDeleted()) {
-				duoi->Delete();
-				duoi = NULL;
+		
+		if (id == -1) {
+			if (GetTickCount64() - sdanh > 200 && danh) {
+				if (duoi != NULL && !duoi->IsDeleted()) {
+					duoi->Delete();
+					duoi = NULL;
+				}
+				danh = false;
+
 			}
-			danh = false;
-			
+			if (state == MARIO_STATE_DIE)
+				aniId = ID_ANI_MARIO_DIE;
+			else if (level == MARIO_LEVEL_BIG)
+				aniId = GetAniIdBig();
+			else if (level == MARIO_LEVEL_SMALL)
+				aniId = GetAniIdSmall();
+			else if (level == MARIO_LEVEL_RACOON)
+				aniId = GetAniIdRacoon();
+			if (change) {
+				if (nx > 0) {
+					aniId = 803;
+				}
+				else {
+					aniId = 802;
+				}
+			}
+			if (hoalon) {
+				if (nx > 0) {
+					aniId = 803;
+				}
+				else {
+					aniId = 802;
+				}
+			}
 		}
-		if (state == MARIO_STATE_DIE)
-			aniId = ID_ANI_MARIO_DIE;
-		else if (level == MARIO_LEVEL_BIG)
-			aniId = GetAniIdBig();
-		else if (level == MARIO_LEVEL_SMALL)
-			aniId = GetAniIdSmall();
-		else if (level == MARIO_LEVEL_RACOON)
-			aniId = GetAniIdRacoon();
-		if (change) {
-			if (nx > 0) {
-				aniId = 803;
-			}
-			else {
-				aniId = 802;
-			}
-		}
-		if (hoalon) {
-			if (nx > 0) {
-				aniId = 803;
-			}
-			else {
-				aniId = 802;
-			}
+		else {
+			aniId = id;
 		}
 		
 		animations->Get(aniId)->Render(x, y);
@@ -1181,6 +1221,16 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+	case 199:
+		if (isSitting) break;
+		maxVx = MARIO_WALKING_SPEED;
+		ay = MARIO_ACCEL_WALK_X;
+		break;
+	case 198:
+		if (isSitting) break;
+		maxVx = -MARIO_WALKING_SPEED;
+		ay = -MARIO_ACCEL_WALK_X;
+		break;
 	}
 
 	CGameObject::SetState(state);
@@ -1188,6 +1238,14 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
+	if (id != -1) {
+
+		left = x - 4;
+		top = y - 4;
+		right = left + 8;
+		bottom = top + 8;
+		return;
+	}
 	if (level==MARIO_LEVEL_BIG || level==3)
 	{
 		if (isSitting)

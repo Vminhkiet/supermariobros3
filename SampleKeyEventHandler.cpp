@@ -9,9 +9,19 @@
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
 	if (mario->getintro() == 0)
 		return;
+	if (game->GetCurrentScene()->getid() == 3) {
+		switch (KeyCode)
+		{
+		case DIK_S:
+
+			break;
+		}
+		return;
+	}
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
@@ -67,10 +77,19 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 void CSampleKeyHandler::OnKeyUp(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-
+	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (mario->getintro() == 0)
 		return;
+	if (game->GetCurrentScene()->getid() == 3) {
+		switch (KeyCode)
+		{
+		case DIK_S:
+
+			break;
+		}
+		return;
+	}
 	switch (KeyCode)
 	{
 	case DIK_S:
@@ -96,6 +115,30 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		return;
 	if (mario->getintro() == 0)
 		return;
+	if (game->GetCurrentScene()->getid() == 3) {
+		bool l, r, t, b;
+		mario->gethuongdi(l, r, t, b);
+		if (!mario->getduocphep())
+			return;
+		if (game->IsKeyDown(DIK_RIGHT) && r) {
+			mario->SetState(100);
+			mario->setduocphep(false);
+		}
+		else if (game->IsKeyDown(DIK_LEFT) && l) {
+			mario->SetState(200);
+			mario->setduocphep(false);
+		}
+		else if (game->IsKeyDown(DIK_DOWN) && b) {
+			mario->SetState(199);
+			mario->setduocphep(false);
+		}
+		else if (game->IsKeyDown(DIK_UP) && t) {
+			mario->SetState(198);
+			mario->setduocphep(false);
+		}
+		return;
+	}
+	
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A)) {

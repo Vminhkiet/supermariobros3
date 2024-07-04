@@ -129,6 +129,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			LoadResource("textures\\world-1-1-map.json");
 			return;
 		}
+		else if (object_type == -2) {
+			CScene1::GetInstance()->LoadResource("textures\\introworldmap.json");
+			return;
+		}
 		float x = (float)atof(tokens[1].c_str());
 		float y = (float)atof(tokens[2].c_str());
 	
@@ -142,6 +146,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				}
 				obj = new CMario(x, y);
 				player = (CMario*)obj;
+				if (id == 3) {
+					dynamic_cast<CMario*>(player)->setid(1016);
+					dynamic_cast<CMario*>(player)->setay();
+				}
 				DebugOut(L"[INFO] Player object has been created!\n");
 				return;
 				break;
@@ -354,7 +362,7 @@ void CPlayScene::Load()
 	{
 		Intro::GetInstance()->Setitem(objects, player);
 	}
-	else if (id == 0) {	
+	else if (id == 3) {	
 		CScene1::GetInstance()->Setitem(objects, player);
 	}
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
@@ -370,9 +378,9 @@ void CPlayScene::Update(DWORD dt)
 		Intro::GetInstance()->Update(dt);
 		CGame::GetInstance()->SetCamPos(0, 0 /*cy*/);
 	}
-	else if (id == 0) {
+	else if (id == 3) {
 		CScene1::GetInstance()->Update(dt);
-		CGame::GetInstance()->SetCamPos(0, 0 /*cy*/);
+		CGame::GetInstance()->SetCamPos(0,0 /*cy*/);
 	}
 	else{
 		//grid->Update(dt);
@@ -460,7 +468,7 @@ void CPlayScene::Render()
 	if (id == 1) {
 		Intro::GetInstance()->Render();
 	}
-	else if (id == 0) {
+	else if (id == 3) {
 		CScene1::GetInstance()->Render();
 	}
 	else {
@@ -544,9 +552,14 @@ void CPlayScene::PurgeDeletedObjects()
 }
 void CPlayScene::LoadResource(string s) {
 	LPGAME game = CGame::GetInstance();
-	D3DXCOLOR blueColor = D3DXCOLOR(0.53f, 0.81f, 0.92f, 1.0f);
+	if (id != 3) {
+		D3DXCOLOR blueColor = D3DXCOLOR(0.53f, 0.81f, 0.92f, 1.0f);
 
-	CGame::GetInstance()->SetBackgroundColor(blueColor);
+		CGame::GetInstance()->SetBackgroundColor(blueColor);
+	}
+	else {
+		
+	}
 
 
 	// Khởi tạo TileMap và Grid

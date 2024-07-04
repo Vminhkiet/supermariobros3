@@ -16,6 +16,7 @@ C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Goomba.cpp;C
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Grass.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Grass.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Grid.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Grid.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Ground.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Ground.obj
+C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\HUD.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\HUD.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Intro.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Intro.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\IntroScreen.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\IntroScreen.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Koopa.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Koopa.obj
@@ -24,6 +25,7 @@ C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\main.cpp;C:\
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Mario.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Mario.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Mushroom.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Mushroom.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Nen.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Nen.obj
+C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\NODE.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\NODE.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Para.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Para.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\ParaKoopa.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\ParaKoopa.obj
 C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Platform.cpp;C:\Users\minhk\source\repos\gamedev-intro-tutorials\05-SceneManager\Debug\Platform.obj

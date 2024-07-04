@@ -73,7 +73,14 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (x<yroi1 || x>yroi2) {
+	if (!draw) {
+		this->ay = GOOMBA_GRAVITY/20;
+		vx = 0;
+		ax = 0;
+		vy = 0;
+		return;
+	}
+	if (vx!=0 && (x<yroi1 || x>yroi2 )) {
 		if (x < yroi1)
 			x++;
 		else if (x > yroi2)
@@ -97,6 +104,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CGoomba::Render()
 {
+	if (!draw)
+		return;
 	int aniId = ID_ANI_GOOMBA_WALKING;
 	if (state == GOOMBA_STATE_DIE) 
 	{

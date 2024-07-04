@@ -4,6 +4,8 @@
 #include "Mario.h"
 #include "Three.h"
 #include "Leaf.h"
+#include "Mushroom.h"
+#include "Koopa.h"
 class Intro {
 
 	static Intro* __instance;
@@ -15,9 +17,14 @@ class Intro {
 	CNEN* nen;
 	CThree* three;
 	CLEAF* leaf;
+	CMUSHROOM* mush;
+	CGoomba* gooba;
+	CKOOPA* koopa;
+	CKOOPA* koopa1;
 	vector<CGameObject*> objects;
 	bool greenjump=false;
 	bool draw = false;
+	bool end = false;
 
 	int h = -40;
 

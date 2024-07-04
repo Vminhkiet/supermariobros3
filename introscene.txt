@@ -1,16 +1,14 @@
 # list of object assets to load in this scene
 [ASSETS]
-man.txt
-title.txt
 mario.txt
-coin.txt
-cloud.txt
-Leaf.txt
-brick.txt
-nen.txt
+grass.txt
+node.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
-
+# MARIO
+0	57	58
+#Screen
+-2	textures\\introworldmap.json

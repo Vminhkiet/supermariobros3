@@ -1,6 +1,8 @@
 ﻿#include "IntroScreen.h"
 #include "PlayScene.h"
 #include "Grass.h"
+#include "Ground.h"
+#include "NODE.h"
 #include "Utils.h"
 #include "TileMap.h"
 CScene1* CScene1::__instance = NULL;
@@ -19,6 +21,7 @@ void CScene1::Update(DWORD dt)
 		if (objects[i]->IsDeleted() == false)
 			coObjects.push_back(objects[i]);
 	}
+	mariored->Update(dt, &coObjects);
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->IsDeleted() == false)
@@ -29,12 +32,14 @@ void CScene1::Update(DWORD dt)
 void CScene1::Render() {
 	if (tileMap)
 		if (tileMap->getload())
-			tileMap->Draw({ 0,0 });
+			tileMap->Draw({ 25,228 },255,true);
+	
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->IsDeleted() == false)
 			objects[i]->Render();
 	}
+	mariored->Render();
 }
 CScene1* CScene1::GetInstance()
 {
@@ -44,16 +49,16 @@ CScene1* CScene1::GetInstance()
 
 void CScene1::Setitem(vector<LPGAMEOBJECT>& objects, LPGAMEOBJECT& player) {
 	Loadfile();
-	mariored = new CMario(10, 150, 0);
-	mariored->SetLevel(MARIO_LEVEL_SMALL);
 
-	player = mariored;
+	mariored = (CMario*)player;
 
 	for (auto i : this->objects) {
 		objects.push_back(i);
 	}
 }
 void CScene1::LoadResource(string s) {
+	D3DXCOLOR blackColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+	CGame::GetInstance()->SetBackgroundColor(blackColor);
 	LPGAME game = CGame::GetInstance();
 	// Khởi tạo TileMap và Grid
 	tileMap = new CTileMap();
@@ -66,13 +71,34 @@ void CScene1::LoadResource(string s) {
 	ifstream file(s);
 	json j = json::parse(file);
 	for (auto& layer : j["layers"]) {
-		if (layer["name"] == "Grass") {
+		if (layer["name"] == "grass") {
 			for (auto& object : layer["objects"]) {
-				Grass* grass = new Grass(float(object["x"]), float(object["y"]));
+				Grass* grass = new Grass(float(object["x"]) + 19 , float(object["y"]));
 				objects.push_back(grass);
 			}
 		}
+		else if (layer["name"] == "Ground") {
+			for (auto& object : layer["objects"]) {
+				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
 
+				CGround* ground = new CGround(
+					float(object["x"]) + 19,
+					float(object["y"]) + 1,
+					object["width"],
+					object["height"]
+				);
+				// Thêm portal vào danh sách đối tượng của Scene
+				objects.push_back(ground);
+				// Thêm portal vào Grid
+				//grid->InsertObject(ground);
+			}
+		}
+		else if (layer["name"] == "NODE") {
+			for (auto& object : layer["objects"]) {
+				NODE* grass = new NODE(float(object["x"]) + 19, float(object["y"]),object["name"]);
+				objects.push_back(grass);
+			}
+		}
 	}
 
 

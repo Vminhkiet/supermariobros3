@@ -22,6 +22,7 @@ class CGoomba : public CGameObject
 protected:
 	float ax;				
 	float ay; 
+	bool draw = true;
 	bool rua = false;
 	ULONGLONG die_start;
 	float yroi1 = -1;
@@ -39,6 +40,9 @@ protected:
 public: 	
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
+	void setdraw(bool draw) {
+		this->draw = draw;
+	}
 	void Setrua(bool rua) {
 		this->rua = rua;
 	}

@@ -5,8 +5,11 @@ title.txt
 mario.txt
 coin.txt
 cloud.txt
+goomba.txt
+koopa.txt
 Leaf.txt
 brick.txt
+mushroom.txt
 nen.txt
 #
 [OBJECTS]

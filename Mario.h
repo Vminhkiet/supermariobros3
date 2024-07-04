@@ -8,10 +8,10 @@
 #include "debug.h"
 #include "AssetIDs.h"
 
-#define MARIO_WALKING_SPEED		0.15f
-#define MARIO_RUNNING_SPEED		0.3f
+#define MARIO_WALKING_SPEED		0.1f
+#define MARIO_RUNNING_SPEED		0.2f
 
-#define MARIO_ACCEL_WALK_X	0.0004f
+#define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
@@ -136,6 +136,12 @@ class CMario : public CGameObject
 	bool up = false;
 	bool change = false;
 	bool danh = false;
+	bool duocphep = true;
+	bool l = false;
+	bool r = true;
+	bool t = false;
+	bool b = false;
+	string vitri1 = "1";
 	int coin;
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -152,6 +158,7 @@ class CMario : public CGameObject
 	void OnCollisionWithFinish(LPCOLLISIONEVENT e);
 	void OnCollisionWithParakoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithKick(LPCOLLISIONEVENT e);
+	void OnCollisionWithNODE(LPCOLLISIONEVENT e);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRacoon();
@@ -171,6 +178,7 @@ class CMario : public CGameObject
 	bool fly = false;
 	bool roicham = false;
 	bool dangcam = false;
+	int id = -1;
 public:
 	CMario(float x, float y, int intro = 1, bool mariogreen = false) : CGameObject(x, y)
 	{
@@ -196,11 +204,23 @@ public:
 	bool gettele() {
 		return tele;
 	}
+	bool getduocphep() {
+		return duocphep;
+	}
+	void setduocphep(bool duocphep) {
+		this->duocphep = duocphep;
+	}
 	void SetSittingFalse() {
 		isSitting = false;
 	}
 	bool getdangcam() {
 		return dangcam;
+	}
+	void gethuongdi(bool& l, bool& r, bool& t, bool& b) {
+		l = this->l;
+		r = this->r;
+		t = this->t;
+		b = this->b;
 	}
 	void setdangcam(bool dangcam) {
 		this->dangcam = dangcam;
@@ -212,6 +232,15 @@ public:
 			dangcam = false;
 		}
 
+	}
+	void setid(int id) {
+		this->id = id;
+	}
+	void setay() {
+		ay = 0;
+		vy = 0;
+		vx = 0;
+		ax = 0;
 	}
 	int getdraw() {
 		return nx;
