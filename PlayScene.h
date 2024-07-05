@@ -21,6 +21,7 @@ protected:
     LPGAMEOBJECT player;
     LPTILEMAP tileMap;
     LPGRID grid;
+    LPGAMEOBJECT hud;
     vector<LPGAMEOBJECT> objects;
     vector<LPGAMEOBJECT> venus;
     vector<std::pair<Object, bool>> spawn;

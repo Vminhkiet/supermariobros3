@@ -127,7 +127,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,
 			ScreenWidth,
-			ScreenHeight,
+			ScreenHeight + 40,
 			NULL,
 			NULL,
 			hInstance,

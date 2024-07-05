@@ -4,6 +4,7 @@
 #include "Ground.h"
 #include "NODE.h"
 #include "Utils.h"
+#include "HUD.h"
 #include "TileMap.h"
 #include "ItemEn.h"
 CScene1* CScene1::__instance = NULL;
@@ -28,7 +29,10 @@ void CScene1::Update(DWORD dt)
 		if (objects[i]->IsDeleted() == false)
 			objects[i]->Update(dt, &coObjects);
 	}
+	
 	tileMap->Update(dt, &objects);
+	Hud->Update(dt, &objects);
+	Hud->SetPosition(131.82 + 30, 210.09);
 }
 void CScene1::Render() {
 	if (tileMap)
@@ -41,6 +45,7 @@ void CScene1::Render() {
 			objects[i]->Render();
 	}
 	mariored->Render();
+	Hud->Render();
 }
 CScene1* CScene1::GetInstance()
 {
@@ -52,7 +57,6 @@ void CScene1::Setitem(vector<LPGAMEOBJECT>& objects, LPGAMEOBJECT& player) {
 	Loadfile();
 
 	mariored = (CMario*)player;
-
 	for (auto i : this->objects) {
 		objects.push_back(i);
 	}
@@ -104,6 +108,11 @@ void CScene1::LoadResource(string s) {
 			for (auto& object : layer["objects"]) {
 				ItemEn* grass = new ItemEn(float(object["x"]) + 19, float(object["y"]));
 				objects.push_back(grass);
+			}
+		}
+		else if (layer["name"] == "HUD") {
+			for (auto& object : layer["objects"]) {
+				Hud = new HUD(float(object["x"]) + 19, float(object["y"]));
 			}
 		}
 	}

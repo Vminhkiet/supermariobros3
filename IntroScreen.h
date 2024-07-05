@@ -7,6 +7,7 @@ class CScene1
 	static CScene1* __instance;
 	CMario* mariored;
 	LPTILEMAP tileMap;
+	LPGAMEOBJECT Hud;
 	vector<CGameObject*> objects;
 public:
 

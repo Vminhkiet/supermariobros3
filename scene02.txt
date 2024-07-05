@@ -10,6 +10,7 @@ Finish.txt
 koopa.txt
 leaf.txt
 goomba.txt
+HUD.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

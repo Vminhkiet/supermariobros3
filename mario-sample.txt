@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	3
 width	800
 height	750
 
@@ -29,3 +29,5 @@ height	750
 100	textures\misc3.png
 110	textures\intro_x1(new).png
 120	textures\MapSelection(x3)1.png
+130	textures\HUD.png
+140	textures\HUD1.png

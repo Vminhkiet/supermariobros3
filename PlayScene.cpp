@@ -23,6 +23,7 @@
 #include "Para.h"
 #include "Goomba.h"
 #include "Grass.h"
+#include "HUD.h"
 #include "Duoi.h"
 #include "Intro.h"
 #include "ParaKoopa.h"
@@ -332,7 +333,7 @@ void CPlayScene::Load()
 
 	ifstream f;
 	f.open(sceneFilePath);
-
+	hud = HUD::GetInstance();
 	// current resource section flag
 	int section = SCENE_SECTION_UNKNOWN;					
 
@@ -364,6 +365,7 @@ void CPlayScene::Load()
 	}
 	else if (id == 3) {	
 		CScene1::GetInstance()->Setitem(objects, player);
+
 	}
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
@@ -381,6 +383,7 @@ void CPlayScene::Update(DWORD dt)
 	else if (id == 3) {
 		CScene1::GetInstance()->Update(dt);
 		CGame::GetInstance()->SetCamPos(0,0 /*cy*/);
+
 	}
 	else{
 		//grid->Update(dt);
@@ -401,6 +404,7 @@ void CPlayScene::Update(DWORD dt)
 			coObjects.push_back(objects[i]);
 
 		}
+		hud->Update(dt, &coObjects);
 		for (auto& obj : venus)
 		{
 			coObjects.push_back(obj);
@@ -454,7 +458,9 @@ void CPlayScene::Update(DWORD dt)
 			objects[i]->Update(dt, &coObjects);
 
 		}
+		
 		CGame::GetInstance()->SetCamPos((int)cx, (int)cy);
+		hud->SetPosition((int)(131.82 + 19 + cx), (int)(223.09 + cy));
 		tileMap->Update(dt, &objects);
 
 	}
@@ -475,6 +481,7 @@ void CPlayScene::Render()
 		float x, y;
 		CGame::GetInstance()->GetCamPos(x, y);
 		tileMap->Draw({ 0,0 }, 255, true);
+		
 		bool tele = dynamic_cast<CMario*>(player)->gettele();
 		if (tele)
 			player->Render();
@@ -490,6 +497,7 @@ void CPlayScene::Render()
 		}
 		if (!tele)
 			player->Render();
+		hud->Render();
 	}
 }
 
@@ -574,10 +582,6 @@ void CPlayScene::LoadResource(string s) {
 
 		CGame::GetInstance()->SetBackgroundColor(blueColor);
 	}
-	else {
-		
-	}
-
 
 	// Khởi tạo TileMap và Grid
 	tileMap = new CTileMap();

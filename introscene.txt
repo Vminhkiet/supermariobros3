@@ -2,6 +2,7 @@
 [ASSETS]
 mario.txt
 grass.txt
+HUD.txt
 node.txt
 #
 [OBJECTS]

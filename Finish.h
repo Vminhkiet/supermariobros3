@@ -22,8 +22,7 @@ public:
 	void Setdung(bool dung) {
 		this->dung = dung;
 		if (dung) {
-			ay = 0.0002f;
-			vy = -0.1f;
+			vy = -0.2f;
 			die = GetTickCount64();
 		}
 	}

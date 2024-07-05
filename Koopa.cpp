@@ -353,7 +353,6 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 		CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 		if (e->nx != 0 && state == MAI_MOVE) {
 			brick->setdie(true);
-			vx *= -1;
 		}
 	}
 	else if (dynamic_cast<CDie*>(e->obj))
@@ -364,7 +363,6 @@ void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 		CQuestionblock* qs = dynamic_cast<CQuestionblock*>(e->obj);
 		if (e->nx != 0 && state == MAI_MOVE) {
 			qs->SetCham(true);
-			vx *= -1;
 		}
 	}
 	
@@ -376,7 +374,7 @@ void CKOOPA::SetState(int state){
 		if (!die) {
 			CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
 			CMario* mario = dynamic_cast<CMario*>(currentScene->GetPlayer());
-			if (mario->getcam()) {
+			if (bicam) {
 				float cx, cy;
 				mario->Vacham();
 				mario->GetSpeed(cx, cy);
@@ -388,6 +386,7 @@ void CKOOPA::SetState(int state){
 		vx = -KOOPA_WALKING_SPEED;
 		
 		lat = false;
+		bicam = false;
 		roiy1 = -1;
 		roiy2 = -1;
 		isOnTop = 0;
