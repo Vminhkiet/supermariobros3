@@ -507,7 +507,7 @@ void CPlayScene::Clear()
 	{
 		delete (*it);
 	}
-	
+	venus.clear();
 	spawn.clear();
 	objects.clear();
 }
@@ -522,7 +522,9 @@ void CPlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
-
+	for (int i = 0; i < venus.size(); i++)
+		delete venus[i];
+	venus.clear();
 	objects.clear();
 	player = NULL;
 
@@ -543,12 +545,27 @@ void CPlayScene::PurgeDeletedObjects()
 			*it = NULL;
 		}
 	}
-
 	// NOTE: remove_if will swap all deleted items to the end of the vector
 	// then simply trim the vector, this is much more efficient than deleting individual items
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+	for (it = venus.begin(); it != venus.end(); it++)
+	{
+		LPGAMEOBJECT o = *it;
+		if (o->IsDeleted())
+		{
+			delete o;
+			*it = NULL;
+		}
+	}
+
+	// NOTE: remove_if will swap all deleted items to the end of the vector
+	// then simply trim the vector, this is much more efficient than deleting individual items
+	venus.erase(
+		std::remove_if(venus.begin(), venus.end(), CPlayScene::IsGameObjectDeleted),
+		venus.end());
+	
 }
 void CPlayScene::LoadResource(string s) {
 	LPGAME game = CGame::GetInstance();

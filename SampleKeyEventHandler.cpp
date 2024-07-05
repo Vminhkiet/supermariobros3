@@ -2,22 +2,34 @@
 
 #include "debug.h"
 #include "Game.h"
-
+#include "Intro.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "Scene.h"
 
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
-	if (mario->getintro() == 0)
+	if (mario->getintro() == 0) {
+		if (!Intro::GetInstance()->getend())
+			return;
+		switch (KeyCode)
+		{
+		case DIK_S:
+			CGame::GetInstance()->InitiateSwitchScene(3);
+			break;
+		}
 		return;
+	}
 	if (game->GetCurrentScene()->getid() == 3) {
 		switch (KeyCode)
 		{
 		case DIK_S:
-
+			if (mario->getidphong() == -1)
+				return;
+			CGame::GetInstance()->InitiateSwitchScene(2);
 			break;
 		}
 		return;

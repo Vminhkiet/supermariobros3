@@ -5,6 +5,7 @@
 #include "NODE.h"
 #include "Utils.h"
 #include "TileMap.h"
+#include "ItemEn.h"
 CScene1* CScene1::__instance = NULL;
 void CScene1::Loadfile() {
     LoadResource("textures\\introworldmap.json");
@@ -96,6 +97,12 @@ void CScene1::LoadResource(string s) {
 		else if (layer["name"] == "NODE") {
 			for (auto& object : layer["objects"]) {
 				NODE* grass = new NODE(float(object["x"]) + 19, float(object["y"]),object["name"]);
+				objects.push_back(grass);
+			}
+		}
+		else if (layer["name"] == "Item") {
+			for (auto& object : layer["objects"]) {
+				ItemEn* grass = new ItemEn(float(object["x"]) + 19, float(object["y"]));
 				objects.push_back(grass);
 			}
 		}

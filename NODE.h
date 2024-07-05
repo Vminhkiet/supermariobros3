@@ -4,6 +4,7 @@ class NODE :public CGameObject
 {
 
 	string name;
+	int id = -1;
 	bool diduoc = false;
 	bool l = false;
 	bool r = false;
@@ -25,6 +26,12 @@ public:
 		else if (name == "3") {
 			b = true;
 		}
+		if (name == "3") {
+			id = 2;
+		}
+	}
+	int getid() {
+		return id;
 	}
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {

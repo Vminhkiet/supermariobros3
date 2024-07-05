@@ -169,6 +169,7 @@
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="IntroScreen.cpp" />
+    <ClCompile Include="ItemEn.cpp" />
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="main.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Intro.h" />
     <ClInclude Include="IntroScreen.h" />
+    <ClInclude Include="ItemEn.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="Leaf.h" />

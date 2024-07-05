@@ -30,6 +30,9 @@ class Intro {
 
 public:
 	static Intro* GetInstance();
+	bool getend() {
+		return end;
+	}
 	void Setitem(vector<LPGAMEOBJECT>& obj,LPGAMEOBJECT& player);
 	void Update(DWORD dt);
 	void Render();

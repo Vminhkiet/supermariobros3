@@ -179,6 +179,7 @@ class CMario : public CGameObject
 	bool roicham = false;
 	bool dangcam = false;
 	int id = -1;
+	int idphong = -1;
 public:
 	CMario(float x, float y, int intro = 1, bool mariogreen = false) : CGameObject(x, y)
 	{
@@ -199,6 +200,9 @@ public:
 		isOnPlatform = false;
 		coin = 0;
 		this->SetType(OBJECT_TYPE_MARIO);
+	}
+	int getidphong() {
+		return idphong;
 	}
 	int getintro();
 	bool gettele() {

@@ -266,6 +266,7 @@ void CMario::OnCollisionWithNODE(LPCOLLISIONEVENT e) {
 	}
 	vitri1 = n->getname();
 	duocphep = true;
+	idphong = n->getid();
 	n->gethuong(l, r, t, b);
 	vx = 0;
 	vy = 0;
