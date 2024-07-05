@@ -433,16 +433,13 @@ void CPlayScene::Update(DWORD dt)
 		if (cx < 0) cx = 0;
 		
 		if (cx > 2503) cx = 2503;
-		if (cy > 155) {
+		if (mario->Getlevel() != 3)
+			cy = 0;
+		else if (cy>cameray-100) {
 			cy = 240;
+			
 		}
-		else if (mario->gettele() && cy < 150 && cy > 0) {
-			cy = 0;
-		}
-		else if (!mario->checkfly() && cy > -100 && !mario->gettele()) {
-			cy = 0;
-		}
-		else if (mario->checkfly() && cy > 0 && !mario->gettele()) {
+		else if( cy>-120){
 			cy = 0;
 		}
 		float vx, vy;
@@ -638,6 +635,12 @@ void CPlayScene::LoadResource(string s) {
 				//grid->InsertObject(ground);
 			}
 		}
+		else if (layer["name"] == "Camera") {
+			for (auto& object : layer["objects"]) {
+				camerax = float(object["x"]) - 2;
+				cameray = float(object["y"]) - 228;
+			}
+		}
 		else if (layer["name"] == "TopGround") {
 			for (auto& object : layer["objects"]) {
 				// Tạo đối tượng portal từ dữ liệu trong tệp JSON
@@ -661,7 +664,7 @@ void CPlayScene::LoadResource(string s) {
 					float(object["y"]) - 228
 				);
 				Object s;
-				s.x = float(object["x"]) - 8;
+				s.x = float(object["x"]) - 2;
 				s.y = float(object["y"]) - 228;
 				s.name = object["name"];
 				listbrick.push_back(s);
@@ -719,7 +722,7 @@ void CPlayScene::LoadResource(string s) {
 						true
 					);
 					Object s;
-					s.x = float(object["x"]) - 8;
+					s.x = float(object["x"]) - 2;
 					s.y = float(object["y"]) - 228;
 					s.name = object["name"];
 					listbrick.push_back(s);

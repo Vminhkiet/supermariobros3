@@ -36,7 +36,6 @@ protected:
 	float startx, starty;
 	bool danghoisinh = false;
 	bool die = false;
-	ULONGLONG bienmat;
 	ULONGLONG hoisinh;
 	ULONGLONG stop;
 	ULONGLONG die_start;
@@ -108,7 +107,6 @@ public:
 		starty = this->starty;
 	}
 	bool getres() {
-		bienmat = GetTickCount64();
 		return res;
 	}
 	void setres(bool res) {

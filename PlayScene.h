@@ -18,6 +18,7 @@ struct Object {
 class CPlayScene : public CScene
 {
 protected:
+    float camerax, cameray;
     LPGAMEOBJECT player;
     LPTILEMAP tileMap;
     LPGRID grid;

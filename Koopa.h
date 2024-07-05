@@ -96,6 +96,11 @@ public:
 	bool getcho() {
 		return cho;
 	}
+	void getisOnTop() {
+
+		if (isOnTop)
+			y += 5;
+	}
 	void getstart(float& startx, float& starty) {
 		startx = this->startx;
 		starty = this->starty;
@@ -108,6 +113,9 @@ public:
 	}
 	void setres(bool res) {
 		this->res = res;
+	}
+	bool getres() {
+		return res;
 	}
 	void sethuong(bool huong) {
 		huongdichuyen = huong;

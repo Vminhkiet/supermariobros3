@@ -7,6 +7,7 @@
 #include "Die.h"
 #include "Brick.h"
 #include "Koopa.h"
+#include "Venus.h"
 #include "Goomba.h"
 #include "Para.h"
 #include "Ground.h"
@@ -236,6 +237,14 @@ void CParaKoopa::OnNoCollision(DWORD dt)
 	y += vy * dt;
 };
 void CParaKoopa::OnCollisionWith(LPCOLLISIONEVENT e) {
+	if (dynamic_cast<CVenus*>(e->obj)) {
+		if (dynamic_cast<CVenus*>(e->obj)->getdie()) {
+			return;
+		}
+		if (state == MAI_MOVE2)
+		   dynamic_cast<CVenus*>(e->obj)->setdie(true);
+		return;
+	}
 	if (!e->obj->IsBlocking() && e->obj->GetType() != 14 && e->obj->GetType() != 2 && (!dynamic_cast<CParaKoopa*>(e->obj)) && (!dynamic_cast<CKOOPA*>(e->obj)) || e->obj->GetType() == 16) return;
 	if (dynamic_cast<Thebox*>(e->obj)) return;
 	//if (dynamic_cast<CKOOPA*>(e->obj) &&( state == LIFE2 || canh ==true)) return;

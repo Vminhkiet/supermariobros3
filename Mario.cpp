@@ -347,6 +347,10 @@ void CMario::OnCollisionWithFinish(LPCOLLISIONEVENT e) {
 }
 void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 	CParaKoopa* p = dynamic_cast<CParaKoopa*>(e->obj);
+	if (p->getcho())
+		return;
+	if (p->getres() || p->getdie())
+		return;
 	if (p->getcanh()) {
 		if (e->ny < 0)
 		{
@@ -364,6 +368,9 @@ void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 						CGame::GetInstance()->GetCurrentScene()->setpause(true);
 						hoalon = true;
 						isOnTop = false;
+						dacam = false;
+						dangcam = false;
+						cammai = false;
 						level = 2;
 						StartUntouchable();
 					}
@@ -372,6 +379,9 @@ void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 						st = GetTickCount64();
 						CGame::GetInstance()->GetCurrentScene()->setpause(true);
 						hoalon = true;
+						dacam = false;
+						dangcam = false;
+						cammai = false;
 						isOnTop = false;
 						level = MARIO_LEVEL_SMALL;
 						StartUntouchable();
@@ -405,6 +415,9 @@ void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 				if (pstate == 0 || pstate == 2)
 				{
 					if (untouchable == 0) {
+						dacam = false;
+						dangcam = false;
+						cammai = false;
 						if (level == 3)
 						{
 							st = GetTickCount64();
@@ -457,6 +470,9 @@ void CMario::OnCollisionWithParakoopa(LPCOLLISIONEVENT e) {
 	}
 	else if (pstate == 2) {
 		if (untouchable == 0) {
+			dacam = false;
+			dangcam = false;
+			cammai = false;
 			if (level == 3)
 			{
 				st = GetTickCount64();
@@ -510,6 +526,9 @@ void CMario::OnCollisionWithKick(LPCOLLISIONEVENT e) {
 }
 void CMario::OnCollisionWithBullet(LPCOLLISIONEVENT e) {
 	if (untouchable == 0) {
+		dacam = false;
+		dangcam = false;
+		cammai = false;
 		if (level == 3) {
 
 			st = GetTickCount64();
@@ -606,6 +625,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (untouchable == 0)
 		{
+			dacam = false;
+			dangcam = false;
+			cammai = false;
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
 				if (level == 3)
@@ -640,12 +662,15 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 	int pstate = p->Getstate();
 	if (p->getcho())
 		return;
+	if (p->getres() || p->getdie())
+		return;
 	if (pstate == 0) {
 		if (e->ny < 0)
 		{
 			if (pstate == 0)
 			{
 				p->SetState(1);
+				p->getisOnTop();
 				vy = -MARIO_JUMP_DEFLECT_SPEED +0.2f;
 			}
 		}
@@ -655,6 +680,9 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 			{
 				if (pstate == 0 || pstate == 2)
 				{
+					dacam = false;
+					dangcam = false;
+					cammai = false;
 					if (untouchable == 0) {
 						if (level == 3)
 						{
@@ -716,6 +744,9 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 	}
 	else if (pstate == 2) {
 		if (untouchable == 0) {
+			dacam = false;
+			dangcam = false;
+			cammai = false;
 			if (level == 3)
 			{
 				st = GetTickCount64();
@@ -725,7 +756,7 @@ void CMario::OnCollisionWithTroopa(LPCOLLISIONEVENT e) {
 				level = MARIO_LEVEL_SMALL + 1;
 				StartUntouchable();
 			}
-			if (level == 2)
+			else if (level == 2)
 			{
 				st = GetTickCount64();
 				CGame::GetInstance()->GetCurrentScene()->setpause(true);
@@ -751,7 +782,6 @@ void CMario::OnCollisionWithPara(LPCOLLISIONEVENT e) {
 	{
 		if (goomba->getcanh()) {
 			goomba->setcanh(false);
-			goomba->Setvy(0);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 		else if (goomba->GetState() != GOOMBA_STATE_DIE)
@@ -765,6 +795,9 @@ void CMario::OnCollisionWithPara(LPCOLLISIONEVENT e) {
 		if (untouchable == 0)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE){
+				dacam = false;
+				dangcam = false;
+				cammai = false;
 				if (level == 3)
 				{
 					st = GetTickCount64();
@@ -1386,6 +1419,9 @@ void CMario::Vacham() {
 	if (untouchable == 0)
 	{
 		if (untouchable == 0) {
+			dacam = false;
+			dangcam = false;
+			cammai = false;
 			if (level == 3)
 			{
 				st = GetTickCount64();

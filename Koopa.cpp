@@ -4,6 +4,7 @@
 #include "PlayScene.h"
 #include "QuestionBlock.h"
 #include "Brick.h"
+#include "Venus.h"
 #include "Ground.h"
 #include "Die.h"
 #include "Mario.h"
@@ -264,6 +265,14 @@ void CKOOPA::OnNoCollision(DWORD dt)
 void CKOOPA::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (dynamic_cast<CLEAF*>(e->obj))
 		return;
+	if (dynamic_cast<CVenus*>(e->obj)) {
+		if (dynamic_cast<CVenus*>(e->obj)->getdie()) {
+			return;
+		}
+		if(state==MAI_MOVE)
+		   dynamic_cast<CVenus*>(e->obj)->setdie(true);
+		return;
+	}
 	if (!e->obj->IsBlocking() && e->obj->GetType() != 14 && e->obj->GetType()!=2&&(!dynamic_cast<CParaKoopa*>(e->obj)) && (!dynamic_cast<CKOOPA*>(e->obj)) || e->obj->GetType()==16 ) return;
 	if (dynamic_cast<Thebox*>(e->obj)) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) {

@@ -56,6 +56,9 @@ public:
 	}
 	void setcanh(bool co) {
 		canh = co;
+		if (!co) {
+			y -= 3;
+		}
 	}
 	virtual void SetState(int state);
 	void Setrua(bool rua) {
