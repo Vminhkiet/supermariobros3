@@ -25,6 +25,7 @@ protected:
     vector<LPGAMEOBJECT> objects;
     vector<LPGAMEOBJECT> venus;
     vector<std::pair<Object, bool>> spawn;
+    vector<Object> listbrick;
     void _ParseSection_SPRITES(string line);
     void _ParseSection_ANIMATIONS(string line);
 
@@ -46,6 +47,9 @@ public:
     void Spawn(Object s);
     vector<std::pair<Object, bool>> getspawn() {
         return spawn;
+    }
+    vector<Object> getbrick() {
+        return listbrick;
     }
     void findgetposition(float& x, float& y, string name) {
         for (auto i : spawn) {

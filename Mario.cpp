@@ -66,6 +66,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vitri = cy;
 		tele = true;
 	}
+	if (tele && !huygach) {
+		changebrick();
+		huygach = true;
+	}
+	else {
+		huygach = false;
+	}
 	if (dangdichuyen) {
 		
 		if (len == 1) {
@@ -89,6 +96,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	else {
 		len = 0;
 	}
+	
 	if (isOnPlatform) {
 		fly = false;
 	}
@@ -258,6 +266,64 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	
 	
 }
+void CMario::changebrick() {
+	vector<LPGAMEOBJECT> objects = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->getobjects();
+	CPlayScene* currentScene = dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene());
+	vector<Object>listbrick = currentScene->getbrick();
+	for (auto& obj : objects)
+	{
+		if (dynamic_cast<CBrick*>(obj))
+		{
+			if (obj->IsDeleted())
+				return;
+			obj->Delete();
+		}
+		else if (dynamic_cast<CQuestionblock*>(obj)) {
+			if (dynamic_cast<CQuestionblock*>(obj)->getpower() == 4) {
+				if (obj->IsDeleted())
+					return;
+				obj->Delete();
+			}
+		}
+		else if (dynamic_cast<ButtonP*>(obj)) {
+			if (obj->IsDeleted())
+				return;
+			obj->Delete();
+		}
+		else if (dynamic_cast<CCoin*>(obj)) {
+			if (obj->IsDeleted())
+				return;
+			for (auto i : listbrick) {
+				if (i.name == "") {
+					float cx, cy;
+					dynamic_cast<CCoin*>(obj)->GetPosition(cx, cy);
+					if (cx == i.x && cy == i.y)
+						obj->Delete();
+				}
+			}
+		}
+	}
+	
+	for (auto i : listbrick) {
+		if (i.name == "") {
+			CBrick* obj = new CBrick(
+				i.x,
+				i.y
+			);
+			currentScene->AddObject(obj);
+		}
+		else if (i.name == "P") {
+			CQuestionblock* obj = new CQuestionblock(
+				i.x,
+				i.y,
+				4,
+				true
+			);
+			currentScene->AddObject(obj);
+		}
+	}
+	
+}
 void CMario::OnCollisionWithNODE(LPCOLLISIONEVENT e) {
 	NODE* n = dynamic_cast<NODE*>(e->obj);
 	
@@ -424,6 +490,7 @@ void CMario::OnCollisionWithSwap(LPCOLLISIONEVENT e) {
 	dichchuyen = true;
 	name = dynamic_cast<Swap*>(e->obj)->getname();
 	cground = dynamic_cast<Swap*>(e->obj)->getdown();
+
 }
 void CMario::OnCollisionWithKick(LPCOLLISIONEVENT e) {
 	if (level == 3 && danh ) {
@@ -482,6 +549,9 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e) {
 		y -= MARIO_BIG_BBOX_HEIGHT / 4;
 		
 		SetLevel(level);
+	}
+	else {
+		e->obj->Delete();
 	}
 }
 void CMario::OnCollisionWithMario(LPCOLLISIONEVENT e) {

@@ -660,6 +660,11 @@ void CPlayScene::LoadResource(string s) {
 					float(object["x"]) - 2,
 					float(object["y"]) - 228
 				);
+				Object s;
+				s.x = float(object["x"]) - 8;
+				s.y = float(object["y"]) - 228;
+				s.name = object["name"];
+				listbrick.push_back(s);
 				objects.push_back(brick);
 			}
 		}
@@ -701,7 +706,7 @@ void CPlayScene::LoadResource(string s) {
 					obj = new CQuestionblock(
 						float(object["x"]) - 2,
 						float(object["y"]) - 228,
-						0,
+						2,
 						true
 					);
 					objects.push_back(obj);
@@ -713,6 +718,11 @@ void CPlayScene::LoadResource(string s) {
 						4,
 						true
 					);
+					Object s;
+					s.x = float(object["x"]) - 8;
+					s.y = float(object["y"]) - 228;
+					s.name = object["name"];
+					listbrick.push_back(s);
 					objects.push_back(obj);
 				}
 				
@@ -849,20 +859,16 @@ void CPlayScene::deleteenime(float cx,float cy,float vx) {
 		}
 		else*/ if (dynamic_cast<CKOOPA*>(i)) {
 			CKOOPA* h = dynamic_cast<CKOOPA*>(i);
-			if (h->Getstate() != 0)
-				return;
 			if (!h->getdie())
 				continue;
 			h->getstart(mx, my);
 			if (vx > 0) {
 				if (mx <= cx + SCREEN_WIDTH+10 && mx >= cx + SCREEN_WIDTH  && my >= cy && my <= cy + SCREEN_HEIGHT) {
-					dynamic_cast<CKOOPA*>(i)->SetState(0);
 					dynamic_cast<CKOOPA*>(i)->setres(true);
 				}
 			}
 			else if (vx < 0) {
 				if (mx >= cx + 30 && mx <= cx + 40 && my >= cy && my <= cy + SCREEN_HEIGHT) {
-					dynamic_cast<CKOOPA*>(i)->SetState(0);
 					dynamic_cast<CKOOPA*>(i)->setres(true);
 				}
 			}

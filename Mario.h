@@ -177,6 +177,7 @@ class CMario : public CGameObject
 	bool nhapnhay = false;
 	bool fly = false;
 	bool roicham = false;
+	bool huygach = false;
 	bool dangcam = false;
 	int id = -1;
 	int idphong = -1;
@@ -266,7 +267,7 @@ public:
 		vy = 0;
 	}
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
-
+	void changebrick();
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	int Getlevel() {
