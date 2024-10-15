@@ -1,0 +1,14 @@
+{ "columns":29,
+ "image":"world-1-12.png",
+ "imageheight":480,
+ "imagewidth":464,
+ "margin":0,
+ "name":"world1-1",
+ "spacing":0,
+ "tilecount":870,
+ "tiledversion":"1.10.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

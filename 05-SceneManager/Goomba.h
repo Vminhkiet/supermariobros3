@@ -16,15 +16,17 @@
 
 #define ID_ANI_GOOMBA_WALKING 5000
 #define ID_ANI_GOOMBA_DIE 5001
-
+#define ID_ANI_GOOMBA_DIEKOOPA 5002
 class CGoomba : public CGameObject
 {
 protected:
 	float ax;				
 	float ay; 
-
+	bool draw = true;
+	bool rua = false;
 	ULONGLONG die_start;
-
+	float yroi1 = -1;
+	float yroi2 = -1;
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
@@ -38,4 +40,10 @@ protected:
 public: 	
 	CGoomba(float x, float y);
 	virtual void SetState(int state);
+	void setdraw(bool draw) {
+		this->draw = draw;
+	}
+	void Setrua(bool rua) {
+		this->rua = rua;
+	}
 };

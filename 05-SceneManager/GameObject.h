@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3dx10.h>
@@ -17,7 +17,7 @@ using namespace std;
 class CGameObject
 {
 protected:
-
+	
 	float x; 
 	float y;
 
@@ -25,17 +25,40 @@ protected:
 	float vy;
 
 	int nx;	 
-
+	int ny;
 	int state;
 
-	bool isDeleted; 
+	bool isDeleted=false;
+	int type=-1;
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
-
+	float Gety() {
+		return y;
+	}
+	void Setvy(float vy) { this->vy = vy; }
+	int getnx() {
+		return nx;
+	}
+	float getx() { return x; }
+	int GetNy() {
+		return ny;
+	}
+	void SetX(float x) {
+		this->x = x;
+	}
+	void SetType(int x) {
+		this->type = x;
+	}
+	float getvx() {
+		return vx;
+	}
+	int GetType() {
+		return this->type;
+	}
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
 	bool IsDeleted() { return isDeleted; }
@@ -44,7 +67,6 @@ public:
 
 	CGameObject();
 	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
-
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
@@ -63,7 +85,11 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};
 	
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
-	virtual int IsBlocking() { return 1; }
+	virtual int IsBlocking()
+	{
+		return 1;
+	}
+
 
 	~CGameObject();
 

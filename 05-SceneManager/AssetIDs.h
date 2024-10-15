@@ -1,9 +1,8 @@
 #pragma once
-
 //
 // This file contains all IDs of game assets 
 //
-
+#define ID_TEX_TILESET -10
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
@@ -19,7 +18,18 @@
 #define OBJECT_TYPE_MAN 6
 #define OBJECT_TYPE_NEN 7
 #define OBJECT_TYPE_MARIOGREEN 8
+#define OBJECT_TYPE_LEAF	9
+#define OBJECT_TYPE_NAM	10
+#define OBJECT_TYPE_PLATFORM 11
+#define OBJECT_TYPE_GROUND 12
+#define OBJECT_TYPE_QUES 13
+#define OBJECT_TYPE_TOP 14
+#define OBJECT_TYPE_VENUS 15
+#define OBJECT_TYPE_BULLET 16
+#define OBJECT_TYPE_KOOPA 17
+#define  OBJECT_TYPE_PARA 18
 #define OBJECT_TYPE_PORTAL	50
+#define LOAD_RESOURCE -1
 
 
 #pragma region MARIO 

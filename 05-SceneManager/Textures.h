@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <d3dx10.h>
-
+#include <string>
 #include "Texture.h"
 
 using namespace std;
@@ -18,7 +18,8 @@ class CTextures
 public:
 	CTextures();
 	void Add(int id, LPCWSTR filePath);
-	LPTEXTURE Get(unsigned int i);
+
+	LPTEXTURE Get(int i);
 	void Clear();
 
 	static CTextures* GetInstance();

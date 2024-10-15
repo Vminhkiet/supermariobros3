@@ -4,6 +4,8 @@
 
 class CSampleKeyHandler: public CSceneKeyHandler
 {
+	bool a = false;
+	bool fly = false;
 public:
 	virtual void KeyState(BYTE *states);
 	virtual void OnKeyDown(int KeyCode);

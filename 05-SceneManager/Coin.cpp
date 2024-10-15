@@ -1,9 +1,21 @@
 #include "Coin.h"
-
+void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (ques) {
+		if (ycu != y + 50) {
+			y -= 2;
+		}
+		else {
+			dungve = true;
+			this->Delete();
+		}
+	}
+	CGameObject::Update(dt, coObjects);
+}
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_COIN)->Render(x, y);
+	if(!dungve)
+	   animations->Get(ID_ANI_COIN)->Render(x, y);
 
 	//RenderBoundingBox();
 }

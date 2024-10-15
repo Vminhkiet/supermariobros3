@@ -1,0 +1,14 @@
+{ "columns":9,
+ "image":"MapSelection(x3).png",
+ "imageheight":70,
+ "imagewidth":154,
+ "margin":0,
+ "name":"door",
+ "spacing":0,
+ "tilecount":36,
+ "tiledversion":"1.10.2",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.10"
+}

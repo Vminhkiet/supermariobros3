@@ -15,9 +15,9 @@ void CCurtain::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	if(!stop)
-	    animations->Get(ID_ANI_CURTAIN)->Render(x, y, 305, 240);
+	    animations->Get(ID_ANI_CURTAIN+14)->Render(x, y, 305, 240);
 	else
-		animations->Get(ID_ANI_CURTAIN + 1)->Render(x+10, y+105, 360, 20);
+		animations->Get(ID_ANI_CURTAIN + 15)->Render(x+10, y+105, 360, 20);
 	//RenderBoundingBox();
 }
 
