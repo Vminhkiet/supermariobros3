@@ -30,7 +30,6 @@ A fan-made remake of **Super Mario Bros 3** built from scratch with a custom gam
 - OS: Windows 10 or later
 - Compiler: Visual Studio 2022
 - DirectX SDK: [June 2010 version](https://www.microsoft.com/en-us/download/details.aspx?id=6812)
-- Optional: CMake (if you use it)
 - JSON Library: [`nlohmann/json`](https://github.com/nlohmann/json)
 
 ---
