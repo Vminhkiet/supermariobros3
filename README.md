@@ -1,5 +1,8 @@
 # Super Mario Bros 3 - Custom Engine DX10 Edition
 A fan-made remake of **Super Mario Bros 3** built from scratch with a custom game engine(ThS. Đinh Nguyễn Anh Dũng) using DirectX 10.
+> 🔁 **Note:**
+> - To **view commit history or source code**, switch to the **`main` branch**
+> - To **download or play the game**, use the **`game` branch**
 ## 📸 Screenshots
 ### 🖼️ Introduce
 ![Introduce](IMAGE/intro.png)
